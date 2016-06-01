@@ -1,5 +1,5 @@
-function [ fix ] = linearPsuedoPT( OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, atomType )
-%linearPseudoPT Pseudopotential approximation of a linear paul trap.
+function [ fix ] = linearPseudoPT( OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, atomType )
+%LINEARPSEUDOPT Pseudopotential approximation of a linear paul trap.
 % This approximation replaces the radiofrequency electric field of the
 % linear Paul trap with a harmonic pseudopotential. This harmonic
 % pseudopotential may be approximated via the Mathieu equation (see eg.

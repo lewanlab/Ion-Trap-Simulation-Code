@@ -15,7 +15,7 @@ else
 end
 
 %Add a cylindrical SHO for the pseudopotential.
-temp = CylindricalSHOCfg(fixID, k_r, k_z, groupID);
+temp = SHOCfg(fixID, k_r, k_r, k_z, groupID);
 for i=1:length(temp)
    strings{end+1} = temp{i}; 
 end

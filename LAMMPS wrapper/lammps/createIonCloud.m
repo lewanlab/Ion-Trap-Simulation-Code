@@ -1,5 +1,5 @@
 function [ ionStruct ] = createIonCloud( radius, atomType, number, randomSeed)
-%CREATEIONS Creates a cloud of ions that may be added to the trap. 
+%CREATEIONCLOUD Creates a cloud of ions that may be added to the trap. 
 %
 % 'number' ions are added of the specified type (defined previously using
 % AddAtomType), arranged randomly within the specified radius (m). the

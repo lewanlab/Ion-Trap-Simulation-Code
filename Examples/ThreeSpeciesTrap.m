@@ -20,45 +20,47 @@ geomC = 0.244; %dimensionless geometric factor
 
 % Ions used in the simulation are defined using the AddAtomType command.
 sim = LAMMPSSimulation();
-sim.SetSimulationDomain(1e-3,1e-3,1e-3);
+SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
-CalciumIons = sim.AddAtomType(1, 40);
-NDIons = sim.AddAtomType(1, 20);
-AlexaFluora = sim.AddAtomType(1,60);
+CalciumIons = AddAtomType(sim, 1, 40);
+NDIons = AddAtomType(sim, 1, 20);
+AlexaFluora = AddAtomType(sim, 1, 60);
 
 radiusofIonCloud = 1e-4;
 Number = 20;
 
-sim.AddAtoms(createIonCloud(radiusofIonCloud, CalciumIons, Number))
-sim.AddAtoms(createIonCloud(radiusofIonCloud, NDIons, Number))
-sim.AddAtoms(createIonCloud(radiusofIonCloud, AlexaFluora, Number))
+AddAtoms(sim, createIonCloud(radiusofIonCloud, CalciumIons, Number))
+AddAtoms(sim, createIonCloud(radiusofIonCloud, NDIons, Number))
+AddAtoms(sim, createIonCloud(radiusofIonCloud, AlexaFluora, Number))
 
-% Add a pseudopotential for purposes of minimisation. We need one for each
+% Define pseudopotentials for purposes of minimisation. We need one for each
 % atomic species because the pseudopotential for an RF trap is q/m dependent.
-pseudoPot1 = linearPaulTrapPseudopotential(oscV, endcapV, z0, r0, geomC, RF, CalciumIons);
-pseudoPot2 = linearPaulTrapPseudopotential(oscV, endcapV, z0, r0, geomC, RF, NDIons);
-pseudoPot3 = linearPaulTrapPseudopotential(oscV, endcapV, z0, r0, geomC, RF, AlexaFluora);
+pseudoPot1 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, CalciumIons);
+pseudoPot2 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, NDIons);
+pseudoPot3 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, AlexaFluora);
+
+% add the pseudopotentials to the simulation
 sim.Add(pseudoPot1);
 sim.Add(pseudoPot2);
 sim.Add(pseudoPot3);
 
-%%Minimise using the pseudopotential.
-sim.AddRun(minimize(1.4e-26,0, 10000, 10000,1e-7));
+% perform minimisation using the pseudopotential to save time
+sim.Add(minimize(1.4e-26,0, 10000, 10000,1e-7));
 
-% Replace the pseudopotentials with the full RF field.
+% Replace pseudopotentials with the full RF field.
 sim.Remove(pseudoPot1);
 sim.Remove(pseudoPot2);
 sim.Remove(pseudoPot3);
-sim.Add(linearPaulTrap(oscV, endcapV, z0, r0, geomC, RF));
+sim.Add(linearPT(oscV, endcapV, z0, r0, geomC, RF));
 
-%Add some damping bath
+%Add a langevin bath to simulate thermalisation with a background buffer gas
 sim.Add(langevinBath(3e-4, 1e-6));
 
 %Configure output to a file
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 
-% Dynamically evolve for a few steps.
-sim.Add(runCommand(1e4));
+% Dynamically evolve for a small number of steps.
+sim.Add(evolve(1e4));
 sim.Execute();
 
 %% Post process results

@@ -3,7 +3,7 @@ function AddAtoms( sim, atoms )
 % Add a defined set of atoms to the simulation. The atoms should be defined by an atom
 % creation command, for example createIonCloud or placeAtoms
 % 
-% SYNTAX: AddAtoms(atoms)
+% SYNTAX: AddAtoms(sim, atoms)
 % 
 % See Also: CREATEIONCLOUD, PLACEATOMS
 
