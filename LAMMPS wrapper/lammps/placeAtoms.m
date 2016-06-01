@@ -1,8 +1,13 @@
 function [ ionStruct ] = placeAtoms( atomType, x, y, z )
 %PLACEATOMS Places the given atomType at the x,y,z coordinates specified,
-%which should be column vectors.
+%which can be column vectors to place multiple atoms.
+% 
+% Syntax: placeAtoms( atomType, x, y, z )
+% 
 % Example:
 %  placeAtoms(atomType, x, y, z);
+%
+% See Also: AddAtomType
 
 if nargin < 4
     error('not enough input arguments.');

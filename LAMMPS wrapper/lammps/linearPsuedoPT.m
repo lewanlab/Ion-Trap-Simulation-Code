@@ -7,12 +7,9 @@ function [ fix ] = linearPsuedoPT( OscillatingV, EndcapV, Z0, R0, GeometricConst
 %
 % As the pseudopotential is dependent on the charge:mass ratio of the ion,
 % this fix requires that an atomType be supplied. If multiple atom types
-% exist in the trap, one fix should be specified for each type. If atomType
-% is not specified a cell array of fixes is generated for each atomType.
+% exist in the trap, one fix should be created for each type.
 % 
 % See Also: linearPaulTrap, http://tf.nist.gov/general/pdf/1226.pdf
-
-if nargin < 
 
 a_r = -4 * (atomType.charge * 1.6e-19) * GeometricConstant * EndcapV / ...
     ((atomType.mass *  1.660e-27) * Z0^2 * (RFFrequency * 2 * pi)^2);

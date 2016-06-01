@@ -1,11 +1,18 @@
 function [ runCmd ] = thermalVelocities( temperature, zeroTotalMom, seed)
-%THERMALVELOCITIES Set the velocities of atoms to those given by a thermal
-%distribution of input temperature (Kelvin). Set zeroTotalMom to 'yes' if
-%the resulting ensemble should have zero total linear momentum.
+%THERMALVELOCITIES Set the velocities of atoms to a thermal
+%distribution of the specified temperature (Kelvin).
+% Set zeroTotalMom to 'yes' if the resulting ensemble should have zero
+% total momentum/center of mass motion.
+%
+% Syntax: 
+%  thermalVelocities(temperature, zeroTotalMom, seed)
+%  thermalVelocities(temperature, zeroTotalMom)
+%  thermalVelocities(temperature)
+% 
 % Example:
-%  thermalVelocities(300, 'no'), thermalVelocities(300);
+%  thermalVelocities(300) % 300 Kelvin;
+% 
 % See Also: http://lammps.sandia.gov/doc/velocity.html
-
 
 if nargin < 3
     seed = floor(rand(1) * 10000);
