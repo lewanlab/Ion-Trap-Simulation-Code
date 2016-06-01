@@ -1,5 +1,16 @@
 function [ ionStruct ] = createIonCloud( radius, atomType, number, randomSeed)
-%CREATEIONS Creates a cloud of ions that may be added to the trap.
+%CREATEIONS Creates a cloud of ions that may be added to the trap. 
+%
+% 'number' ions are added of the specified type (defined previously using
+% AddAtomType), arranged randomly within the specified radius (m). the
+% 'randomSeed' may be specified manually to ensure sequences are
+% repeatable, otherwise a new random number is used.
+%
+% SYNTAX: createIonCloud(radius, atomType, number, randomSeed)
+%
+% Example:
+%   createIonCloud(1e-4, calciumIon, 40)
+% See Also: AddAtomType
 
 if nargin < 4
     randomSeed = randi(100000,1);

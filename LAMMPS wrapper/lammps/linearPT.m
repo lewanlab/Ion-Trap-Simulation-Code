@@ -1,21 +1,21 @@
-function [ fix ] = linearPaulTrap( OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, Anisotropy, offset )
-%LINEARPAULTRAP Applies an oscillating electric field to atoms. The
-%characterisation of the trap follows Berkeland et al. (1998).
-% RFFrequency should be in Hz, not radians per second. Z0 and R0 are
-% the axial and radial dimensions of the trap. The optional parameter
-% Anisotropy is used to imbalance fields in X and Y directions, such that
-% V_y = anisotropy * V_x
+function [ fix ] = linearPT( OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, Anisotropy, offset )
+%LINEARPT Applies an oscillating electric field to atoms. The
+%characterisation of the trap follows the parameters outlined in Berkeland
+%et al. (1998) for a linear Paul trap geometry.
+% RFFrequency is specified in Hz. Z0 and R0 are the axial and radial
+% dimensions of the trap. The optional parameter Anisotropy is used to
+% imbalance fields in X and Y directions, such that V_y = anisotropy * V_x
 %
-% This method produces a simulation using the full radiofrequency electric
+% This method evaluates the force due to the full radiofrequency electric
 % fields - pseudopotential approximations may be more appropriate for most
 % cases.
 %
 % OscillatingV and RFFrequency may be specified as vectors, in which case a
-% multi-frequency paul trap is created.
+% multi-frequency trap is created as discussed in
+% https://arxiv.org/pdf/1310.6294.pdf
 %
-% Example:
-%  linearPaulTrap(OscV, endV, z0, r0, geomC, RFFreq, Anisotropy, offset)
-%  linearPaulTrap(a, q, ions, , geomC, RFFreq, Anisotropy, offset)
+% SYNTAX: linearPaulTrap(OscV, endV, z0, r0, geomC, RFFreq, Anisotropy, offset)
+% 
 % See Also: LinearSecularPaulTrap, http://tf.nist.gov/general/pdf/1226.pdf
 
 if nargin < 8

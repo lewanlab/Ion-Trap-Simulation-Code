@@ -17,8 +17,6 @@ fwriteCell(fHandle, boilerplate());
 fprintf(fHandle, 'units si\n');
 fprintf(fHandle, 'atom_style charge\n');
 
-
-
 fwriteCfg(fHandle, defineSimulationBox(sim.SimulationBox.length, sim.SimulationBox.width, sim.SimulationBox.height, length(sim.AtomTypes(:))));
 
 %Write atom insertion commands

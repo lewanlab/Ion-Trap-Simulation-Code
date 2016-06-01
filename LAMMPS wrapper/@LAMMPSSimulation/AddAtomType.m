@@ -1,5 +1,5 @@
 function [typeStruct] = AddAtomType( sim, charge, amuMass )
-%ADDATOMS Define atomic species used in simulations. Units are in atomic
+%ADDATOMTYPE Define atomic species used in simulations. Units are in atomic
 %charges and mass units.
 %
 % SYNTAX: AddAtomType(sim, charge, amuMass)

@@ -1,7 +1,14 @@
 function [ fixObj ] = laserCool( atomType, k )
-%LASERCOOL Simulates laser cooling of a particular ion species by damping
-%velocity of the ion. k =[kx, ky, kz] defines the strength of the damping
-%which is of the form f_i = - k_i * v_i (= v_i / relaxation time)
+%LASERCOOL A simplistic model of laser cooling.
+% Simulates the laser cooling of atoms along a given axis by applying an
+% anisotropic viscous damping force. The laser cooling is applied only to
+% the specified atomType. k = [kx, ky, kz] defines the strength of the
+% damping which is of the form f_i = - k_i * v_i (= v_i / relaxation time)
+% 
+% Syntax: laserCool( atomType, k )
+%
+% Example: laserCool( calcium, [ 1 0 0 ] / 60e-6 ) % 60us viscous force along one direction
+% 
 % See Also: langevinBath
 
 if ~isfield(atomType, 'id') || ~isfield(atomType, 'charge') || ~isfield(atomType, 'mass')

@@ -4,4 +4,3 @@ function [ output ] = defineSimulationBox(  l, w, h, ionSpecies  )
 output = struct('cfgFileHandle', @()simulationBoxCfg( l, w, h, ionSpecies ));
 
 end
-

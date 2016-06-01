@@ -1,5 +1,5 @@
-function [ fix ] = SHO( k_x, k_y, k_z, atomType )
-%Adds a simple harmonic oscillator to the species (all atoms if no species
+function [ fix ] = harmonicOscillator( k_x, k_y, k_z, atomType )
+%HARMONICOSCILLATOR Adds a simple harmonic oscillator to the given species (all atoms if no species
 %specified).
 % k_x, k_y, k_z are spring constants along the three cartesian axes.
 %

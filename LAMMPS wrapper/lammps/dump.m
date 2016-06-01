@@ -1,44 +1,39 @@
-function [ dumpCmd ] = dump( filename, lammpsVariables, steps )
+function [ dumpCmd ] = dump( filename, variables, interval )
 %DUMP Dumps variables from lammps into files for analysis.
-% LammpsVariables is a cell of lammps variables and/or x,y,z,vx,vy,vz
+% Outputs the given variables into the specified file every internal
+% simulation steps. variables is a cell of LAMMPSVariables and/or
+% the literals x,y,z,vx,vy,vz. The interval defaults to 10 if not specified.
 %
 % Example:
 %  dump('output.txt', {'id','x','y','z'}, 10);
 % See Also: LAMMPSAverage
 
-%Must wait until the config file is generated before we can check multiples
-%of steps...
-
-%if any of the lammps variables are fixes, we should add them...
-
-%default value for steps = 1
 if nargin < 3
-    steps = 1;
+    interval = 10;
 end
 
-if isempty(lammpsVariables)
+if isempty(variables)
     error('lammpsVariables cannot be empty');
 end
 
 %input can be either a single literal, lammps variable, or a cell of either
 %of these.
-if ~iscell(lammpsVariables) && ~(isa(lammpsVariables, 'LAMMPSVariable') || ischar(lammpsVariables))
+if ~iscell(variables) && ~(isa(variables, 'LAMMPSVariable') || ischar(variables))
     error('lammpsVariables input must either be a string literal, a LAMMPSVariable object or a (mixed) cell array of these.');
 end
 
 %convert single property to length 1 cell.
-if ~iscell(lammpsVariables)
+if ~iscell(variables)
     lv = cell(1,1);
-    lv{1} = lammpsVariables;
-    lammpsVariables = lv;
+    lv{1} = variables;
+    variables = lv;
 end
 
 %Convert atomic property literals to lammps properties.
-lammpsVariables = literalsToLammpsVariables(lammpsVariables);
+variables = literalsToLammpsVariables(variables);
 
 %If no error thrown, lammpsVariables is now a cell of LAMMPSVariable objects.
-
 dumpCmd = LAMMPSDump();
-dumpCmd.cfgFileHandle = @()dumpCfg(filename, getUnusedID('dump'), lammpsVariables, steps);
+dumpCmd.cfgFileHandle = @()dumpCfg(filename, getUnusedID('dump'), variables, interval);
 
 end

@@ -1,6 +1,6 @@
 function [ strings ] = SHOCfg(fixID, k_x, k_y, k_z, groupID )
-%LINEARPAULTRAPCFG Config file for atoms attached to the origin by springs,
-%cylindrical symmetry. GroupID should be a string, or leave blank for 'all'
+%SHOCFG Config file for atoms attached to the origin by springs. GroupID
+%should be a string, or leave blank for 'all'
 
 strings =           {'#SHO'};
 
