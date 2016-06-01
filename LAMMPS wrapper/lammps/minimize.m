@@ -7,7 +7,7 @@ function [ runCmd ] = minimize( etol, ftol, maxiter, maxeval, maxDist )
 % maxDist. The minimisation is terminated when one of the following
 % criteria is met:
 %
-% 1. energy difference between steps less than etol.
+% 1. energy difference (as fraction of absolute energy) between steps is less than etol.
 % 2. total force is less than ftol
 % 3. the number of iterations exceeds maxiter
 % 4. the number of force evaluations exceeds maxeval

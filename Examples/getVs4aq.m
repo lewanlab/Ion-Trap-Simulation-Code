@@ -1,5 +1,5 @@
 function [ oscV, endV ] = getVs4aq( ionType, RFFrequency, z0, r0, geometricC, a, q )
-%GETVOLTAGEFORAQ Calculates the oscillating and endcap voltages required for
+%GETVS4AQ Calculates the oscillating and endcap voltages required for
 %specified Mathieu (a,q) stability parameters in the defined trap.
 % Assumes a linear Paul trap geometry as defined in Berkeland et. al.
 % (1998). ionType is the species to calculate voltages for. a and q

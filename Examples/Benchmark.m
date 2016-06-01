@@ -7,7 +7,7 @@
 close all
 clearvars
 
-NumberOfIons = 20;
+NumberOfIons = 100;
 
 %Create an empty experiment.
 sim = LAMMPSSimulation();
@@ -21,11 +21,13 @@ sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 charge = 1;
 mass = 100;
 ions = sim.AddAtomType(charge, mass);
-sim.AddAtoms(createIonCloud(1e-3, ions, NumberOfIons, 1337));
+sim.AddAtoms(createIonCloud(1e-5, ions, NumberOfIons, 1337));
 
 %Add the linear Paul trap electric field.
 RF = 3.85e7;
-sim.Add(linearPaulTrap(50, 1, 5.5e-3, 7e-3, 0.244, RF));
+z0 = 5.5e-3; r0 = 7e-3; geomC = 0.244;
+[vs(1), vs(2)] = getVs4aq(ions, RF, z0, r0, geomC, -0.01, 0.3);
+sim.Add(linearPT( vs(1), vs(2), 5.5e-3, 7e-3, 0.244, RF));
 
 %Add some damping bath
 sim.Add(langevinBath(3e-3, 1e-5));
@@ -35,7 +37,7 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(runCommand(30000));
+sim.Add(evolve(30000));
 sim.Execute();
 
 figure;
