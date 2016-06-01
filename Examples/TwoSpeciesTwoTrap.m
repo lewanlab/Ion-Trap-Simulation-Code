@@ -2,7 +2,7 @@
 % Author: Elliot Bentine.
 
 % This experiment is a simulation of a proposed scheme by Tryppogeorgos et
-% al.
+% al (See the ArXiV paper: https://arxiv.org/pdf/1310.6294.pdf )
 
 % Ions of two highly different charge:mass ratios are confined within an
 % ion trap with a more complicated waveform applied to the electrodes. This
@@ -22,36 +22,38 @@ endCapV = 0.18; %V
 % 33e :1.4e6 amu
 
 sim = LAMMPSSimulation();
-sim.SetSimulationDomain(1e-3,1e-3,1e-3);
+SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
-lightIons = sim.AddAtomType(1, 138);
-heavyIons = sim.AddAtomType(33, 1.4e6);
+lightIons = AddAtomType(sim, 1, 138);
+heavyIons = AddAtomType(sim, 33, 1.4e6);
 
 % Create the ion clouds.
-radiusofIonCloud = 1e-3;
+rIC = 1e-3; % place atoms randomly within this radius
 Number = 10;
 
-sim.AddAtoms(createIonCloud(radiusofIonCloud, lightIons, Number))
-sim.AddAtoms(createIonCloud(radiusofIonCloud, heavyIons, 1))
+sim.AddAtoms(createIonCloud(rIC, lightIons, Number))
+sim.AddAtoms(createIonCloud(rIC, heavyIons, 1))
 
 % Add the linear Paul trap electric fields for each:
-[thVoltA, ~] = getVoltageForLinearTrapAQ(33*1.6e-19, 1.4e6*1.66e-27, TrapFreqA, traplength, radius, geomC, 0, 0.3);
-[thVoltB, ~] = getVoltageForLinearTrapAQ(1*1.6e-19, 138*1.66e-27, TrapFreqB, traplength, radius, geomC, 0, 0.3);
+[thVoltA, ~] = getVs4aq(heavyIons, TrapFreqA, traplength, radius, geomC, 0, 0.3);
+[thVoltB, ~] = getVs4aq(lightIons, TrapFreqB, traplength, radius, geomC, 0, 0.3);
 
-sim.Add(linearPaulTrap([thVoltA thVoltB]', endCapV, traplength, radius, geomC, [TrapFreqA TrapFreqB]'));
+sim.Add(linearPT([thVoltA thVoltB]', endCapV, traplength, radius, geomC, [TrapFreqA TrapFreqB]'));
 
-%Add some damping bath
+%Add a light damping bath
 sim.Add(langevinBath(3e-4, 1e-5));
 
-% Minimise by evolving in the presence of a langevin bath.
+% Minimise by evolving in the presence of a viscous langevin bath. We
+% remove the bath at the end of the minimisation.
 bath = langevinBath(0, 1e-5);
 sim.Add(bath);
-sim.Add(runCommand(10000));
+sim.Add(evolve(10000));
 sim.Remove(bath);
 
-% Run simulation
+% Having minimised the system, start to output coordinates to positions.txt
+% and run for a number of steps.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
-sim.Add(runCommand(10000));
+sim.Add(evolve(100000));
 sim.Execute();
 
 %% Post process results
