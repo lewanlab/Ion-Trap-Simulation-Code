@@ -77,7 +77,7 @@ pastelRed = [237 28 36]/255;
 % The first plot shows the trajectories of atoms in the trap.
 subplot(1,2,1);
 
-%depthPlotLines(x, y, z, pastelBlue, [50 150]); hold on;
+depthPlotLines(x, y, z, pastelBlue, [50 150]); hold on;
 d = depthPlot(x(:,1), y(:,1), z(:,1), pastelRed, [50 150], 'x'); hold off
 set(d, 'LineWidth', 3);
 xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)

@@ -2,8 +2,8 @@ function handle = depthPlotLines( x,y,z, fillColor, mSizes )
 %DEPTHPLOT Plots a series of points but lerps the marker color inbetween
 %the given values to give an illusion of depth
 
-if any(size(fillColor) ~= [2 3])
-    error('colors must be specified as 2x3');
+if any(size(fillColor) ~= [1 3])
+    error('colors must be specified as 1x3');
 end
 
 if nargin < 5
@@ -30,8 +30,8 @@ end
 
     function c = getColor(dist)
         dist3 = repmat(dist, 1, 3);
-        a = repmat(fillColor(1,:), size(dist,1), 1);
-        b = repmat(fillColor(2,:), size(dist,1), 1);
+        a = repmat(fillColor .* 0.5, size(dist,1), 1);
+        b = repmat(fillColor, size(dist,1), 1);
 
         c = a .* dist3 + (1 - dist3) .* b;
     end
