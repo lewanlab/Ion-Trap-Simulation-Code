@@ -5,4 +5,3 @@ function [ n ] = gasDensity( T, mbar)
 kb = 1.3806488e-23;
 n = mbar*100/(T*kb);
 end
-

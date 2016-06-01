@@ -41,7 +41,7 @@ q = 2 / r0 .^2 / (RF * 2 * pi).^2 * V0 * ((charge * 1.6e-19) / (mass * 1.67e-27)
 fprintf('System has a=%.5f, q=%.5f\n', a,q)
 %These values agree with those on page 47 of Gingell's thesis.
 
-sim.Add(linearPaulTrap(V0, U0, z0, r0, geometricKappa, RF));
+sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
 %Add some damping bath
 sim.Add(langevinBath(0, 1e-5));
@@ -52,7 +52,7 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(runCommand(10000));
+sim.Add(evolve(10000));
 sim.Execute();
 
 %% Plot the results
@@ -71,15 +71,14 @@ x = x*1e6; y = y*1e6; z = z*1e6;
 % pastel colour. A 3D-plot is used, with axis equal so that we get a true
 % sense of size.
 figure;
-deepBlue = [63 72 204]/255;
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 
 % The first plot shows the trajectories of atoms in the trap.
 subplot(1,2,1);
 
-depthPlotLines(x, y, z, [pastelBlue.*.5; pastelBlue], [50 150]); hold on;
-d = depthPlot(x(:,1), y(:,1), z(:,1), [pastelRed.*.5; pastelRed], [50 150], 'x'); hold off
+%depthPlotLines(x, y, z, pastelBlue, [50 150]); hold on;
+d = depthPlot(x(:,1), y(:,1), z(:,1), pastelRed, [50 150], 'x'); hold off
 set(d, 'LineWidth', 3);
 xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
@@ -92,7 +91,7 @@ grid off;  view(-45,5);
 % crystal arrangement.
 subplot(1,2,2);
 
-depthPlot(x(:,end), y(:,end), z(:,end), [pastelBlue.*.5; pastelBlue]);
+depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue);
 
 xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)

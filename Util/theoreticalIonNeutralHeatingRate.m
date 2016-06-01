@@ -10,8 +10,6 @@ function [ h_coll, gamma_elastic ] = theoreticalIonNeutralHeatingRate( n, Tn, mi
 % Ti - temperature of ion cloud (default: 0);
 % mn - mass of neutral particles
 
-%Author: Elliot Bentine
-
 if nargin < 3
    error('Not enough input parameters'); 
 end
@@ -34,4 +32,3 @@ u = (mn*mi)/(mi+mn);
 h_coll = (3*2.21/4)*(1.6021766e-19)/(8.854187e-12)*(1.3806488e-23)*(u.^0.5/(mi+mn))*(Tn-Ti)*(n*p.^0.5);
  gamma_elastic =2.21/4*(1.6e-19)/(8.854187e-12)*n*(p/u).^0.5;
 end
-

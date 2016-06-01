@@ -53,17 +53,23 @@ sim.Remove(bath);
 % Having minimised the system, start to output coordinates to positions.txt
 % and run for a number of steps.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
-sim.Add(evolve(100000));
+sim.Add(evolve(10000));
 sim.Execute();
 
 %% Post process results
-[~, ~, x,y,z] = readDump('positions.txt');
+[~, id, x,y,z] = readDump('positions.txt');
 
 indices = sim.GetSpeciesIndices();
 
+pastelBlue = [112 146 190]/255;
+pastelRed = [237 28 36]/255;
+
 figure;
 hold on
-plot3(x(indices{1},end), y(indices{1},end), z(indices{1}, end), 'xr');
-plot3(x(indices{2},end), y(indices{2},end), z(indices{2}, end), 'bo');
+color = repmat(pastelBlue, size(x, 1), 1);
+color(indices{2}, :) = pastelRed;
+% plot3(x(indices{1},end), y(indices{1},end), z(indices{1}, end), 'xr');
+% plot3(x(indices{2},end), y(indices{2},end), z(indices{2}, end), 'bo');
+depthPlot(x(:,end),y(:,end),z(:,end),color)
 axis equal
 title('Final positions of ion in trap');

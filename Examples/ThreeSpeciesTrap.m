@@ -69,13 +69,26 @@ sim.Execute();
 
 indices = sim.GetSpeciesIndices();
 
-%Plot some trajectories
+% Select some colors to use for each species
+pastelBlue = [112 146 190]/255;
+pastelRed = [237 28 36]/255;
+grey = [110 110 110] / 255;
+
+color = repmat(pastelBlue, size(x, 1), 1);
+color(indices{2}, :) = repmat(pastelRed, length(indices{2}), 1);
+color(indices{3}, :) = repmat(grey, length(indices{3}), 1);
+
+%Plot the end points of the trajectories
 frames = size(x,1)-10:size(x,1); %select last ten outputs
 figure;
 hold on
-plot3(x(indices{1}, end),y(indices{1}, end),z(indices{1}, end), 'xr');
-plot3(x(indices{2}, end),y(indices{2}, end),z(indices{2}, end), 'og');
-plot3(x(indices{3}, end),y(indices{3}, end),z(indices{3}, end), '^b');
+h1 = depthPlot(1e6*x(indices{1},end), 1e6*y(indices{1},end), 1e6*z(indices{1},end), color(indices{1},:)); hold on
+h2 = depthPlot(1e6*x(indices{2},end), 1e6*y(indices{2},end), 1e6*z(indices{2},end), color(indices{2},:));
+h3 = depthPlot(1e6*x(indices{3},end), 1e6*y(indices{3},end), 1e6*z(indices{3},end), color(indices{3},:)); hold off
 hold off
-title('Last positions');
-legend('Ca', 'ND', 'AlexaFluora');
+legend([h1 h2 h3], 'Ca', 'ND', 'AlexaFluora', 'Location', 'NorthEast');
+view(45,20);
+xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);

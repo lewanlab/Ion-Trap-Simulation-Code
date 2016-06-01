@@ -2,8 +2,8 @@ function handle = depthPlot( x,y,z, fillColor, mSizes, markertype )
 %DEPTHPLOT Plots a series of points but lerps the marker color inbetween
 %the given values to give an illusion of depth
 
-if any(size(fillColor) ~= [2 3])
-    error('colors must be specified as 2x3');
+if (size(fillColor, 2) ~= 3 && ~(size(fillColor, 1) ~= 1 || size(fillColor, 1) ~= size(x,1)))
+    error('colors must be specified as Nx3');
 end
 
 if size(x,2) ~= 1 || size(y,2) ~= 1 || size(z,2) ~= 1
@@ -16,6 +16,12 @@ end
 
 if nargin < 6
     markertype = 'filled';
+end
+
+
+if size(fillColor) == [1 3]
+   % repeat fill color for all atoms in list
+   fillColor = repmat(fillColor, size(x,1), 1);
 end
 
     function direction = getCameraViewDirection(axForGraph)
@@ -38,8 +44,8 @@ end
 
     function c = getColor(dist)
         dist3 = repmat(dist, 1, 3);
-        a = repmat(fillColor(1,:), size(dist,1), 1);
-        b = repmat(fillColor(2,:), size(dist,1), 1);
+        b = fillColor;
+        a = fillColor .* .5;
 
         c = a .* dist3 + (1 - dist3) .* b;
     end
