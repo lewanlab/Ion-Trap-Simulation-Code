@@ -1,13 +1,18 @@
-function [typeStruct] = AddAtomType( obj, charge, amuMass )
-%ADDATOMS Adds atom types.
-% Adds types of atoms to the simulation, eg create a definition for barium+
-% ions with ex.AddAtomType(1, 138).
+function [typeStruct] = AddAtomType( sim, charge, amuMass )
+%ADDATOMS Define atomic species used in simulations. Units are in atomic
+%charges and mass units.
+%
+% SYNTAX: AddAtomType(sim, charge, amuMass)
+%
+% Example: 
+%  AddAtomType(sim, 1, 40) % calcium 40+ ion
+% See Also: AddAtoms
 
-if obj.HasExecuted
+if sim.HasExecuted
     warning('Avoid editing the simulation once LAMMPS has executed.');
 end
 
-id = length(obj.AtomTypes(:))+1;
+id = length(sim.AtomTypes(:))+1;
 typeStruct = struct('cfgFileHandle', @()atomTypesCfg(id, charge, amuMass), 'id', id, 'charge', charge, 'mass', amuMass);
-obj.AtomTypes(end+1) = typeStruct;
+sim.AtomTypes(end+1) = typeStruct;
 end

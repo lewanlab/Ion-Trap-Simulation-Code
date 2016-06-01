@@ -1,12 +1,17 @@
-function Execute(obj)
-%Execute Starts lammps and configures it to perform the simulation.
+function Execute(sim)
+% EXECUTE Creates an input file from the configured simulation, launches
+% lammps and runs the simulation. Any changes to the simulation after this
+% command (eg adding new atom types) will not affect the results of the
+% simulation.
+%
+% SYNTAX: Execute(sim)
 
 %write the input file.
-WriteInputFile(obj);
+WriteInputFile(sim);
 
 %invoke LAMMPS
-runLAMMPS(obj.ConfigFileName);
+runLAMMPS(sim.ConfigFileName);
 
-obj.HasExecuted = true;
+sim.HasExecuted = true;
 
 end

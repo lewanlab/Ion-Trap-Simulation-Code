@@ -1,11 +1,13 @@
 %% Simple example
-% This simple example script creates a single species ion trap. 3 ions are
+% This simple example script creates a single species ion trap. N ions are
 % confined within this trap, and are cooled by interaction with a langevin
 % bath. The positions of atoms are output every 10 timesteps, and a secular
 % velocity is also output by averaging atomic velocities over each RF
 % cycle.
 close all
 clearvars
+
+NumberOfIons = 20;
 
 %Create an empty experiment.
 sim = LAMMPSSimulation();
@@ -17,13 +19,13 @@ sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 
 % Add some atoms:
 charge = 1;
-mass = 30;
+mass = 100;
 ions = sim.AddAtomType(charge, mass);
-sim.AddAtoms(createIonCloud(1e-4, ions, 1000, 1337));
+sim.AddAtoms(createIonCloud(1e-3, ions, NumberOfIons, 1337));
 
 %Add the linear Paul trap electric field.
-RF = 3.85e6;
-sim.Add(linearPaulTrap(300, 1, 5.5e-3, 7e-3, 0.244, RF));
+RF = 3.85e7;
+sim.Add(linearPaulTrap(50, 1, 5.5e-3, 7e-3, 0.244, RF));
 
 %Add some damping bath
 sim.Add(langevinBath(3e-3, 1e-5));
@@ -33,9 +35,12 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(runCommand(1000));
+sim.Add(runCommand(30000));
 sim.Execute();
 
 figure;
 [timestep, ~, x,y,z] = readDump('positions.txt');
+plot3(x',y',z','-','Color', [0.8 0.8 0.8]); hold on
 plot3(x(:,end)',y(:,end)',z(:,end)','k.');
+plot3(0,0,0,'g+');  hold off
+

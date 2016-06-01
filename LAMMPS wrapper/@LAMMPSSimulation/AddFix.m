@@ -1,8 +1,9 @@
-function AddFix( obj, fix )
+function AddFix( sim, fix )
 %ADDFIX Adds a fix to the atoms
-% Add a fix to the simulation. This may be thought of as a force, thoguh
+% Add a fix to the simulation. This may be thought of as a force, though
 % more abstract examples exist. Create the fix to add using a fix creation
 % command, eg linearPaulTrap, langevinBath, etc.
+% 
 % Example:
 %  AddFix(LAMMPSFix)
 % See Also: LINEARPAULTRAP, SHO, LANGEVINBATH, LASERCOOL, EFIELD,
@@ -12,14 +13,14 @@ if ~isa(fix, 'LAMMPSFix')
     error('Input argument invalid; must be of class LAMMPSFix.');
 end
 
-if obj.HasExecuted
+if sim.HasExecuted
     warning('Avoid editing the simulation once LAMMPS has executed.');
 end
 
 %Some fixes may specify a 'limiting timestep'
-if fix.time > 0 && fix.time < obj.LimitingTimestep
-    obj.LimitingTimestep = fix.time;
+if fix.time > 0 && fix.time < sim.LimitingTimestep
+    sim.LimitingTimestep = fix.time;
 end
 
-obj.Fixes(end+1) = fix;
+sim.Fixes(end+1) = fix;
 end

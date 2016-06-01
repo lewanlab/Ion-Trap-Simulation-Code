@@ -15,18 +15,37 @@ sim = LAMMPSSimulation();
 % minimum dimensions of the simulation box.
 sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 
-% Add some atoms:
+% Add a new atom type:
 charge = 1;
-mass = 30;
-ions = sim.AddAtomType(charge, mass);
-sim.AddAtoms(placeAtoms(ions, [0 0 0]', [0 0 0]', [-1 0 1]'*1e-6));
+mass = 40;
+calciumIons = sim.AddAtomType(charge, mass);
+
+% Create a cloud of ions based on this atom type. Seed is used for random
+% number generation in placing the atoms.
+N = 50;
+seed = 1;
+
+sim.AddAtoms(createIonCloud(1e-3, calciumIons, N, seed));
 
 %Add the linear Paul trap electric field.
+%(Numbers from Gingell's thesis)
 RF = 3.85e6;
-sim.Add(linearPaulTrap(300, 1, 5.5e-3, 7e-3, 0.244, RF));
+z0 = 5.5e-3 / 2;
+r0 = 7e-3 / 2;
+geometricKappa = 0.244;
+U0 = 15;
+V0 = 500;
+
+a = -4 * geometricKappa / z0 .^2 / (RF * 2 * pi).^2 * U0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
+q = 2 / r0 .^2 / (RF * 2 * pi).^2 * V0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
+fprintf('System has a=%.5f, q=%.5f\n', a,q)
+%These values agree with those on page 47 of Gingell's thesis.
+
+sim.Add(linearPaulTrap(V0, U0, z0, r0, geometricKappa, RF));
 
 %Add some damping bath
-sim.Add(langevinBath(3e-3, 1e-5));
+sim.Add(langevinBath(0, 1e-5));
+
 
 %Configure outputs.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
@@ -36,6 +55,52 @@ sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 sim.Add(runCommand(10000));
 sim.Execute();
 
-figure;
+%% Plot the results
+% Originally atoms start off as a randomly placed mess, but due to the
+% action of the Langevin bath they are cooled into a Coulomb crystal
+% formation. As a result, the first half of the simulation's trajectories
+% look very hectic as we have a gas-like phase. To make the plot clearer,
+% we will just plot the end part of the simulation after some cooling to an
+% ordered phase has taken place.
+
+% We load the results from the output file:
 [timestep, ~, x,y,z] = readDump('positions.txt');
-plot3(x',y',z');
+x = x*1e6; y = y*1e6; z = z*1e6; 
+
+% We will plot trajectories in light grey and final atom positions in a
+% pastel colour. A 3D-plot is used, with axis equal so that we get a true
+% sense of size.
+figure;
+deepBlue = [63 72 204]/255;
+pastelBlue = [112 146 190]/255;
+pastelRed = [237 28 36]/255;
+
+% The first plot shows the trajectories of atoms in the trap.
+subplot(1,2,1);
+
+depthPlotLines(x, y, z, [pastelBlue.*.5; pastelBlue], [50 150]); hold on;
+d = depthPlot(x(:,1), y(:,1), z(:,1), [pastelRed.*.5; pastelRed], [50 150], 'x'); hold off
+set(d, 'LineWidth', 3);
+xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
+grid off;  view(-45,5);
+
+
+% The second plot shows the final positions of the atoms in a Coulomb
+% crystal arrangement.
+subplot(1,2,2);
+
+depthPlot(x(:,end), y(:,end), z(:,end), [pastelBlue.*.5; pastelBlue]);
+
+xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
+grid off;  view(-45,5);
+
+%Title
+ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0
+1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
+text(0.5, 1,'Trajectories of Worked Example','HorizontalAlignment','center','VerticalAlignment', 'top', 'FontSize', 16)

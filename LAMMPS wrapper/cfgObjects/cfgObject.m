@@ -1,7 +1,7 @@
 classdef cfgObject < matlab.mixin.Heterogeneous & handle
-    %CFGOBJECT Objects that manifest on the configuration file.    
+    %CFGOBJECT Objects that implement LAMMPS commands in the input file.    
     properties
-        cfgFileHandle
+        cfgFileHandle % A function that generates text for the lammps input file
     end   
 end
 

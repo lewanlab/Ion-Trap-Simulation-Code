@@ -30,11 +30,14 @@ sim.AddRun(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 
 %Deliver periodic 'kicks' by randomizing the velocity, such that we excite
 %many modes over the simulation.
-temp = 1e-4;
+temp = 1e-5;
 for k=1:20
     sim.Add(thermalVelocities(temp, 'no'));
     sim.Add(runCommand(100000));
 end
+
+%Note: full RF simulation requires active cooling to prevent crystal from
+%'melting' due to applied kicks and RF heating.
 
 % Run simulation
 sim.Execute();

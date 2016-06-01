@@ -84,6 +84,18 @@ end
 
 %Prepare output for nargout
 id = reshape(atomVars(1, :, :), size(atomVars, 2), size(atomVars, 3));
+
+
+%reshape data to order indices correctly according to the read ids
+
+%first we sort according to the ordering of ids
+% [~,j] = sort(id,1);
+% 
+% d = shiftdim(([0:1:size(atomVars,3)-1])*size(atomVars,2),-1);
+% repmat(d, [size(atomVars
+% baseIndex = repmat(
+
+
 for i=1:nargout-2
     varargout{i} = reshape(atomVars(1+i, :, :), size(atomVars, 2), size(atomVars, 3));
 end

@@ -54,7 +54,7 @@ sim.Add(dump('positions2.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/max([RF_A RF_B]))}));
 
 % Run simulation
-sim.Add(runCommand(10000000));
+sim.Add(runCommand(1000000));
 sim.Execute();
 
 %% Post processing
@@ -113,7 +113,7 @@ title(sprintf('Density plot of Barium ion positions, with heavy ion at center (%
 a = x(2:11, :); c = z(2:11, :);
 dat = [a(:), c(:)]*1e6;
 
-[n,cBins] = hist3(dat, [1000 1000]); % default is to 10x10 bins
+[n,cBins] = hist3(dat, [100 100]); % default is to 10x10 bins
 
 n = n';
 %heavy ion
@@ -122,7 +122,7 @@ dat = [a(:), c(:)]*1e6;
 
 m = hist3(dat, cBins)'; % default is to 10x10 bins
 
-img = ones(1000,1000,3);
+img = ones(100,100,3);
 maxI = max([n(:); m(:)]);
 img(:,:,1) = n / max(n(:)) * maxI;
 img(:,:,3) = m / max(m(:)) * maxI; %normalise prob distribution per ion species
@@ -150,14 +150,6 @@ for i=fix(max(ylim)/50)*50:-50:min(ylim)
     plot3([min(xlim) min(xlim)+(max(xlim)-min(xlim))/50], [i i], [0.5 0.5], '-k');
 end
 hold off
-
-%create image
-% xb = linspace(min(dat(:,1)),max(dat(:,1)),size(n,1)+1);
-% yb = linspace(min(dat(:,2)),max(dat(:,2)),size(n,1)+1);
-% 
-% h = pcolor(xb,yb,[n1);
-
-
 
 xlabel('x position (\(\mu m\))', 'Interpreter', 'Latex')
 ylabel('z position (\(\mu m\))', 'Interpreter', 'Latex')

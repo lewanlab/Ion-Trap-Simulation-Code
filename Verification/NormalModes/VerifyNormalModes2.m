@@ -5,7 +5,7 @@ clear all
 close all
 
 
-UsePseudoPotentialApprox = true;
+UsePseudoPotentialApprox = false;
 
 % Compare normal modes of the ions to theoretical modes from
 % pseudopotential theory.
@@ -14,7 +14,7 @@ UsePseudoPotentialApprox = true;
 radiusofIonCloud = 1e-3;
 charge = 1;
 mass = 180;
-Number = 30;
+Number = 10;
 
 %Define trap
 z0 = 5.5e-3;
@@ -65,19 +65,19 @@ for i=1:3*Number
     [ma, fIndex] = max(a .* conj(a));
     
     if ~exist('simfs', 'var')
-        simfs = log(a .* conj(a));
+        simfs = (a .* conj(a));
     else
-        simfs = [simfs, log(a.*conj(a))];
+        simfs = [simfs, (a.*conj(a))];
     end
     
     result(end+1) = struct('mode', i, 'f', f(fIndex), 'thF', NM(i));
 end
-
+%%
 %convolve simfs with a spatial filter to make peaks visible (otherwise the
 %peaks aren't seen due to aliasing effects because number of bins >> number
 %of pixels.)
-G = fspecial('gaussian',[30 1],2);
-simfs = imfilter(simfs,G,'same');
+G = fspecial('gaussian',[100 1],10);
+simfsf = imfilter(log(simfs),G,'same');
 
 %plot mode frequencies
 figure;
@@ -92,13 +92,14 @@ ylabel('Frequency (kHz)');
 %Plot a figure showing the spectral decomposition of each eigenmode
 figure;
 %[xps,yps] = meshgrid(1:length(result), 1e-3*linspace(0, max(f), length(f)));
-colormap jet;
-imagesc(1:length(result)-1, 1e-3*linspace(0, max(f)), simfs);
+
+imagesc(1:length(result)-1, 1e-3*linspace(0, max(f)), simfsf);
 set(gca,'YDir','normal')
 hold on
-thR = plot([result(:).mode],[result(:).thF]*1e-3, '.k');
+thR = plot([result(:).mode],[result(:).thF]*1e-3, '-k', 'MarkerSize', 5, 'LineWidth', 1);
 legend(thR, 'theory');
-xlabel('Eigenmode');
-ylabel('Frequency (kHz)');
-title('Frequency decomposition of each eigenmode, log of amplitude');
+xlabel('Eigenmode', 'FontSize', 12);
+ylabel('Frequency (kHz)', 'FontSize', 12);
+title(sprintf('Normal modes of a Coulomb Crystal'), 'FontSize', 14);
 axis tight;
+ylim([0 200]);

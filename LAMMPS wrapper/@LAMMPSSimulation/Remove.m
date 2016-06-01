@@ -1,19 +1,14 @@
-function [ output_args ] = Remove( sim, obj )
-% Remove Removes a a fix or dump from the lammps simulation. The input
-% argument is the fix or command to remove from the simulation, which
-% should have previously been added via sim.add.
+function Remove( sim, obj )
+% REMOVE Disables a previously added fix or dump (obj) in the lammps
+% simulation. This can be used to eg. suspend output to a file or turn off
+% a force previously applied to the atoms.
 %
-% Note this implementation does not remove previously added
-% LAMMPSRunCommands/Fixes from the simulation object - rather, it adds
-% another runcommand at this point in the simulation which tells lammps to
-% unfix/undump/remove the previously added command.
-%
-% SYNTAX: Remove(obj)
+% SYNTAX: Remove(sim, obj)
 %
 % Example:
 %  Remove(LAMMPSFix)
 %  Remove(LAMMPSRunCommand)
-% See Also: Add
+% See Also: Add, Unfix
 
 if isa(obj, 'LAMMPSFix')
     sim.Unfix(obj);
@@ -22,7 +17,7 @@ elseif isa(obj, 'LAMMPSDump')
     rc.cfgFileHandle = @ () { '#Remove dump', sprintf('undump %s', obj.ID)};
     sim.Add(rc);
 else
-    error('Invalid argument to LAMMPSSimulation.Remove');
+    error('Invalid argument to LAMMPSSimulation.Remove: Must be either a LAMMPSFix or a LAMMPSDump');
 end
 
 end

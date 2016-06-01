@@ -3,8 +3,8 @@ function [ id ] = getUnusedID( type )
 %'atomtype', 'group', 'priority', 'command'. All return integer except fix, which returns a
 %string.
 % This command is for internal use of the lammps wrapper, in particular for
-% generating unique ids of fixes, groups etc when writing the sif file for
-% lammps. This should not be used by the end user.
+% generating unique ids of fixes, groups etc when writing the input file
+% for LAMMPS. This should not be used by the end user.
 
 persistent currAtomTypeID currFixID currRegionID currGroupID currPriority ...
     currCommID currDumpID;

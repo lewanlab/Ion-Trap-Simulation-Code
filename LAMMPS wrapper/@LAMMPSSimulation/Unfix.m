@@ -1,20 +1,23 @@
-function Unfix( obj, fix )
-%UNFIX Removes a fix from the experiment, eg to disable a secular
-%potential after minimisation.
+function Unfix( sim, fix )
+% UNFIX Disables a previously added fix. 
+%
+% Unfix inserts a command to the simulation input file that disables a fix
+% previously added to the simulation via AddFix.
+%
+% SYNTAX: Unfix(sim, fix)
+%
+% Example:
+%  Unfix(sim, biasField)
+% See Also: Add, Remove
 
-%NOTE: What this really does is insert a command to lammps to remove the
-%fix. The fix does not really get removed from the experiment object as such.
-
-%check input
+% validate input
 if ~isa(fix, 'LAMMPSFix')
     error('Input argument invalid; must be of class LAMMPSFix.');
 end
 
-%create a fake object and insert into the fix list to unregister the fix at
-%the correct moment.
 unfix = LAMMPSFix();
 unfix.cfgFileHandle = @()unfixCfg(fix.ID);
-obj.AddFix(unfix);
+sim.AddFix(unfix);
 
 end
 

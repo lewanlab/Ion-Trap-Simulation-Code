@@ -1,21 +1,22 @@
 classdef LAMMPSSimulation < handle
-    % A numerical simulation of an ion trap in LAMMPS.
+    % LAMMPSSIMULATION A LAMMPS simulation that may be configured by defining atoms types, adding atoms and forces.
+    
     properties
-        %TIMESTEP - Timestep of simulation, in seconds
+        %TIMESTEP - time between adjacent simulation steps in seconds
         TimeStep
         
-        %CONFIGFILENAME - name of the confile file written as an input file
-        %to the lammps executable.
+        %CONFIGFILENAME - name of the generated input file that configures
+        %the lammps executable to run the simulation. The file is generated
+        %using WriteInputFile.
         ConfigFileName
     end
     
     
     properties (SetAccess=private)
-        %FIXES - List of applied fixes
+        %FIXES - Time-Ordered list of applied fixes
         Fixes
         
-        %RUNCOMMANDS - List of Run commands, which are priority-sensitive
-        %statements in lammps.
+        %RUNCOMMANDS - Time-ordered list of run commands
         RunCommands
         
         %ATOMLIST - list of function handles that will create atoms.
@@ -34,22 +35,16 @@ classdef LAMMPSSimulation < handle
         
         %HASEXECUTED - Has the simulation been run?
         HasExecuted
-    end
-    
-    properties (Constant)
-        %AU - atomic mass units in kg
-        au = 1.66053892e-27;
         
-        %E - elementary charge in Coulombs
-        e = 1.60217657e-19;
+        %COULOMBCUTOFF - Cut-off range for the Coulomb interaction
+        CoulombCutoff
     end
     
     methods
         
         function obj = LAMMPSSimulation
             % LAMMPSSimulation Create a simulation template for lammps
-            % Example:
-            %  LAMMPSSimulation()
+            % SYNTAX: LAMMPSSimulation()
             getUnusedID('reset');
             obj.Fixes = LAMMPSFix.empty(1,0); %create empty array of fix objects.
             obj.RunCommands = LAMMPSRunCommand.empty(1,0);
@@ -60,12 +55,14 @@ classdef LAMMPSSimulation < handle
             obj.LimitingTimestep = 1;
             obj.ConfigFileName = 'experiment.lammps';
             obj.HasExecuted = false;
-            %obj.add(
+            obj.CoulombCutoff = 0.01;
             
             %Add time integration to motion of atoms
             AddFix(obj, fixNVEIntegrator());
             
         end
+        
+        % These functions are defined in other files:
         
         SetSimulationDomain(obj, length, width, height)
         AddAtoms(obj, atoms)
