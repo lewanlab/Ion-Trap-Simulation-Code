@@ -1,7 +1,11 @@
-function [ strings ] = nveIntegratorCfg( fixID )
+function [ strings ] = nveIntegratorCfg( fixID, groupName, preamble )
 %NVEINTEGRATORCFG Configures all atoms to undergo nve integration.
 
-strings = { '#Configuring integration for all atoms', sprintf('fix %s all nve', fixID), ''};
+if nargin < 2
+    groupName = 'all';
+end
+
+strings = { '#Configuring integration for all atoms', preamble, sprintf('fix %s %s nve', fixID, groupName), ''};
 
 end
 

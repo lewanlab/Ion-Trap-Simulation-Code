@@ -9,9 +9,6 @@ function WriteInputFile(sim)
 
 fHandle = fopen(sim.ConfigFileName, 'w');
 
-%reset id counts.
-getUnusedID('reset');
-
 fwriteCell(fHandle, boilerplate());
 %fprintf(fHandle, 'package omp 0\n');
 fprintf(fHandle, 'units si\n');
@@ -47,6 +44,35 @@ fprintf(fHandle, 'thermo 10000\n');
 fprintf(fHandle, 'thermo_style custom step cpu\n');
 fprintf(fHandle, 'thermo_modify flush yes\n');
 fprintf(fHandle, 'fix extra all print 10 "SIMULATION RUNNING----------------------"\n');
+
+%Rigid Body support: If we have a rigid body, we set the group
+%'nonRigidBody' that defines the group of all atoms not in rigid bodies to
+%be 'all - rigid body group', otherwise just 'all'.
+rbGrps = {};
+for i=1:length(sim.Fixes)
+    fixId = sim.Fixes(i).ID;
+    if length(fixId) > 5 && strcmp(fixId(1:5), 'rbody')
+        rbGrps{end+1} = ['g' fixId];
+        
+        % Write rigid body definitions now
+        fprintf(fHandle, '#Priority promoted for fix (%s) due to needing group definition\n', sim.Fixes(i).ID);
+        fwriteCell(fHandle, sim.Fixes(i).cfgFileHandle());
+        sim.Fixes(i).cfgFileHandle = @() ( {''} );
+    end
+end
+
+% We must add the nve integrator only to atoms not in rigid body groups.
+if length(rbGrps) > 1
+    rbs = cellfun(@(x) [x ' '], rbGrps, 'UniformOutput', false);
+    nonRigidBody = ['group nonRigidBody subtract all ' [rbs{:}]];
+else
+    nonRigidBody = 'group nonRigidBody union all';
+end
+nonRigidBodyNVE = fixNVEIntegrator('nonRigidBody', nonRigidBody);
+fwriteCell(fHandle, nonRigidBodyNVE.cfgFileHandle());
+
+%reset id counts.
+getUnusedID('reset');
 
 %Write fixes and commands in order.
 numToWrite = length(sim.Fixes) + length(sim.RunCommands);

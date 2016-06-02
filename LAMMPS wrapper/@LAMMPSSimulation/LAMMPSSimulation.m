@@ -57,9 +57,6 @@ classdef LAMMPSSimulation < handle
             obj.HasExecuted = false;
             obj.CoulombCutoff = 0.01;
             
-            %Add time integration to motion of atoms
-            AddFix(obj, fixNVEIntegrator());
-            
         end
         
         % These functions are defined in other files:

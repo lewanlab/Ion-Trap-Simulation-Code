@@ -18,14 +18,14 @@ sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 % Add a new atom type:
 charge = 1;
 mass = 40;
-calciumIons = sim.AddAtomType(charge, mass);
+rod1 = sim.AddAtomType(charge, mass);
+freeIons = sim.AddAtomType(charge, mass);
 
-% Create a cloud of ions based on this atom type. Seed is used for random
-% number generation in placing the atoms.
-N = 50;
-seed = 1;
+N = 20;
+AddAtoms(sim, placeAtoms(rod1, [1 1 1]'*1e-4, [-0.5 0 0.5]'*1e-5, [0 0 0]'));
+AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
 
-sim.AddAtoms(createIonCloud(1e-3, calciumIons, N, seed));
+sim.Add(rigidBody(rod1));
 
 %Add the linear Paul trap electric field.
 %(Numbers from Gingell's thesis)
@@ -46,6 +46,8 @@ sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 %Add some damping bath
 sim.Add(langevinBath(0, 1e-5));
 
+% Minimise first in this bath
+sim.Add(evolve(10000));
 
 %Configure outputs.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
@@ -67,38 +69,8 @@ sim.Execute();
 [timestep, ~, x,y,z] = readDump('positions.txt');
 x = x*1e6; y = y*1e6; z = z*1e6; 
 
-% We will plot trajectories in light grey and final atom positions in a
-% pastel colour. A 3D-plot is used, with axis equal so that we get a true
-% sense of size.
-figure;
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
+c = [repmat(pastelRed, 3, 1); repmat(pastelBlue, N, 1)];
 
-% The first plot shows the trajectories of atoms in the trap.
-subplot(1,2,1);
-
-depthPlotLines(x, y, z, pastelBlue, [50 150]); hold on;
-d = depthPlot(x(:,1), y(:,1), z(:,1), pastelRed, [50 150], 'x'); hold off
-set(d, 'LineWidth', 3);
-xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
-grid off;  view(-45,5);
-
-
-% The second plot shows the final positions of the atoms in a Coulomb
-% crystal arrangement.
-subplot(1,2,2);
-
-depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue);
-
-xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
-grid off;  view(-45,5);
-
-%Title
-ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
-text(0.5, 1,'Trajectories of Worked Example','HorizontalAlignment','center','VerticalAlignment', 'top', 'FontSize', 16)
+depthPlot(x(:,end),y(:,end),z(:,end), c);
