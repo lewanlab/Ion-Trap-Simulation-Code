@@ -1,10 +1,15 @@
-%% Verify Secular Motion Frequency
+%% Verify Secular Motion Frequency ( full RF )
 % Author: Elliot Bentine 2013
+% 
+% This script verifies that the linear Paul trap implementation in (py)Lion
+% gives the correct force. It uses a single ion and is as such very fast to
+% run, but it cannot verify that ion-ion interactions are correct as a
+% result. Mathieu parameters for the translational motion (a and q) are
+% varied and the secular frequencies extracted from the simulation results.
+% These are plotted against theoretical predictions.
+
 clear all
 close all
-
-%%
-% This script verifies the correct secular motion frequencies for ions in a linear Paul trap, simulated in LAMMPS.
 
 %define the ions to use.
 ionMass = 40;
@@ -31,22 +36,22 @@ for TrapQ = TrapQs
     
     %Create an experiment in lammps
     sim = LAMMPSSimulation();
-    sim.SetSimulationDomain(1e-3,1e-3,1e-3);
+    SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
     
-    C40Ion = sim.AddAtomType(ionCharge, ionMass);
+    C40Ion = AddAtomType(sim, ionCharge, ionMass);
     radiusofIonCloud = 1e-3;
-    sim.AddAtoms(createIonCloud(radiusofIonCloud, C40Ion, 1, 1e-4))
+    AddAtoms(sim, createIonCloud(radiusofIonCloud, C40Ion, 1, 1e-4))
     
     ionMasskg = ionMass * 1.66e-27; %in kilograms
     ionChargeC = ionCharge * 1.6e-19; %in Coulombs
     
-    [oscV, endcapV] = getVoltageForLinearTrapAQ(ionChargeC, ionMasskg, Trapfrequency, EndcapZ0, R0, geometricC, TrapA, TrapQ);
-    sim.AddFix(linearPaulTrap(oscV, endcapV, EndcapZ0, R0, geometricC, Trapfrequency));
+    [oscV, endcapV] = getVs4aq(C40Ion, Trapfrequency, EndcapZ0, R0, geometricC, TrapA, TrapQ);
+    sim.AddFix(linearPT(oscV, endcapV, EndcapZ0, R0, geometricC, Trapfrequency));
     
     sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
     
     % Run simulation
-    sim.Add(runCommand(10000));
+    sim.Add(evolve(10000));
     sim.Execute();
     
     %Load the output and analyse it for secular frequencies.
@@ -81,15 +86,15 @@ theoreticalZFreq = Trapfrequency/2*sqrt(-2*TrapA)*ones(size(TrapQs));
 %Plot measured secular frequencies from LAMMPS as crosses, and theoretical
 %frequencies from theory as circles.
 gr = figure; hold on;
-plot(TrapQs, pseudoX, 'rx');
-plot(TrapQs, pseudoY, 'gx');
-plot(TrapQs, pseudoZ, 'bx');
-plot(TrapQs, theoreticalRadialFreq, 'ro');
-plot(TrapQs, theoreticalRadialFreq, 'go');
-plot(TrapQs, theoreticalZFreq, 'bo');
+plot(TrapQs, 1e-3*pseudoX, 'rx');
+plot(TrapQs, 1e-3*pseudoY, 'gx');
+plot(TrapQs, 1e-3*pseudoZ, 'bx');
+plot(TrapQs, 1e-3*theoreticalRadialFreq, 'ro');
+plot(TrapQs, 1e-3*theoreticalRadialFreq, 'go');
+plot(TrapQs, 1e-3*theoreticalZFreq, 'bo');
 
-title('Secular Frequencies of a Single Ion');
+title('Full RF Trap Frequencies for a Single Ion');
 xlabel('Trap Q');
-ylabel('Secular freq (Hz)');
+ylabel('Secular freq (kHz)');
 legend('LAMMPS x', 'LAMMPS y', 'LAMMPS z', 'Theory x', 'Theory y', 'Theory z');
 saveas(gr, 'micromotion.fig');

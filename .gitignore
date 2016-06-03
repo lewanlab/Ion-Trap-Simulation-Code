@@ -3,4 +3,5 @@
 **/*.asv
 **/*.cfg
 **/*.txt
+**/*.fig
 Simulations/**

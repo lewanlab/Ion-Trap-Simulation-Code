@@ -24,16 +24,16 @@ ions = sim.AddAtomType(charge, 20);
 sim.AddAtoms(createIonCloud(radiusofIonCloud, ions, Number, 1e-5))
 
 % Add the linear Paul trap electric field of Gingell's thesis:
-sim.AddFix(linearPaulTrap(oscillatingVoltage, endcapPotential, z0, r0, geometricFactor, Radiofrequency));
+sim.Add(linearPT(oscillatingVoltage, endcapPotential, z0, r0, geometricFactor, Radiofrequency));
 
 %Add some damping bath
-sim.AddFix(langevinBath(0, 1e-6));
+sim.Add(langevinBath(0, 1e-6));
 
 % Run simulation
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 
 % Run simulation
-sim.Add(runCommand(10000));
+sim.Add(evolve(10000));
 sim.Execute();
 
 %% Post process data
