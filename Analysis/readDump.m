@@ -1,7 +1,11 @@
-function [timesteps, id, varargout] = readDump( filename )
+function [timesteps, id, varargout] = readDump( filename, sortResults )
 %READDUMP Reads data from the given dump file. The dump should be a file
 %with atom quantities in the order 'id vargout' eg 'id vx vy vz', then read
 %using [timesteps, id, vx, vy, vz] =readDump('dump.txt')
+
+if (nargin < 2)
+    sortResults = 1;
+end
 
 fHandle = fopen(filename, 'r');
 cleaner = onCleanup(@() fclose(fHandle));
@@ -88,13 +92,14 @@ id = reshape(atomVars(1, :, :), size(atomVars, 2), size(atomVars, 3));
 
 %reshape data to order indices correctly according to the read ids
 
-%first we sort according to the ordering of ids
-% [~,j] = sort(id,1);
-% 
-% d = shiftdim(([0:1:size(atomVars,3)-1])*size(atomVars,2),-1);
-% repmat(d, [size(atomVars
-% baseIndex = repmat(
-
+if (sortResults)
+    % sort according to the ordering of ids
+    [~,j] = sort(id,1);
+    for i=1:size(id, 3)
+        atomVars(:,:,i) = atomVars(:, j(:,i), i);
+        id(:,i) = id(j(:,i),i);
+    end
+end
 
 for i=1:nargout-2
     varargout{i} = reshape(atomVars(1+i, :, :), size(atomVars, 2), size(atomVars, 3));

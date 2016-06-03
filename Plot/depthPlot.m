@@ -1,6 +1,6 @@
 function handle = depthPlot( x,y,z, fillColor, mSizes, markertype )
-%DEPTHPLOT Plots a series of points but lerps the marker color inbetween
-%the given values to give an illusion of depth
+%DEPTHPLOT Plots a series of points but lerps the marker color and size
+%between given values to give an illusion of depth
 
 if (size(fillColor, 2) ~= 3 && ~(size(fillColor, 1) ~= 1 || size(fillColor, 1) ~= size(x,1)))
     error('colors must be specified as Nx3');
@@ -80,9 +80,13 @@ if strcmp(markertype, 'filled')
     set(handle,'MarkerEdgeColor', 'k');
 end
 
-%Start a timer that will update the view on rotation
+%Start a timer that will update the view on rotation*
 t = timer('TimerFcn', @(~,~,~)callback(), 'StartDelay', 0.2, 'Period', 0.1,...
 'ExecutionMode', 'fixedDelay');
 start(t);
+
+% * Note: I experimented with a callback, but it's not as reliable and also
+% this way allows you to use hold and and generate multiple depth plots.
+
 end
 

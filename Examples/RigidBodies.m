@@ -21,13 +21,13 @@ freeIons = sim.AddAtomType(charge, mass);
 % together
 rod1 = sim.AddAtomType(charge, mass);
 
-% create a cloud of 50 free ions
-N = 50;
-AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
-
 % position the ions to fix into a rigid rod. We separate each of the three
 % ions by 5 microns.
 AddAtoms(sim, placeAtoms(rod1, [1 1 1]'*1e-4, [-0.5 0 0.5]'*1e-5, [0 0 0]'));
+
+% create a cloud of 50 free ions
+N = 50;
+AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
 
 % We add a rigid body declaration to fix the relative positions of this
 % group of atoms.
@@ -71,16 +71,19 @@ sim.Execute();
 % ordered phase has taken place.
 
 % We load the results from the output file:
-[timestep, ~, x,y,z] = readDump('positions.txt');
+[timestep, id, x,y,z] = readDump('positions.txt');
 x = x*1e6; y = y*1e6; z = z*1e6; 
 
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 c = [repmat(pastelRed, 3, 1); repmat(pastelBlue, N, 1)];
 
-h = depthPlot(x(:,end),y(:,end),z(:,end), c);
+h = depthPlot(x(:,end),y(:,end),z(:,end), c, [100 250]*3); hold on
+h2 = plot3(x(1:3,end), y(1:3, end), z(1:3, end), '-', 'LineWidth', 3, 'Color', pastelRed); hold off
+%axis vis3d
+set(gcf, 'Position', [0 0 800 600], 'Units', 'pixels')
 
-xlim(xlim() * 1.2); ylim(ylim() * 1.2); zlim(zlim() * 1.2);
+xlim(xlim() * 1.7); ylim(ylim() * 1.7); zlim(zlim() * 1.7);
 xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
@@ -94,6 +97,7 @@ while (ishandle(h))
         end
         
         set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
+        set(h2, 'XData', x(1:3,i)', 'YData', y(1:3,i)', 'ZData', z(1:3,i)');
         pause(0.04);
     end
 end
