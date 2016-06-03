@@ -1,34 +1,40 @@
 %% Simple example
-% This simple example script creates a single species ion trap. 3 ions are
-% confined within this trap, and are cooled by interaction with a langevin
-% bath. The positions of atoms are output every 10 timesteps, and a secular
-% velocity is also output by averaging atomic velocities over each RF
-% cycle.
+% This example follows broadly the same structure as the 'SimpleExample.m'
+% script. We additionally create a charged rod of three ions fixed as a
+% rigid body and add them to the simulation. To emphasise the elements
+% required for rigid body simulation we shall reduce comments elsewhere.
 close all
 clearvars
 
 %Create an empty experiment.
 sim = LAMMPSSimulation();
 
-% Add a simulation box. This determines the region that will be simulated.
-% The simulation box may expand beyond these limits, but these specify the
-% minimum dimensions of the simulation box.
+% Define simulation region.
 sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 
 % Add a new atom type:
 charge = 1;
 mass = 40;
-rod1 = sim.AddAtomType(charge, mass);
 freeIons = sim.AddAtomType(charge, mass);
 
-N = 20;
-AddAtoms(sim, placeAtoms(rod1, [1 1 1]'*1e-4, [-0.5 0 0.5]'*1e-5, [0 0 0]'));
+% Additionally define an atom type the same as the first to be fixed
+% together
+rod1 = sim.AddAtomType(charge, mass);
+
+% create a cloud of 50 free ions
+N = 50;
 AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
 
+% position the ions to fix into a rigid rod. We separate each of the three
+% ions by 5 microns.
+AddAtoms(sim, placeAtoms(rod1, [1 1 1]'*1e-4, [-0.5 0 0.5]'*1e-5, [0 0 0]'));
+
+% We add a rigid body declaration to fix the relative positions of this
+% group of atoms.
 sim.Add(rigidBody(rod1));
 
 %Add the linear Paul trap electric field.
-%(Numbers from Gingell's thesis)
+%(Numbers from Gingell's thesis, p47)
 RF = 3.85e6;
 z0 = 5.5e-3 / 2;
 r0 = 7e-3 / 2;
@@ -39,7 +45,6 @@ V0 = 500;
 a = -4 * geometricKappa / z0 .^2 / (RF * 2 * pi).^2 * U0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
 q = 2 / r0 .^2 / (RF * 2 * pi).^2 * V0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
 fprintf('System has a=%.5f, q=%.5f\n', a,q)
-%These values agree with those on page 47 of Gingell's thesis.
 
 sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
@@ -50,11 +55,11 @@ sim.Add(langevinBath(0, 1e-5));
 sim.Add(evolve(10000));
 
 %Configure outputs.
-sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
+sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 2));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(evolve(10000));
+sim.Add(evolve(100));
 sim.Execute();
 
 %% Plot the results
@@ -73,4 +78,22 @@ pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 c = [repmat(pastelRed, 3, 1); repmat(pastelBlue, N, 1)];
 
-depthPlot(x(:,end),y(:,end),z(:,end), c);
+h = depthPlot(x(:,end),y(:,end),z(:,end), c);
+
+xlim(xlim() * 1.2); ylim(ylim() * 1.2); zlim(zlim() * 1.2);
+xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
+
+% start update loop to animate video
+while (ishandle(h))
+    for i=1:size(x,2)
+        if ~ishandle(h) 
+            break;
+        end
+        
+        set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
+        pause(0.04);
+    end
+end
