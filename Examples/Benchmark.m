@@ -7,7 +7,7 @@
 close all
 clearvars
 
-NumberOfIons = 100;
+NumberOfIons = 300;
 
 %Create an empty experiment.
 sim = LAMMPSSimulation();
@@ -22,7 +22,7 @@ charge = 1;
 mass = 100;
 ions = sim.AddAtomType(charge, mass);
 sim.AddAtoms(createIonCloud(1e-5, ions, NumberOfIons, 1337));
-
+%sim.Add(custom('fix rebalance all balance 1000 1.3 shift xyz 10 1.05'))
 %Add the linear Paul trap electric field.
 RF = 3.85e7;
 z0 = 5.5e-3; r0 = 7e-3; geomC = 0.244;
