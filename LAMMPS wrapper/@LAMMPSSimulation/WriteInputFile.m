@@ -24,6 +24,8 @@ fprintf(fHandle, 'atom_style charge\n');
 
 fwriteCfg(fHandle, defineSimulationBox(sim.SimulationBox.length, sim.SimulationBox.width, sim.SimulationBox.height, length(sim.AtomTypes(:))));
 
+writePairwiseInteraction(sim, fHandle);
+
 % Add atoms to config file
 writeAtoms(sim, fHandle);
 
@@ -38,10 +40,6 @@ getSteps(sim.TimeStep, 'set');
 fprintf(fHandle, 'timestep %e\n', sim.TimeStep);
 %update cfg helper timestep
 cfghelperTimestep(sim.TimeStep);
-
-fprintf(fHandle, 'atom_modify sort 0 1\n');
-%Use Coulomb force with 1cm cutoff for now.
-fprintf(fHandle, 'pair_style coul/cut %e\npair_coeff * * \n', sim.CoulombCutoff);
 
 writeOutputStreamConfig(fHandle);
 
