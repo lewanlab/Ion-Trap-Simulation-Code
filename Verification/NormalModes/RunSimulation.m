@@ -18,7 +18,7 @@ pseudopot = linearPseudoPT(OscV, EndcapV, z0, r0, geomC, RF, ions);
 sim.Add(pseudopot);
 
 %Minimize as far as possible in given iterations
-sim.Add(minimize(0,0, 500000, 500000,1e-7));
+sim.Add(minimize(0,0, 500000, 500000,1e-6));
 
 if ~UsePseudoPotentialApprox
     %Replace the pseudopot with micromotion
@@ -29,14 +29,24 @@ end
 %Configure output to a file - by Nyquist we won't determine the RF, but
 %should be able to determine all normal mode freqs (which must be less than
 %RF)
+
+sim.Add(langevinBath(0, 1e-4));
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
+sim.Add(evolve(100000));
 
 %Deliver periodic 'kicks' by randomizing the velocity, such that we excite
 %many modes over the simulation.
-temp = 1e-5;
-for k=1:20
+temp = 1e-8;
+%sim.Add(thermalVelocities(temp, 'no'));
+
+for k=1:4
     sim.Add(thermalVelocities(temp, 'no'));
     sim.Add(evolve(100000));
+    % Also cool crystal back to zero in between kicks to prevent 'melting'
+    %b = langevinBath(0, 1e-4);
+    %sim.Add(b);
+    %sim.Add(evolve(10000));
+    %sim.Unfix(b);
 end
 
 %Note: full RF simulation requires active cooling to prevent crystal from
@@ -52,3 +62,8 @@ time = timesteps*sim.TimeStep;
 x = x';
 y = y';
 z = z';
+
+% Dispose of last half of data
+%x = x(4000:end, :);
+%y = y(4000:end, :);
+%z = z(4000:end, :);

@@ -76,7 +76,7 @@ G = fspecial('gaussian',[100 1],10);
 simfsf = imfilter(log(simfs),G,'same');
 
 %plot mode frequencies
-figure;
+figure(1);
 simR = plot([result(:).mode],[result(:).f]*1e-3, 'xb'); hold on
 thR = plot([result(:).mode],[result(:).thF]*1e-3, '+r');
 title('Peak frequency component of each eigenmode');
@@ -86,7 +86,7 @@ xlabel('Eigenmode');
 ylabel('Frequency (kHz)');
 
 %Plot a figure showing the spectral decomposition of each eigenmode
-figure;
+figure(2);
 %[xps,yps] = meshgrid(1:length(result), 1e-3*linspace(0, max(f), length(f)));
 
 imagesc(1:length(result)-1, 1e-3*linspace(0, max(f)), simfsf);
@@ -99,3 +99,8 @@ ylabel('Frequency (kHz)', 'FontSize', 12);
 title(sprintf('Normal modes of a Coulomb Crystal'), 'FontSize', 14);
 axis tight;
 ylim([0 200]);
+
+% Attempt to determine if the crystal partially melted during the
+% simulation. We test if any atoms have moved outside of a threshold region
+% size. This region size is taken by using the 
+figure(3)

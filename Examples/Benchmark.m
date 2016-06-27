@@ -7,7 +7,7 @@
 close all
 clearvars
 
-NumberOfIons = 300;
+NumberOfIons = 1000;
 
 %Create an empty experiment.
 sim = LAMMPSSimulation();
@@ -37,7 +37,7 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(evolve(30000));
+sim.Add(evolve(100000));
 sim.Execute();
 
 figure;
@@ -45,4 +45,3 @@ figure;
 plot3(x',y',z','-','Color', [0.8 0.8 0.8]); hold on
 plot3(x(:,end)',y(:,end)',z(:,end)','k.');
 plot3(0,0,0,'g+');  hold off
-

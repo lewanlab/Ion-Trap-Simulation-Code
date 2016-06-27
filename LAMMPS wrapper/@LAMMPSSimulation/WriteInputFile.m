@@ -9,20 +9,19 @@ function WriteInputFile(sim)
 
 fHandle = fopen(sim.ConfigFileName, 'w');
 
-fwriteCell(fHandle, boilerplate());
-%fprintf(fHandle, 'package omp 0\n');
+% Write boiler plate text to the input file:
+writeBoilerplate(fHandle);
+
+% Determine gpu acceleration state
+writeGpuAccel(sim, fHandle);
+
 fprintf(fHandle, 'units si\n');
 fprintf(fHandle, 'atom_style charge\n');
 
 fwriteCfg(fHandle, defineSimulationBox(sim.SimulationBox.length, sim.SimulationBox.width, sim.SimulationBox.height, length(sim.AtomTypes(:))));
 
-%Write atom insertion commands
-fwriteCfg(fHandle, sim.AtomList);
-
-%Definitions for atom types
-fprintf(fHandle, '# Atom definitions\n');
-fwriteCfg(fHandle, sim.AtomTypes);
-fprintf(fHandle, '\n');
+% Add atoms to config file
+writeAtoms(sim, fHandle);
 
 %Write appropriate timestep.
 if sim.LimitingTimestep < sim.TimeStep
@@ -40,10 +39,7 @@ fprintf(fHandle, 'atom_modify sort 0 1\n');
 %Use Coulomb force with 1cm cutoff for now.
 fprintf(fHandle, 'pair_style coul/cut %e\npair_coeff * * \n', sim.CoulombCutoff);
 
-fprintf(fHandle, 'thermo 10000\n');
-fprintf(fHandle, 'thermo_style custom step cpu\n');
-fprintf(fHandle, 'thermo_modify flush yes\n');
-fprintf(fHandle, 'fix extra all print 10 "SIMULATION RUNNING----------------------"\n');
+writeOutputStreamConfig(fHandle);
 
 %Rigid Body support: If we have a rigid body, we set the group
 %'nonRigidBody' that defines the group of all atoms not in rigid bodies to
@@ -62,7 +58,7 @@ for i=1:length(sim.Fixes)
 end
 
 % We must add the nve integrator only to atoms not in rigid body groups.
-if length(rbGrps) > 1
+if ~isempty(rbGrps)
     rbs = cellfun(@(x) [x ' '], rbGrps, 'UniformOutput', false);
     nonRigidBody = ['group nonRigidBody subtract all ' [rbs{:}]];
 else

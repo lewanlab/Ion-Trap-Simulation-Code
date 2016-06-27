@@ -38,6 +38,10 @@ classdef LAMMPSSimulation < handle
         
         %COULOMBCUTOFF - Cut-off range for the Coulomb interaction
         CoulombCutoff
+        
+        %GPUACCEL - Enable/Disable gpu acceleration through the gpu
+        %package.
+        GPUAccel
     end
     
     methods
@@ -56,7 +60,7 @@ classdef LAMMPSSimulation < handle
             obj.ConfigFileName = 'experiment.lammps';
             obj.HasExecuted = false;
             obj.CoulombCutoff = 0.01;
-            
+            obj.GPUAccel = 0;
         end
         
         % These functions are defined in other files:

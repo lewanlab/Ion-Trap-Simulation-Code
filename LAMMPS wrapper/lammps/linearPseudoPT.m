@@ -21,7 +21,7 @@ q_r = 2 * (atomType.charge * 1.6e-19) * OscillatingV / ...
 w_r = (RFFrequency * 2 * pi) / 2 * (a_r + (q_r^2)/2)^0.5;
 w_z = (RFFrequency * 2 * pi) / 2 * (a_z)^0.5;
 
-fprintf('Frequency of motion: %e, %e\n', w_r, w_z)
+fprintf('Frequency of motion: f_r=%e, f_z=%e\n', w_r/2/pi, w_z/2/pi)
 
 %Spring constants for force calculation.
 k_r = w_r ^ 2 * (atomType.mass *  1.660e-27);
