@@ -16,14 +16,15 @@ writeBoilerplate(fHandle);
 % Determine gpu acceleration state
 writeGpuAccel(sim, fHandle);
 
-% Configure neighbor list generation parameters
-writeNeighborList(sim, fHandle);
-
 fprintf(fHandle, 'units si\n');
 fprintf(fHandle, 'atom_style charge\n');
 
 fwriteCfg(fHandle, defineSimulationBox(sim.SimulationBox.length, sim.SimulationBox.width, sim.SimulationBox.height, length(sim.AtomTypes(:))));
 
+% Configure neighbor list generation parameters
+writeNeighborList(sim, fHandle);
+
+% Configure pairwise interactions for long-range Coulombics.
 writePairwiseInteraction(sim, fHandle);
 
 % Add atoms to config file
@@ -41,6 +42,8 @@ fprintf(fHandle, 'timestep %e\n', sim.TimeStep);
 %update cfg helper timestep
 cfghelperTimestep(sim.TimeStep);
 
+% Intermittently write status update to output stream so we know the
+% simulation is proceeding as it should.
 writeOutputStreamConfig(fHandle);
 
 %Rigid Body support: If we have a rigid body, we set the group

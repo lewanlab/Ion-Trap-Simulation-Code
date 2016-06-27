@@ -3,7 +3,6 @@ function writePairwiseInteraction( sim, fHandle)
 %Sets scaling of Coulomb repulsion to 1 for all atom types.
 
 fprintf(fHandle, '# Configure pairwise interactions for long range Coulombics only\n');
-%fprintf(fHandle, 'atom_modify sort 0 1\n');
 fprintf(fHandle, 'pair_style coul/cut %e\npair_coeff * * \n\n', sim.CoulombCutoff);
 
 
