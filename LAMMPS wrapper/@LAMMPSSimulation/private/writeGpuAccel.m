@@ -8,6 +8,6 @@ else
     fprintf(fileHandle, 'package gpu 1\n');
     fprintf(fileHandle, 'suffix gpu\n');
 end
-
+    fprintf(fileHandle, '\n');
 end
 

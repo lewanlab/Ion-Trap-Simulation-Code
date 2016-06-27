@@ -8,6 +8,7 @@ function WriteInputFile(sim)
 %  WriteInputFile(sim)
 
 fHandle = fopen(sim.ConfigFileName, 'w');
+oc = onCleanup(@() fclose(fHandle));
 
 % Write boiler plate text to the input file:
 writeBoilerplate(fHandle);
@@ -15,8 +16,8 @@ writeBoilerplate(fHandle);
 % Determine gpu acceleration state
 writeGpuAccel(sim, fHandle);
 
-fprintf(fHandle, 'neighbor %.3f %s\n', sim.NeighborSkin, sim.NeighborList);
-fprintf(fHandle, 'neigh_modify once yes\n');
+% Configure neighbor list generation parameters
+writeNeighborList(sim, fHandle);
 
 fprintf(fHandle, 'units si\n');
 fprintf(fHandle, 'atom_style charge\n');
@@ -99,6 +100,5 @@ for i=1:numToWrite
     end
 end
 
-fclose(fHandle);
 getSteps(0,'set');
 end
