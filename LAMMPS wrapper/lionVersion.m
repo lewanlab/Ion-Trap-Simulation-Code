@@ -3,4 +3,3 @@ function [ out ] = lionVersion( )
 out = 'v1.002';
 
 end
-
