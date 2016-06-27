@@ -9,8 +9,22 @@ classdef LAMMPSSimulation < handle
         %the lammps executable to run the simulation. The file is generated
         %using WriteInputFile.
         ConfigFileName
+        
+        %COULOMBCUTOFF - Cut-off range for the Coulomb interaction
+        CoulombCutoff
+        
+        %GPUACCEL - Enable/Disable gpu acceleration through the gpu
+        %package.
+        GPUAccel
+        
+        %NEIGHBORLIST - Select style used for neighbour list (see
+        %http://lammps.sandia.gov/doc/neighbor.html)
+        NeighborList
+        
+        %NEIGHBORSKIN - size of the skin used for neighbor calculations (see
+        %http://lammps.sandia.gov/doc/neighbor.html)
+        NeighborSkin
     end
-    
     
     properties (SetAccess=private)
         %FIXES - Time-Ordered list of applied fixes
@@ -35,32 +49,27 @@ classdef LAMMPSSimulation < handle
         
         %HASEXECUTED - Has the simulation been run?
         HasExecuted
-        
-        %COULOMBCUTOFF - Cut-off range for the Coulomb interaction
-        CoulombCutoff
-        
-        %GPUACCEL - Enable/Disable gpu acceleration through the gpu
-        %package.
-        GPUAccel
     end
     
     methods
         
-        function obj = LAMMPSSimulation
+        function sim = LAMMPSSimulation
             % LAMMPSSimulation Create a simulation template for lammps
             % SYNTAX: LAMMPSSimulation()
             getUnusedID('reset');
-            obj.Fixes = LAMMPSFix.empty(1,0); %create empty array of fix objects.
-            obj.RunCommands = LAMMPSRunCommand.empty(1,0);
-            obj.AtomList = struct('cfgFileHandle', {}, 'atomNumber', {});
-            obj.AtomTypes = struct('cfgFileHandle', {}, 'id', {}, 'charge', {}, 'mass', {});
-            obj.SimulationBox = struct('width', {}, 'height', {}, 'length', {});
-            obj.TimeStep = 1;
-            obj.LimitingTimestep = 1;
-            obj.ConfigFileName = 'experiment.lammps';
-            obj.HasExecuted = false;
-            obj.CoulombCutoff = 0.01;
-            obj.GPUAccel = 0;
+            sim.Fixes = LAMMPSFix.empty(1,0); %create empty array of fix objects.
+            sim.RunCommands = LAMMPSRunCommand.empty(1,0);
+            sim.AtomList = struct('cfgFileHandle', {}, 'atomNumber', {});
+            sim.AtomTypes = struct('cfgFileHandle', {}, 'id', {}, 'charge', {}, 'mass', {});
+            sim.SimulationBox = struct('width', {}, 'height', {}, 'length', {});
+            sim.TimeStep = 1;
+            sim.LimitingTimestep = 1;
+            sim.ConfigFileName = 'experiment.lammps';
+            sim.HasExecuted = false;
+            sim.CoulombCutoff = 0.01;
+            sim.GPUAccel = 0;
+            sim.NeighborList = 'nsq';
+            sim.NeighborSkin = 1;
         end
         
         % These functions are defined in other files:

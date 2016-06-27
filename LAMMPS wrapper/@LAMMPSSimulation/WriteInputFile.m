@@ -15,6 +15,9 @@ writeBoilerplate(fHandle);
 % Determine gpu acceleration state
 writeGpuAccel(sim, fHandle);
 
+fprintf(fHandle, 'neighbor %.3f %s\n', sim.NeighborSkin, sim.NeighborList);
+fprintf(fHandle, 'neigh_modify once yes\n');
+
 fprintf(fHandle, 'units si\n');
 fprintf(fHandle, 'atom_style charge\n');
 

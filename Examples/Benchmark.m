@@ -11,6 +11,7 @@ NumberOfIons = 1000;
 
 %Create an empty experiment.
 sim = LAMMPSSimulation();
+sim.GPUAccel = true;
 
 % Add a simulation box. This determines the region that will be simulated.
 % The simulation box may expand beyond these limits, but these specify the
@@ -37,7 +38,7 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(evolve(100000));
+sim.Add(evolve(3000));
 sim.Execute();
 
 figure;
