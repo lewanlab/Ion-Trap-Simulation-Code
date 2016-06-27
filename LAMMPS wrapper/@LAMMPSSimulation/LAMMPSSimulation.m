@@ -66,7 +66,7 @@ classdef LAMMPSSimulation < handle
             sim.LimitingTimestep = 1;
             sim.ConfigFileName = 'experiment.lammps';
             sim.HasExecuted = false;
-            sim.CoulombCutoff = 0.01;
+            sim.CoulombCutoff = 10;%0.01;
             sim.GPUAccel = 0;
             sim.NeighborList = 'nsq';
             sim.NeighborSkin = 1;
