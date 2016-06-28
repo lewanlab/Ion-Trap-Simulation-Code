@@ -11,7 +11,7 @@ function [ fix ] = efield( Ex, Ey, Ez )
 % See Also: http://lammps.sandia.gov/doc/fix_efield.html
 
 fix = LAMMPSFix();
-fix.cfgFileHandle = efieldCfg(fix.ID, Ex, Ey, Ez);
+fix.createInputFileText = @efieldCfg;
+fix.InputFileArgs = { Ex, Ey, Ez };
 
 end
-

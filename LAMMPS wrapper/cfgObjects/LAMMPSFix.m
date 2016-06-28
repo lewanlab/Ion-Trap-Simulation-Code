@@ -1,8 +1,12 @@
-classdef LAMMPSFix < PrioritisedCfgObject
+classdef LAMMPSFix < InputFileElement
     %FIX All fixes
     
     properties
-        time %apply a limiting timestep if time != 0;
+        %TIME apply a limiting timestep if time != 0;
+        time
+        
+        %BASENAME prepend this string_ to fixIDs
+        baseName
     end
     
     methods
@@ -12,7 +16,17 @@ classdef LAMMPSFix < PrioritisedCfgObject
                 baseName = '';
             end
             obj.time = 0;
-            obj.ID = [baseName getUnusedID('fix')];
+            obj.baseName = baseName;
+        end
+        
+        function id = getID(obj)
+           
+            if ~isempty(obj.baseName)
+                id = [obj.baseName '_' obj.ID];
+            else
+                id = obj.ID;
+            end
+            
         end
     end
 end

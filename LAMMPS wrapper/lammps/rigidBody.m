@@ -16,6 +16,7 @@ for i=1:nargin
 end
 
 fix = LAMMPSFix('rbody');
-fix.cfgFileHandle = rigidBodyCfg(fix.ID, listTypes);
+fix.createInputFileText = @rigidBodyCfg;
+fix.InputFileArgs = listTypes;
 
 end

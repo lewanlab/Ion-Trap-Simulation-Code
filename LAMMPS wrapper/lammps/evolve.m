@@ -5,7 +5,7 @@ function [ runCmd ] = evolve( nSteps )
 % 
 % See Also: http://lammps.sandia.gov/doc/run.html
 
-runCmd = LAMMPSRunCommand();
-runCmd.cfgFileHandle = @()runCommandCfg(nSteps);
+runCmd = InputFileElement();
+runCmd.createInputFileText = @(~) runCommandCfg(nSteps);
 
 end

@@ -27,11 +27,8 @@ classdef LAMMPSSimulation < handle
     end
     
     properties (SetAccess=private)
-        %FIXES - Time-Ordered list of applied fixes
-        Fixes
-        
-        %RUNCOMMANDS - Time-ordered list of run commands
-        RunCommands
+        %FIXES - Time-Ordered list of simulation elements
+        Elements
         
         %ATOMLIST - list of function handles that will create atoms.
         AtomList
@@ -56,15 +53,14 @@ classdef LAMMPSSimulation < handle
         function sim = LAMMPSSimulation
             % LAMMPSSimulation Create a simulation template for lammps
             % SYNTAX: LAMMPSSimulation()
-            getUnusedID('reset');
-            sim.Fixes = LAMMPSFix.empty(1,0); %create empty array of fix objects.
-            sim.RunCommands = LAMMPSRunCommand.empty(1,0);
+            
+            sim.Elements = InputFileElement.empty(1,0); %create empty array of fix objects.
             sim.AtomList = struct('cfgFileHandle', {}, 'atomNumber', {});
             sim.AtomTypes = struct('cfgFileHandle', {}, 'id', {}, 'charge', {}, 'mass', {});
             sim.SimulationBox = struct('width', {}, 'height', {}, 'length', {});
             sim.TimeStep = 1;
             sim.LimitingTimestep = 1;
-            sim.ConfigFileName = 'experiment.lammps';
+            sim.ConfigFileName = 'sim.lammps';
             sim.HasExecuted = false;
             sim.CoulombCutoff = 10;
             sim.GPUAccel = 0;
@@ -73,12 +69,9 @@ classdef LAMMPSSimulation < handle
         end
         
         % These functions are defined in other files:
-        
         SetSimulationDomain(obj, length, width, height)
         AddAtoms(obj, atoms)
         [atomTypeStruct] = AddAtomType(obj, charge, mass);
-        AddFix(obj, fix)
-        AddRun(obj, run)
         Execute(obj)
         WriteInputFile(obj)
         Unfix(obj, fix)        

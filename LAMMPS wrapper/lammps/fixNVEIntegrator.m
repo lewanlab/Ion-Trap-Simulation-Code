@@ -17,7 +17,8 @@ if nargin < 2
 end
 
 fix = LAMMPSFix();
-fix.cfgFileHandle =  @()nveIntegratorCfg(fix.ID, groupName, preamble);
+fix.createInputFileText =  @nveIntegratorCfg;
+fix.InputFileArgs = { groupName, preamble };
 
 end
 

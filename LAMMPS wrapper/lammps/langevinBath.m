@@ -20,9 +20,10 @@ function [ fix ] = langevinBath( temperature, dampingTime, ionSpecies )
 fix = LAMMPSFix();
 
 if nargin < 3
-    fix.cfgFileHandle = @()langevinBathCfg(fix.ID, temperature, dampingTime);
+    fix.createInputFileText = @langevinBathCfg;
+    fix.InputFileArgs = { temperature, dampingTime };
 else
-    fix.cfgFileHandle = @()typeGroupPrefix(@(g)langevinBathCfg(fix.ID, temperature, dampingTime, g), ionSpecies.id);
+    fix.createInputFileText = @()typeGroupPrefix(@(g)langevinBathCfg(fix.ID, temperature, dampingTime, g), ionSpecies.id);
 end
 
 

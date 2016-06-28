@@ -16,7 +16,7 @@ function [ runCmd ] = minimize( etol, ftol, maxiter, maxeval, maxDist )
 %
 % See Also: http://lammps.sandia.gov/doc/minimize.html
 
-runCmd = LAMMPSRunCommand();
-runCmd.cfgFileHandle = @()minimizeCfg(etol, ftol, maxiter, maxeval, maxDist);
+runCmd = InputFileElement();
+runCmd.createInputFileText = @(~) minimizeCfg(etol, ftol, maxiter, maxeval, maxDist);
 
 end

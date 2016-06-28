@@ -15,9 +15,9 @@ if ~isa(fix, 'LAMMPSFix')
     error('Input argument invalid; must be of class LAMMPSFix.');
 end
 
-unfix = LAMMPSFix();
-unfix.cfgFileHandle = @()unfixCfg(fix.ID);
-sim.AddFix(unfix);
+unfix = InputFileElement();
+unfix.createInputFileText = @(~) unfixCfg(getID(fix));
+sim.Add(unfix);
 
 end
 

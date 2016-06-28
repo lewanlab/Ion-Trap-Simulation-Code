@@ -1,7 +1,7 @@
 function WriteInputFile(sim)
 %WRITEINPUTFILE Takes a previously configured simulation object and
 %produces an input file that implements the desired simulation in lammps.
-% 
+%
 % SYNTAX: WriteInputFile(sim)
 %
 % Example:
@@ -36,11 +36,10 @@ if sim.LimitingTimestep < sim.TimeStep
     sim.TimeStep = sim.LimitingTimestep;
 end
 
+% Update timestep on helper utilities and set timestep in input file.
 getSteps(sim.TimeStep, 'set');
-
-fprintf(fHandle, 'timestep %e\n', sim.TimeStep);
-%update cfg helper timestep
 cfghelperTimestep(sim.TimeStep);
+fprintf(fHandle, 'timestep %e\n', sim.TimeStep);
 
 % Intermittently write status update to output stream so we know the
 % simulation is proceeding as it should.
@@ -50,15 +49,21 @@ writeOutputStreamConfig(fHandle);
 %'nonRigidBody' that defines the group of all atoms not in rigid bodies to
 %be 'all - rigid body group', otherwise just 'all'.
 rbGrps = {};
-for i=1:length(sim.Fixes)
-    fixId = sim.Fixes(i).ID;
+for i=1:length(sim.Elements)
+    e = sim.Elements{i};
+    if (~isa(e, 'LAMMPSFix'))
+        continue;
+    end
+        
+    fixId = getID(e);
+        
     if length(fixId) > 5 && strcmp(fixId(1:5), 'rbody')
         rbGrps{end+1} = ['g' fixId];
         
         % Write rigid body definitions now
         fprintf(fHandle, '#Priority promoted for fix (%s) due to needing group definition\n', sim.Fixes(i).ID);
-        fwriteCell(fHandle, sim.Fixes(i).cfgFileHandle());
-        sim.Fixes(i).cfgFileHandle = @() ( {''} );
+        fwriteCell(fHandle, getLines(e));
+        e.createInputFileText = @(~) ( {''} );
     end
 end
 
@@ -70,35 +75,17 @@ else
     nonRigidBody = 'group nonRigidBody union all';
 end
 nonRigidBodyNVE = fixNVEIntegrator('nonRigidBody', nonRigidBody);
-fwriteCell(fHandle, nonRigidBodyNVE.cfgFileHandle());
+nonRigidBodyNVE.ID = 'motion';
+fwriteCell(fHandle, getLines(nonRigidBodyNVE));
 
 %reset id counts.
-getUnusedID('reset');
+%getUnusedID('reset');
 
-%Write fixes and commands in order.
-numToWrite = length(sim.Fixes) + length(sim.RunCommands);
-fixi = 1;
-runi = 1;
-for i=1:numToWrite
-    %write runs and fixes in the correct order.
-    if fixi > length(sim.Fixes)
-        %written all fixes - only commands remain
-        fwriteCell(fHandle, sim.RunCommands(runi).cfgFileHandle());
-        runi = runi + 1;
-    elseif runi > length(sim.RunCommands)
-        %written all commands, only fixes remain
-        fwriteCell(fHandle, sim.Fixes(fixi).cfgFileHandle());
-        fixi = fixi + 1;
-    else
-        
-        if sim.Fixes(fixi).Priority < sim.RunCommands(runi).Priority
-            fwriteCell(fHandle, sim.Fixes(fixi).cfgFileHandle());
-            fixi = fixi + 1;
-        else
-            fwriteCell(fHandle, sim.RunCommands(runi).cfgFileHandle());
-            runi = runi + 1;
-        end
-    end
+% Write each element in the simulation to the input file
+for i=1:length(sim.Elements)
+    element = sim.Elements{i};
+    text = getLines(element);
+    fwriteCell(fHandle, text);
 end
 
 getSteps(0,'set');

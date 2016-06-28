@@ -1,4 +1,4 @@
-classdef LAMMPSVariable < cfgObject
+classdef LAMMPSVariable < InputFileElement
     %LAMMPSVARIABLE Interface, represents some variable used for output or
     %further operation in lammps, eg average velocity, secular velocity,
     %etc.
@@ -11,17 +11,16 @@ classdef LAMMPSVariable < cfgObject
     
     properties (SetAccess = private)
         variableType
-        ID
     end
     
     methods
         function obj = LAMMPSVariable()
             %LAMMPSVARIABLE Creates a new LAMMPSVariable object and assigns
             %it an unused id
-            obj.ID = getUnusedID('fix');
+            obj.ID =  idString(6);
             obj.Frequency = @() 1;
             obj.setVariableType('fix');
-            obj.cfgFileHandle = @() { };
+            obj.createInputFileText = @(~) { };
             obj.Length = 1;
         end
         

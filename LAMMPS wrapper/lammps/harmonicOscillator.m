@@ -19,7 +19,8 @@ if nargin > 2
     fix.time = 1/(10*f);
     fix.cfgFileHandle = @()typeGroupPrefix(@(g)SHOCfg(fix.ID, k_x, k_y, k_z, g), atomType.id);
 else
-    fix.cfgFileHandle = @()SHOCfg(fix.ID, k_x, k_y, k_z);
+    fix.createInputFileText = @SHOCfg;
+    fix.InputFileArgs = { k_x, k_y, k_z };
 end
 
 

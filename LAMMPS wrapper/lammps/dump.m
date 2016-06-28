@@ -34,6 +34,7 @@ variables = literalsToLammpsVariables(variables);
 
 %If no error thrown, lammpsVariables is now a cell of LAMMPSVariable objects.
 dumpCmd = LAMMPSDump();
-dumpCmd.cfgFileHandle = @()dumpCfg(filename, getUnusedID('dump'), variables, interval);
+dumpCmd.createInputFileText = @dumpCfg;
+dumpCmd.InputFileArgs = { filename, variables, interval };
 
 end

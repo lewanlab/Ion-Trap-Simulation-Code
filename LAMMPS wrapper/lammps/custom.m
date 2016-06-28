@@ -13,8 +13,8 @@ function [ runCmd ] = custom( command )
 % See Also: http://lammps.sandia.gov/doc/Manual.html,
 % http://lammps.sandia.gov/doc/Section_commands.html#comm
 
-runCmd = LAMMPSRunCommand();
-runCmd.cfgFileHandle = @()customCommandCfg(command);
+runCmd = InputFileElement();
+runCmd.createInputFileText = @(~) customCommandCfg(command);
 
 end
 

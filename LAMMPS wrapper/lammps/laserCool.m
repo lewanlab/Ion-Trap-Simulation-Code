@@ -26,7 +26,8 @@ if any(k < 0)
 end
 
 fixObj = LAMMPSFix();
-fixObj.cfgFileHandle = @()laserCoolCfg(fixObj.ID, atomType.id, k(1), k(2), k(3));
+fixObj.createInputFileText = @laserCoolCfg;
+fixObj.InputFileArgs =  { atomType.id, k(1), k(2), k(3) };
 
 end
 

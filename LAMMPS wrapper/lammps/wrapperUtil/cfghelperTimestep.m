@@ -1,5 +1,5 @@
 function [ output ] = cfghelperTimestep( input )
-%LAMMPSTIMESTEP Gets or sets the global variable used when writing the
+%cfghelperTimestep Gets or sets the global variable used when writing the
 %config file. An end user of the wrapper should never need to use this
 %function.
 

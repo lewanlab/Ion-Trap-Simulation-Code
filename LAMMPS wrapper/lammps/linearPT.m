@@ -41,6 +41,7 @@ OscillatingV = OscillatingV(:);
 
 fix = LAMMPSFix();
 fix.time = 1/max(RFFrequency(:))/20;
-fix.cfgFileHandle = @()linearPaulTrapCfg(fix.ID, OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, Anisotropy, offset);
+fix.createInputFileText = @linearPaulTrapCfg;
+fix.InputFileArgs = { OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, Anisotropy, offset };
 
 end

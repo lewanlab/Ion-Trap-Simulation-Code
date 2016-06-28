@@ -13,8 +13,8 @@ function Remove( sim, obj )
 if isa(obj, 'LAMMPSFix')
     sim.Unfix(obj);
 elseif isa(obj, 'LAMMPSDump')
-    rc = LAMMPSRunCommand();
-    rc.cfgFileHandle = @ () { '#Remove dump', sprintf('undump %s', obj.ID)};
+    rc = InputFileElement();
+    rc.createInputFileText = @ (~) { '#Remove dump', sprintf('undump %s', obj.getID())};
     sim.Add(rc);
 else
     error('Invalid argument to LAMMPSSimulation.Remove: Must be either a LAMMPSFix or a LAMMPSDump');

@@ -16,6 +16,5 @@ end
 nStepsHandle = @() ceil(time/cfghelperTimestep('get'));
 outLV = stepAvg(lammpsVariables, nStepsHandle);
 
-
 end
 

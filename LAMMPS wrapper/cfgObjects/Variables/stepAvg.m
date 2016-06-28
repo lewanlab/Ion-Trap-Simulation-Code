@@ -48,7 +48,7 @@ outLV.Length = sum(cellfun(@(x) x.Length, lammpsVariables));
 %other needed quantities.
 preamble = {};
 for lv=lammpsVariables
-    strs = lv{1}.cfgFileHandle();
+    strs = getLines(lv{1});
     if ~isempty(strs)
         for s=strs
             preamble{end+1} = s;
@@ -74,8 +74,8 @@ else
 end
 
 preamble{end+1} = '# define time integration of variables over number of steps:';
-outLV.cfgFileHandle = @() [preamble, ...
-    {sprintf('fix %s all ave/atom 1 %d %d%s', outLV.ID, nStepsHandle(), nStepsHandle(), variableString)}];
+outLV.createInputFileText = @(~) [preamble, ...
+    {sprintf('fix %s all ave/atom 1 %d %d%s', getID(outLV), nStepsHandle(), nStepsHandle(), variableString)}];
 
 end
 

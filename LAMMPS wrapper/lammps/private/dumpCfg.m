@@ -1,4 +1,4 @@
-function [ strings ] = dumpCfg( filename, id, lammpsVariables, Nsteps )
+function [ strings ] = dumpCfg( id, filename, lammpsVariables, Nsteps )
 %DUMPCFG Writes cfg file text for dumping lammps variables to file
 %lammpsVariables is a cell of LAMMPSVariable objects.
 
@@ -22,7 +22,7 @@ outputVars = sprintf('%s ', vars{:});
 %lammpsVariable styles should implement recursion if it is needed (eg
 %stepAvg of a timeAvg)
 for i=1:length(lammpsVariables)
-   extra = lammpsVariables{i}.cfgFileHandle();
+   extra = getLines(lammpsVariables{i});
    if ~isempty(extra)
        for str=extra
           strings{end+1} = str{1};

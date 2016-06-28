@@ -33,7 +33,8 @@ timestep = 1/max(w_z, w_r)/10;
 %RFFrequency should be in Hz, not rad per second.
 fix = LAMMPSFix();
 fix.time = timestep;
-fix.cfgFileHandle = @()pseudoLinearPaulTrapCfg(fix.ID, k_r, k_z, atomType.id);
+fix.createInputFileText = @pseudoLinearPaulTrapCfg;
+fix.InputFileArgs = { k_r, k_z, atomType.id };
 
 end
 

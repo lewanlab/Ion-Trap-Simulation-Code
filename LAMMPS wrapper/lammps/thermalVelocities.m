@@ -26,8 +26,8 @@ if ~strcmp(zeroTotalMom,'yes') && ~strcmp(zeroTotalMom,'no')
     error('zeroTotalMom must be "yes" or "no".');
 end
 
-runCmd = LAMMPSRunCommand();
-runCmd.cfgFileHandle = @()thermalVelocitiesCfg(temperature, zeroTotalMom, seed);
+runCmd = InputFileElement();
+runCmd.createInputFileText = @(~) thermalVelocitiesCfg(temperature, zeroTotalMom, seed);
 
 end
 
