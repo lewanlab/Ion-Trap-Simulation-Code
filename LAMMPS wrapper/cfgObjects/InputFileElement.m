@@ -24,19 +24,18 @@ classdef InputFileElement < matlab.mixin.Heterogeneous & handle
         %file element in LAMMPS commands.
             ife = inputFileElement;
             if iscell(ife.InputFileArgs)
-                text = ife.createInputFileText(ife.ID, ife.InputFileArgs{:});
+                text = ife.createInputFileText(getID(ife), ife.InputFileArgs{:});
             elseif ~isempty(ife.InputFileArgs)
-                text = ife.createInputFileText(ife.ID, ife.InputFileArgs);
+                text = ife.createInputFileText(getID(ife), ife.InputFileArgs);
             else
-                text = ife.createInputFileText(ife.ID);
+                text = ife.createInputFileText(getID(ife));
             end
         end
         
         function ref = getID(inputFileElement)
         %GETID Gets the unique ID representing the input file element.
             ref = inputFileElement.ID;
-        end    
-        
+        end            
     end
     
 end

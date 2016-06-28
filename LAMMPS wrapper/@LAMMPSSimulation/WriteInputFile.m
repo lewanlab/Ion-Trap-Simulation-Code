@@ -61,9 +61,9 @@ for i=1:length(sim.Elements)
         rbGrps{end+1} = ['g' fixId];
         
         % Write rigid body definitions now
-        fprintf(fHandle, '#Priority promoted for fix (%s) due to needing group definition\n', sim.Fixes(i).ID);
+        fprintf(fHandle, '#Priority promoted for fix (%s) due to needing group definition\n', getID(e));
         fwriteCell(fHandle, getLines(e));
-        e.createInputFileText = @(~) ( {''} );
+        sim.Elements{i} = emptyElement();
     end
 end
 
