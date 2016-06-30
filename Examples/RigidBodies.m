@@ -33,6 +33,9 @@ AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
 % group of atoms.
 sim.Group(rod1).Rigid = 1;
 
+% Can also group atoms together by id, for example:
+% sim.Group( [ 4 5 6 ] ).Rigid = 1;
+
 %Add the linear Paul trap electric field.
 %(Numbers from Gingell's thesis, p47)
 RF = 3.85e6;
@@ -97,7 +100,8 @@ while (ishandle(h))
         end
         
         set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
-        set(h2, 'XData', x(1:3,i)', 'YData', y(1:3,i)', 'ZData', z(1:3,i)');
+        set(h2, 'XData', x(1:3,)i', 'YData', y(1:3,i)', 'ZData', z(1:3,i)');
         pause(0.04);
     end
+    pause(1);
 end
