@@ -2,6 +2,7 @@ function [ fix ] = harmonicOscillator( f_x, f_y, f_z, group )
 %HARMONICOSCILLATOR Adds a simple harmonic oscillator to the given group of
 %atoms (all atoms if no group specified).
 % f_x, f_y, f_z are spring constants along the three cartesian axes.
+%
 % SYNTAX: harmonicOscillator( f_x, f_y, f_z )
 %         harmonicOscillator( f_x, f_y, f_z, group )
 

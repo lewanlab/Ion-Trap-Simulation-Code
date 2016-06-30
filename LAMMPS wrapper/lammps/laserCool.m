@@ -8,7 +8,7 @@ function [ fixObj ] = laserCool( atomType, gamma )
 % 
 % Syntax: laserCool( atomType, gamma )
 %
-% Example: laserCool( calcium, [ 1 0 0 ] / 60e-6 ) % 60us viscous force along one direction
+% Example: laserCool( calcium, [ 1 Inf Inf ] / 60e-6 ) % 60us viscous force along one direction
 % 
 % See Also: langevinBath
 
