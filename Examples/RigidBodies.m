@@ -31,7 +31,7 @@ AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
 
 % We add a rigid body declaration to fix the relative positions of this
 % group of atoms.
-sim.Add(rigidBody(rod1));
+sim.Group(rod1).Rigid = 1;
 
 %Add the linear Paul trap electric field.
 %(Numbers from Gingell's thesis, p47)

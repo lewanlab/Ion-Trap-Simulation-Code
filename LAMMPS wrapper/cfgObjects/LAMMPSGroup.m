@@ -10,6 +10,12 @@ classdef LAMMPSGroup < handle
         
         %ID - unique identifier of this group
         ID;
+        
+        %RIGID - flag specifying whether the group should be evolved as a
+        %rigid body. Note that LION will not check whether atom assignments
+        %to rigid groups overlap. It is assumed that a rigid group contains
+        %atoms that are not in any other rigid group.
+        Rigid;
     end
     
     methods
@@ -31,6 +37,8 @@ classdef LAMMPSGroup < handle
             self.Content = p.Results.content;
             
             self.ID = ['grp_' idString(5)];
+            
+            self.Rigid = 0;
             
         end
         

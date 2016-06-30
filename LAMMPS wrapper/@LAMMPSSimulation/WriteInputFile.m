@@ -48,41 +48,9 @@ writeOutputStreamConfig(fHandle);
 % Write all defined groups to output file
 writeGroups(sim, fHandle)
 
-%Rigid Body support: If we have a rigid body, we set the group
-%'nonRigidBody' that defines the group of all atoms not in rigid bodies to
-%be 'all - rigid body group', otherwise just 'all'.
-rbGrps = {};
-for i=1:length(sim.Elements)
-    e = sim.Elements{i};
-    if (~isa(e, 'LAMMPSFix'))
-        continue;
-    end
-        
-    fixId = getID(e);
-        
-    if length(fixId) > 5 && strcmp(fixId(1:5), 'rbody')
-        rbGrps{end+1} = ['g' fixId];
-        
-        % Write rigid body definitions now
-        fprintf(fHandle, '#Priority promoted for fix (%s) due to needing group definition\n', getID(e));
-        fwriteCell(fHandle, getLines(e));
-        sim.Elements{i} = emptyElement();
-    end
-end
-
-% We must add the nve integrator only to atoms not in rigid body groups.
-if ~isempty(rbGrps)
-    rbs = cellfun(@(x) [x ' '], rbGrps, 'UniformOutput', false);
-    nonRigidBody = ['group nonRigidBody subtract all ' [rbs{:}]];
-else
-    nonRigidBody = 'group nonRigidBody union all';
-end
-nonRigidBodyNVE = fixNVEIntegrator('nonRigidBody', nonRigidBody);
-nonRigidBodyNVE.ID = 'motion';
-fwriteCell(fHandle, getLines(nonRigidBodyNVE));
-
-%reset id counts.
-%getUnusedID('reset');
+% Rigid Body support: lump groups with rigid into a separate rigid body
+% integration.
+writeTimeIntegration(sim, fHandle)
 
 % Write each element in the simulation to the input file
 for i=1:length(sim.Elements)
