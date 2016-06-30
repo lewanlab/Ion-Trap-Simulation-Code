@@ -12,14 +12,16 @@ function [ g ] = Group( sim, content )
 % Deduce group style from input type
 if isnumeric(content)
     style = 'id';
+    c = content;
 elseif isstruct(content) && isfield(content, 'id')
     style = 'type';
+    c = [content.id];
 else
     error('Invalid content! Expect either an array of atomic ids or atomic species.');
 end
 
 % Create group from information
-ng = LAMMPSGroup('style', style, 'content', content);
+ng = LAMMPSGroup('style', style, 'content', c);
 
 found = false;
 % First see if another group exists matching this one.

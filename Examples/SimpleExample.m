@@ -28,7 +28,6 @@ seed = 1;
 sim.AddAtoms(createIonCloud(1e-3, calciumIons, N, seed));
 
 %Add the linear Paul trap electric field.
-%(Numbers from Gingell's thesis)
 RF = 3.85e6;
 z0 = 5.5e-3 / 2;
 r0 = 7e-3 / 2;
@@ -36,15 +35,10 @@ geometricKappa = 0.244;
 U0 = 15;
 V0 = 500;
 
-a = -4 * geometricKappa / z0 .^2 / (RF * 2 * pi).^2 * U0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
-q = 2 / r0 .^2 / (RF * 2 * pi).^2 * V0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
-fprintf('System has a=%.5f, q=%.5f\n', a,q)
-%These values agree with those on page 47 of Gingell's thesis.
-
 sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
 %Add some damping bath
-sim.Add(langevinBath(0, 1e-5));
+sim.Add(langevinBath(0, 1e-5, sim.Group(calciumIons)));
 
 
 %Configure outputs.

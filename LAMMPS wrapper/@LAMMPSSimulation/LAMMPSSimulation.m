@@ -64,6 +64,7 @@ classdef LAMMPSSimulation < handle
             sim.Elements = InputFileElement.empty(1,0); %create empty array of fix objects.
             sim.AtomList = struct('cfgFileHandle', {}, 'atomNumber', {});
             sim.AtomTypes = struct('cfgFileHandle', {}, 'id', {}, 'charge', {}, 'mass', {});
+            sim.Groups = LAMMPSGroup.empty(1,0);
             sim.SimulationBox = struct('width', {}, 'height', {}, 'length', {});
             sim.TimeStep = 1;
             sim.LimitingTimestep = 1;
@@ -85,7 +86,7 @@ classdef LAMMPSSimulation < handle
         Add(sim, obj)
         indices = GetSpeciesIndices(obj)
         Remove(sim, obj)      
-        Group(sim, content)
+        g = Group(sim, content)
     end
 end
 
