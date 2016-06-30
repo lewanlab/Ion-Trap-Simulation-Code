@@ -45,6 +45,9 @@ fprintf(fHandle, 'timestep %e\n', sim.TimeStep);
 % simulation is proceeding as it should.
 writeOutputStreamConfig(fHandle);
 
+% Write all defined groups to output file
+writeGroups(sim, fHandle)
+
 %Rigid Body support: If we have a rigid body, we set the group
 %'nonRigidBody' that defines the group of all atoms not in rigid bodies to
 %be 'all - rigid body group', otherwise just 'all'.

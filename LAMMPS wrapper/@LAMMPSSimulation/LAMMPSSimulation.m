@@ -46,6 +46,13 @@ classdef LAMMPSSimulation < handle
         
         %HASEXECUTED - Has the simulation been run?
         HasExecuted
+        
+
+    end
+    
+    properties (Access=private)
+        %GROUPS - A list of groups defined in the simulation.
+        Groups
     end
     
     methods
@@ -77,7 +84,8 @@ classdef LAMMPSSimulation < handle
         Unfix(obj, fix)        
         Add(sim, obj)
         indices = GetSpeciesIndices(obj)
-        Remove(sim, obj)        
+        Remove(sim, obj)      
+        Group(sim, content)
     end
 end
 
