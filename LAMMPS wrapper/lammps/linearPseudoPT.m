@@ -18,23 +18,12 @@ a_z = - 2 * a_r;
 q_r = 2 * (atomType.charge * 1.6e-19) * OscillatingV / ...
     ((atomType.mass *  1.660e-27) * R0^2 * (RFFrequency * 2 * pi)^2);
 
-w_r = (RFFrequency * 2 * pi) / 2 * (a_r + (q_r^2)/2)^0.5;
-w_z = (RFFrequency * 2 * pi) / 2 * (a_z)^0.5;
+f_r = ((RFFrequency * 2 * pi) / 2 * (a_r + (q_r^2)/2)^0.5) / 2 / pi;
+f_z = ((RFFrequency * 2 * pi) / 2 * (a_z)^0.5 ) / 2 / pi;
 
-fprintf('Frequency of motion: f_r=%e, f_z=%e\n', w_r/2/pi, w_z/2/pi)
+fprintf('Frequency of motion: f_r=%e, f_z=%e\n', f_r, f_z)
 
-%Spring constants for force calculation.
-k_r = w_r ^ 2 * (atomType.mass *  1.660e-27);
-k_z = w_z ^ 2 * (atomType.mass *  1.660e-27);
-
-%Time limit for step...
-timestep = 1/max(w_z, w_r)/10;
-
-%RFFrequency should be in Hz, not rad per second.
-fix = LAMMPSFix();
-fix.time = timestep;
-fix.createInputFileText = @pseudoLinearPaulTrapCfg;
-fix.InputFileArgs = { k_r, k_z, atomType.id };
+fix = harmonicOscillator(f_r, f_r, f_z, atomType.group);
 
 end
 

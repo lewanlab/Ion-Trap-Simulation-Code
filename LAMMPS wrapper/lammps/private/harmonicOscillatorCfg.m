@@ -13,15 +13,15 @@ else
 end
 
 strings =           {'# Harmonic Oscillator: '};
-strings{end+1} =     sprintf('variable %s_w_x\t\tequal %e', fixID, 2*pi*f_x);
-strings{end+1} =     sprintf('variable %s_w_y\t\tequal %e', fixID, 2*pi*f_y);
-strings{end+1} =     sprintf('variable %s_w_z\t\tequal %e', fixID, 2*pi*f_z);
-strings{end+1} =     sprintf('variable fX%s atom "-v_%s_k_x * x * mass"', fixID, fixID);
-strings{end+1} =     sprintf('variable fY%s atom "-v_%s_k_y * y * mass"', fixID, fixID);
-strings{end+1} =     sprintf('variable fZ%s atom "-v_%s_k_z * z * mass"', fixID, fixID);
+strings{end+1} =     sprintf('variable %s_w_x\t\tequal %e', fixID, (2*pi*f_x).^2);
+strings{end+1} =     sprintf('variable %s_w_y\t\tequal %e', fixID, (2*pi*f_y).^2);
+strings{end+1} =     sprintf('variable %s_w_z\t\tequal %e', fixID, (2*pi*f_z).^2);
+strings{end+1} =     sprintf('variable %s_fX atom "-v_%s_w_x * x * mass"', fixID, fixID);
+strings{end+1} =     sprintf('variable %s_fY atom "-v_%s_w_y * y * mass"', fixID, fixID);
+strings{end+1} =     sprintf('variable %s_fZ atom "-v_%s_w_z * z * mass"', fixID, fixID);
 
 %Set up energy for use in minimisation:
-strings{end+1} =	 sprintf('variable %s_E atom "v_%s_k_x * x * x / 2 + v_%s_k_y * y * y / 2 + v_%s_k_z * z * z / 2"', fixID, fixID, fixID, fixID);
+strings{end+1} =	 sprintf('variable %s_E atom "v_%s_w_x * x * x / 2 + v_%s_w_y * y * y / 2 + v_%s_w_z * z * z / 2"', fixID, fixID, fixID, fixID);
 
 strings{end+1} =     sprintf('fix %s %s addforce v_%s_fX v_%s_fY v_%s_fZ energy v_%s_E', fixID, groupName, fixID, fixID, fixID, fixID);
 strings{end+1} = '';

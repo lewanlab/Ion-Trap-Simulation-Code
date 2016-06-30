@@ -13,6 +13,12 @@ if sim.HasExecuted
 end
 
 id = length(sim.AtomTypes(:))+1;
+
 typeStruct = struct('cfgFileHandle', @()atomTypesCfg(id, charge, amuMass), 'id', id, 'charge', charge, 'mass', amuMass);
+
+% create a group for this atom type
+g = sim.Group(typeStruct);
+typeStruct.group = g;
+
 sim.AtomTypes(end+1) = typeStruct;
 end

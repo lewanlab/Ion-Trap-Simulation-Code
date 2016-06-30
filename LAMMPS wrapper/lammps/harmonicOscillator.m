@@ -11,19 +11,18 @@ if nargin > 3
     end
 end
 
-if k_x < 0 || k_y < 0 || k_z < 0
+if f_x < 0 || f_y < 0 || f_z < 0
     warning('One or more spring constants are less than zero (repulsive)');
 end
 
 fix = LAMMPSFix();
-
+%determine limit on timestep.
+fix.time = 1/(20*max([f_x, f_y, f_z]));
+fix.createInputFileText = @harmonicOscillatorCfg;
+    
 if nargin > 3
-    %calculate frequencies for the atomtype to determine limit on timestep.
-    fix.time = 1/(10*max([f_x, f_y, f_z]));
-    fix.createInputFileText = @harmonicOscillatorCfg;
     fix.InputFileArgs = { f_x, f_y, f_z, group };
 else
-    fix.createInputFileText = @harmonicOscillatorCfg;
     fix.InputFileArgs = { f_x, f_y, f_z };
 end
 
