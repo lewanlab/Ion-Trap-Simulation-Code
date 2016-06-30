@@ -68,7 +68,11 @@ while ~feof(fHandle)
                     atomVars = zeros(size(A, 1), size(A, 2), 0);
                 end
                 
+                try
                 atomVars(:,:, end+1) = A;
+                catch e
+                   error('Error occured during readDump. Possible NaN entry for atomic properties, which may be evidence of an unphysical system.', e.message); 
+                end
                 
                 receiveRequired(2);
                 %case 'ITEM: NUM'
