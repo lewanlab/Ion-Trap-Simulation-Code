@@ -36,6 +36,8 @@ classdef LAMMPSGroup < handle
         
         function out = compare(grp1, grp2)
             %COMPARE compares two groups and returns true if grp1 = grp2
+            % SYNTAX: compare(grp1, grp2)
+            
             out = 0;
             
             % First, check style is the same
@@ -59,6 +61,8 @@ classdef LAMMPSGroup < handle
         
         function ift = getInputFileText(self)
             %GETINPUTFILETEXT Gets input file text that defines the group.
+            % SYNTAX: getInputFileText( group )
+            
             content = sprintf('%d ', self.Content);
             %group groupName type content
             ift = sprintf('group %s %s %s\n', self.ID, self.Style, content);

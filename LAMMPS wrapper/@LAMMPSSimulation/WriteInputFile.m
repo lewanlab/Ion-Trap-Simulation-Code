@@ -17,7 +17,7 @@ writeBoilerplate(fHandle);
 writeGpuAccel(sim, fHandle);
 
 fprintf(fHandle, 'units si\n');
-fprintf(fHandle, 'atom_style charge\n');
+fprintf(fHandle, 'atom_style charge\n\n');
 
 fwriteCfg(fHandle, defineSimulationBox(sim.SimulationBox.length, sim.SimulationBox.width, sim.SimulationBox.height, length(sim.AtomTypes(:))));
 
@@ -39,7 +39,7 @@ end
 % Update timestep on helper utilities and set timestep in input file.
 getSteps(sim.TimeStep, 'set');
 cfghelperTimestep(sim.TimeStep);
-fprintf(fHandle, 'timestep %e\n', sim.TimeStep);
+fprintf(fHandle, 'timestep %e\n\n', sim.TimeStep);
 
 % Intermittently write status update to output stream so we know the
 % simulation is proceeding as it should.
