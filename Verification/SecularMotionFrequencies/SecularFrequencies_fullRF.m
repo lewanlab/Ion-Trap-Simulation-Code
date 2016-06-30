@@ -46,7 +46,7 @@ for TrapQ = TrapQs
     ionChargeC = ionCharge * 1.6e-19; %in Coulombs
     
     [oscV, endcapV] = getVs4aq(C40Ion, Trapfrequency, EndcapZ0, R0, geometricC, TrapA, TrapQ);
-    sim.AddFix(linearPT(oscV, endcapV, EndcapZ0, R0, geometricC, Trapfrequency));
+    sim.Add(linearPT(oscV, endcapV, EndcapZ0, R0, geometricC, Trapfrequency));
     
     sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
     
