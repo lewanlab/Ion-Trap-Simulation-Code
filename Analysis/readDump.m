@@ -105,8 +105,13 @@ if (sortResults)
     end
 end
 
-for i=1:nargout-2
-    varargout{i} = reshape(atomVars(1+i, :, :), size(atomVars, 2), size(atomVars, 3));
+try
+    for i=1:nargout-2
+        varargout{i} = reshape(atomVars(1+i, :, :), size(atomVars, 2), size(atomVars, 3));
+    end
+catch e
+    warning('Error occured while loading simulation output. Check that ion trap parameters are stable!');
+    throw e;
 end
 
 end

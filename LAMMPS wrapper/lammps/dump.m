@@ -4,6 +4,8 @@ function [ dumpCmd ] = dump( filename, variables, interval )
 % simulation steps. variables is a cell of LAMMPSVariables and/or
 % the literals x,y,z,vx,vy,vz. The interval defaults to 10 if not specified.
 %
+% SYNTAX: dump( filename, variables, interval )
+%
 % Example:
 %  dump('output.txt', {'id','x','y','z'}, 10);
 % See Also: LAMMPSAverage
