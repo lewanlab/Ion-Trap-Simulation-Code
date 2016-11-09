@@ -100,7 +100,8 @@ while (ishandle(h))
         end
         
         set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
-        set(h2, 'XData', x(1:3,)i', 'YData', y(1:3,i)', 'ZData', z(1:3,i)');
+        set(h2, 'XData', x(1:3,i)', 'YData', y(1:3,i)', 'ZData', z(1:3,i)');
+        title(sprintf('Frame %d', i));
         pause(0.04);
     end
     pause(1);
