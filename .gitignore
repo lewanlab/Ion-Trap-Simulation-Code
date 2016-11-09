@@ -5,3 +5,4 @@
 **/*.txt
 **/*.fig
 Simulations/**
+**/*.cite
