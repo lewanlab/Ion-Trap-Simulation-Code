@@ -1,39 +1,33 @@
-function [ fixObj ] = laserCool( atomType, gamma )
+function [ fixObj ] = laserCool( atomType, k )
 %LASERCOOL A simplistic model of laser cooling.
 % Simulates the laser cooling of atoms along a given axis by applying an
 % anisotropic viscous damping force. The laser cooling is applied only to
-% the specified atomType. gamma = [gx, gy, gz] defines the strength of the
-% damping force of the form f_i = - gamma_i m * v_i. gamma is equivalent to
-% 1/damping time.
+% the specified atomType. k = [kx, ky, kz] defines the strength of the
+% damping which is of the form f_i = - k_i * v_i (= v_i / relaxation time)
 % 
-% Syntax: laserCool( atomType, gamma )
+% Syntax: laserCool( atomType, k )
 %
-% Example: laserCool( calcium, [ 1 Inf Inf ] / 60e-6 ) % 60us viscous force along one direction
+% Example: laserCool( calcium, [ 1 0 0 ] / 60e-6 ) % 60us viscous force along one direction
 % 
 % See Also: langevinBath
 
-if ~isfield(atomType, 'id') || ~isfield(atomType, 'charge') || ~isfield(atomType, 'mass') || ~isfield(atomType, 'group')
+if ~isfield(atomType, 'id') || ~isfield(atomType, 'charge') || ~isfield(atomType, 'mass')
    error('must specify a valid atom species.'); 
 end
 
-if length(gamma) == 1
-    repmat(gamma,1,3);
-elseif length(gamma) ~= 3
-   error('gamma must be a length-3 vector or a single number'); 
+if length(k) == 1
+    repmat(k,1,3);
+elseif length(k) ~= 3
+   error('k must be a length-3 vector or a single number'); 
 end
 
-if any(gamma < 0)
+if any(k < 0)
    error('damping must be greater than zero'); 
 end
 
-if any(isinf(gamma) | isnan(gamma))
-    error('invalid damping parameter: must be finite and numerical');
-end
-
 fixObj = LAMMPSFix();
-fixObj.time = 0.1 / max(gamma(:));
 fixObj.createInputFileText = @laserCoolCfg;
-fixObj.InputFileArgs =  { atomType.group.ID, gamma };
+fixObj.InputFileArgs =  { atomType.id, k(1), k(2), k(3) };
 
 end
 

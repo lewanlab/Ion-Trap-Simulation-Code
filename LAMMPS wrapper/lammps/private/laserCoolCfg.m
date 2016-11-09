@@ -1,16 +1,20 @@
-function [ strings ] = laserCoolCfg(fixID, groupID, gamma )
+function [ strings ] = laserCoolCfg(fixID, atomTypeID, kx, ky, kz )
 %LASERCOOLCFG Config file excerpt for laser cooling of an atom species.
 
 strings = {'#Define laser cooling for a particular atom species.'};
 
+%create a group for this atom type we can use to apply the fix.
+groupID = sprintf('group%d', getUnusedID('group'));
+strings{end+1} = sprintf('group %s type %d', groupID, atomTypeID);
+
 %create the fix
-strings{end+1} =     sprintf('variable %s_gammaX\t\tequal %e', fixID, gamma(1));
-strings{end+1} =     sprintf('variable %s_gammaY\t\tequal %e', fixID, gamma(2));
-strings{end+1} =     sprintf('variable %s_gammaZ\t\tequal %e', fixID, gamma(3));
-strings{end+1} =     sprintf('variable %s_fX atom "-v_%s_gammaX * mass * vx"', fixID, fixID);
-strings{end+1} =     sprintf('variable %s_fY atom "-v_%s_gammaY * mass * vy"', fixID, fixID);
-strings{end+1} =     sprintf('variable %s_fZ atom "-v_%s_gammaZ * mass * vz"', fixID, fixID);
-strings{end+1} =     sprintf('fix %s %s addforce v_%s_fX v_%s_fY v_%s_fZ', fixID, groupID, fixID, fixID, fixID);
+strings{end+1} =     sprintf('variable kx%s\t\tequal %e', fixID, kx);
+strings{end+1} =     sprintf('variable ky%s\t\tequal %e', fixID, ky);
+strings{end+1} =     sprintf('variable kz%s\t\tequal %e', fixID, kz);
+strings{end+1} =     sprintf('variable fX%s atom "-v_kx%s * vx"', fixID, fixID);
+strings{end+1} =     sprintf('variable fY%s atom "-v_ky%s * vy"', fixID, fixID);
+strings{end+1} =     sprintf('variable fZ%s atom "-v_kz%s * vz"', fixID, fixID);
+strings{end+1} =     sprintf('fix %s %s addforce v_fX%s v_fY%s v_fZ%s', fixID, groupID, fixID, fixID, fixID);
 
 strings{end+1} =     '';
 

@@ -25,7 +25,7 @@ sim.Add(langevinBath(1e-6, 1e-5));
 
 %Configure outputs. We output position every 10 steps, and also output
 %the time-averaged secular velocity every RF cycle.
-sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
+sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation

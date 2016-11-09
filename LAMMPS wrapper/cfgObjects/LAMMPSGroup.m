@@ -10,12 +10,6 @@ classdef LAMMPSGroup < handle
         
         %ID - unique identifier of this group
         ID;
-        
-        %RIGID - flag specifying whether the group should be evolved as a
-        %rigid body. Note that LION will not check whether atom assignments
-        %to rigid groups overlap. It is assumed that a rigid group contains
-        %atoms that are not in any other rigid group.
-        Rigid;
     end
     
     methods
@@ -38,14 +32,10 @@ classdef LAMMPSGroup < handle
             
             self.ID = ['grp_' idString(5)];
             
-            self.Rigid = 0;
-            
         end
         
         function out = compare(grp1, grp2)
             %COMPARE compares two groups and returns true if grp1 = grp2
-            % SYNTAX: compare(grp1, grp2)
-            
             out = 0;
             
             % First, check style is the same
@@ -69,8 +59,6 @@ classdef LAMMPSGroup < handle
         
         function ift = getInputFileText(self)
             %GETINPUTFILETEXT Gets input file text that defines the group.
-            % SYNTAX: getInputFileText( group )
-            
             content = sprintf('%d ', self.Content);
             %group groupName type content
             ift = sprintf('group %s %s %s\n', self.ID, self.Style, content);

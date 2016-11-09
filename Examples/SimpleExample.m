@@ -39,10 +39,10 @@ sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
 %Add some damping bath
 sim.Add(langevinBath(0, 1e-5, sim.Group(calciumIons)));
-%sim.Add(laserCool(calciumIons, 1./(1e-5 * [Inf Inf 1])));
+
 
 %Configure outputs.
-sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
+sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation

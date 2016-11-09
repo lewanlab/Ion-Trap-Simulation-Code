@@ -9,8 +9,6 @@ function [ fix ] = linearPseudoPT( OscillatingV, EndcapV, Z0, R0, GeometricConst
 % this fix requires that an atomType be supplied. If multiple atom types
 % exist in the trap, one fix should be created for each type.
 % 
-% SYNTAX: linearPseudoPT( OscV, endcapV, z0, r0, geomC, RF, atomType )
-% 
 % See Also: linearPaulTrap, http://tf.nist.gov/general/pdf/1226.pdf
 
 a_r = -4 * (atomType.charge * 1.6e-19) * GeometricConstant * EndcapV / ...
