@@ -68,11 +68,13 @@ end
 % Now we post process the simulation results, calculating the temperature
 % of each species.
 
+figure(1);
+set(gcf, 'Units', 'Normalized', 'Position', [ 0.1 0.1 0.8 0.8 ]);
+
 for i=1:length(NumberNH3)
     num = NumberNH3(i);
     
     [~, id, x,y,z, vx,vy,vz] = readDump(getFileName(num));
-    figure(1);
     subplot(1, length(NumberNH3), i);
     % Select indices from each one and plot the image of both species.  
     % First select color according to species type
