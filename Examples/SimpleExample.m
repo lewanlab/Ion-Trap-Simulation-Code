@@ -22,9 +22,8 @@ calciumIons = sim.AddAtomType(charge, mass);
 
 % Create a cloud of ions based on this atom type. Seed is used for random
 % number generation in placing the atoms.
-N = 50;
+N = 250;
 seed = 1;
-
 sim.AddAtoms(createIonCloud(1e-3, calciumIons, N, seed));
 
 %Add the linear Paul trap electric field.
@@ -38,15 +37,14 @@ V0 = 500;
 sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
 %Add some damping bath
-sim.Add(langevinBath(0, 1e-5, sim.Group(calciumIons)));
-%sim.Add(laserCool(calciumIons, 1./(1e-5 * [Inf Inf 1])));
+sim.Add(langevinBath(1e-3, 1e-5, sim.Group(calciumIons)));
 
 %Configure outputs.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(evolve(10000));
+sim.Add(evolve(20000));
 sim.Execute();
 
 %% Plot the results
@@ -61,38 +59,42 @@ sim.Execute();
 [timestep, ~, x,y,z] = readDump('positions.txt');
 x = x*1e6; y = y*1e6; z = z*1e6; 
 
-% We will plot trajectories in light grey and final atom positions in a
-% pastel colour. A 3D-plot is used, with axis equal so that we get a true
-% sense of size.
-figure;
+% Subfigure a)
+%  -3d trajectory of ion cloud
 pastelBlue = [112 146 190]/255;
-pastelRed = [237 28 36]/255;
-
-% The first plot shows the trajectories of atoms in the trap.
 subplot(1,2,1);
+plot(timestep(1:20:end), z(1:30,1:20:end)', 'Color', pastelBlue); hold on;
+plot(timestep, z(1,:)', 'Color', [ 0.1 0.1 0.1 ], 'LineWidth', 1.0); hold off;
+xlim([ 1 size(z, 2) ]); ylim([-150 150]); set(gcf, 'Color', 'w');
+xlabel('Timestep', 'Interpreter', 'Latex', 'FontSize', 14); ylabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14);
 
-depthPlotLines(x, y, z, pastelBlue, [50 150]); hold on;
-d = depthPlot(x(:,1), y(:,1), z(:,1), pastelRed, [50 150], 'x'); hold off
-set(d, 'LineWidth', 3);
-xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
-grid off;  view(-45,5);
+% Subfigure b)
+%  Final trajectories of ions, resembling a Coulomb crystal. The crystal is
+%  rendered in 3D.
 
-
-% The second plot shows the final positions of the atoms in a Coulomb
-% crystal arrangement.
-subplot(1,2,2);
+subplot(1,2,2)
 
 depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue);
-
 xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
 set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
-grid off;  view(-45,5);
+grid off;  view(-45,30); axis equal ;%axis vis3d
+set(gcf, 'Position', [ 781 468 740 511 ], 'Color', 'w'); box on;
 
-%Title
-ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
-text(0.5, 1,'Trajectories of Worked Example','HorizontalAlignment','center','VerticalAlignment', 'top', 'FontSize', 16)
+% Subfigure labels
+annotation('textbox', 'String', 'a)', 'FontSize', 14, 'LineStyle', 'none', 'Position', [ 0 0.93 0.05 0.05 ])
+annotation('textbox', 'String', 'b)', 'FontSize', 14, 'LineStyle', 'none', 'Position', [ 0.5 0.93 0.05 0.05 ])
+
+% Render to file
+set(gcf, 'Units', 'centimeters');
+pos = get(gcf, 'Position');
+w = pos(3); 
+h = pos(4);
+p = 0.01;
+set(gcf,...
+  'PaperUnits','centimeters',...
+  'PaperPosition',[p*w p*h w h],...
+  'PaperSize',[w*(1+2*p) h*(1+2*p)]);
+set(gcf, 'Renderer', 'painters')
+saveas(gcf, 'example1.pdf')

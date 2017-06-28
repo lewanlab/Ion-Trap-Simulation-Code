@@ -99,12 +99,10 @@ mask = t > 2*c;
 ke = (vx(:,mask).^2 + vy(:,mask).^2 + vz(:,mask).^2) * mass / 2;
 
 % convert ke into units of  kB T
-amu = 1.66054e-27; % amu in kg
-kB  = 1.38064852e-23; % Boltzmann constant in SI units
-T  = ke * (amu / kB);
+T  = ke * (Const.amu / Const.kB);
 
 % average kinetic energy for each atom
 avgKe = mean(T, 2);
 fprintf('Mean kinetic energy per atom (Kelvin):\n')
 fprintf('mean = %.3f, std = %.3f\n', mean(avgKe), std(avgKe))
-fprintf('(expected 3/2 * T=%.f from equipartition)\n', simT)
+fprintf('(expected 3/2 * (T=%.f) = %.3f from equipartition)\n', simT, simT * 1.5)

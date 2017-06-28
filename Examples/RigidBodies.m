@@ -15,26 +15,25 @@ sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 % Add a new atom type:
 charge = 1;
 mass = 40;
-freeIons = sim.AddAtomType(charge, mass);
+Ca = sim.AddAtomType(charge, mass);
 
 % Additionally define an atom type the same as the first to be fixed
 % together
 rod1 = sim.AddAtomType(charge, mass);
 
-% position the ions to fix into a rigid rod. We separate each of the three
-% ions by 5 microns.
-AddAtoms(sim, placeAtoms(rod1, [1 1 1]'*1e-4, [-0.5 0 0.5]'*1e-5, [0 0 0]'));
+% position the ions to fix into a rigid rod.
+rodx = (-2:1:2) * 5e-6; rody = ones(size(rodx)) * 1e-6; rodz = zeros(size(rodx));
+AddAtoms(sim, placeAtoms(rod1, rodx', rody', rodz'));
+
+% We create a new group, comprised of 'rod1' ions, and set the Rigid
+% property to true.
+sim.Group(rod1).Rigid = 1;
+% Can also group atoms together by id, for example:
+% sim.Group( [ 4 5 6 ] ).Rigid = 1;
 
 % create a cloud of 50 free ions
 N = 50;
-AddAtoms(sim, createIonCloud(1e-4, freeIons, N));
-
-% We add a rigid body declaration to fix the relative positions of this
-% group of atoms.
-sim.Group(rod1).Rigid = 1;
-
-% Can also group atoms together by id, for example:
-% sim.Group( [ 4 5 6 ] ).Rigid = 1;
+AddAtoms(sim, createIonCloud(1e-4, Ca, N));
 
 %Add the linear Paul trap electric field.
 %(Numbers from Gingell's thesis, p47)
@@ -77,9 +76,12 @@ sim.Execute();
 [timestep, id, x,y,z] = readDump('positions.txt');
 x = x*1e6; y = y*1e6; z = z*1e6; 
 
+totalIons = size(x, 1); species = sim.GetSpeciesIndices; rod = species{1};
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
-c = [repmat(pastelRed, 3, 1); repmat(pastelBlue, N, 1)];
+c = repmat(pastelBlue, totalIons, 1);
+c(rod,:) = repmat(pastelRed, length(rod), 1);
+
 
 h = depthPlot(x(:,end),y(:,end),z(:,end), c, [100 250]*3); hold on
 h2 = plot3(x(1:3,end), y(1:3, end), z(1:3, end), '-', 'LineWidth', 3, 'Color', pastelRed); hold off
@@ -106,3 +108,17 @@ while (ishandle(h))
     end
     pause(1);
 end
+
+%%
+% Produce the final figure.
+
+h = depthPlot(x(:,end),y(:,end),z(:,end), c, [100 250]*3); hold on
+%axis vis3d
+set(gcf, 'Position', [0 0 400 500], 'Units', 'pixels')
+xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
+view([ 45, 30 ]); axis equal;
+
+set(gcf, 'Color', 'w');
+title('');
