@@ -22,7 +22,7 @@ if size(x,1) ~= size(y,1) || size(x,1) ~= size(z,1)
    error('x, y, z must be column vectors of the same length');
 end
 
-ionStruct = struct('type', 'atom', 'atomNumber', length(x), 'cfgFileHandle', @()placeAtomsCfg(x,y,z,atomType.id));
+ionStruct = struct('type', 'atom', 'atomNumber', length(x), 'cfgFileHandle', @()placeAtomsCfg(x,y,z,atomType.ID));
 
 end
 

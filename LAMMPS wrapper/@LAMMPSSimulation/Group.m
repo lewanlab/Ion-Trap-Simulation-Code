@@ -13,9 +13,9 @@ function [ g ] = Group( sim, content )
 if isnumeric(content)
     style = 'id';
     c = content;
-elseif isstruct(content) && isfield(content, 'id')
+elseif isa(content, 'AtomType')
     style = 'type';
-    c = [content.id];
+    c = [content.ID];
 else
     error('Invalid content! Expect either an array of atomic ids or atomic species.');
 end

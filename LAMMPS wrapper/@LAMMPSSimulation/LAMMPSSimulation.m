@@ -1,4 +1,4 @@
-classdef LAMMPSSimulation < handle & mixin.SetGet
+classdef LAMMPSSimulation < handle & matlab.mixin.SetGet
     % LAMMPSSIMULATION A LAMMPS simulation that may be configured by defining atoms types, adding atoms and forces.
     
     properties
@@ -62,7 +62,7 @@ classdef LAMMPSSimulation < handle & mixin.SetGet
             
             sim.Elements = InputFileElement.empty(1,0); %create empty array of fix objects.
             sim.AtomList = struct('cfgFileHandle', {}, 'atomNumber', {});
-            sim.AtomTypes = struct('cfgFileHandle', {}, 'id', {}, 'charge', {}, 'mass', {}, 'group', {});
+            sim.AtomTypes = AtomType.empty(1,0);
             sim.Groups = LAMMPSGroup.empty(1,0);
             sim.SimulationBox = struct('width', {}, 'height', {}, 'length', {});
             sim.TimeStep = 1;

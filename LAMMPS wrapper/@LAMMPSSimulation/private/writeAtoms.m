@@ -7,7 +7,11 @@ fwriteCfg(fHandle, sim.AtomList);
 
 %Definitions for atom types
 fprintf(fHandle, '# Atom definitions\n');
-fwriteCfg(fHandle, sim.AtomTypes);
+for i=1:length(sim.AtomTypes)
+    atomType = sim.AtomTypes(i);
+    fprintf(fHandle, 'mass %d %e\n', atomType.ID, 1.660e-27 * atomType.Mass);
+    fprintf(fHandle, 'set type %d charge %e\n', atomType.ID, 1.6e-19 * atomType.Charge);
+end
 fprintf(fHandle, '\n');
 
 end

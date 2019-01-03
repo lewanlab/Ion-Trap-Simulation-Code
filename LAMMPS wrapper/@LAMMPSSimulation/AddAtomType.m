@@ -1,6 +1,7 @@
-function [typeStruct] = AddAtomType( sim, charge, amuMass )
-%ADDATOMTYPE Define atomic species used in simulations. Units are in atomic
-%charges and mass units.
+function atomType = AddAtomType( sim, charge, amuMass )
+%ADDATOMTYPE Define atomic species used in simulations.
+% Units are in atomic charges and mass units. Returns a reference to the
+% created atom type, which can be used with atom placement commands.
 %
 % SYNTAX: AddAtomType(sim, charge, amuMass)
 %
@@ -9,16 +10,11 @@ function [typeStruct] = AddAtomType( sim, charge, amuMass )
 % See Also: AddAtoms
 
 if sim.HasExecuted
-    warning('Avoid editing the simulation once LAMMPS has executed.');
+    error('Cannot add atom type: simulation has already executed.');
 end
 
 id = length(sim.AtomTypes(:))+1;
+atomType = AtomType(sim, id, charge, amuMass);
+sim.AtomTypes(end+1) = atomType;
 
-typeStruct = struct('cfgFileHandle', @()atomTypesCfg(id, charge, amuMass), 'id', id, 'charge', charge, 'mass', amuMass);
-
-% create a group for this atom type
-g = sim.Group(typeStruct);
-typeStruct.group = g;
-
-sim.AtomTypes(end+1) = typeStruct;
 end
