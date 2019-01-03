@@ -23,7 +23,7 @@ rod1 = sim.AddAtomType(charge, mass);
 
 % position the ions to fix into a rigid rod.
 rodx = (-2:1:2) * 5e-6; rody = ones(size(rodx)) * 1e-6; rodz = zeros(size(rodx));
-AddAtoms(sim, placeAtoms(rod1, rodx', rody', rodz'));
+placeAtoms(sim, rod1, rodx', rody', rodz');
 
 % We create a new group, comprised of 'rod1' ions, and set the Rigid
 % property to true.
@@ -33,7 +33,7 @@ sim.Group(rod1).Rigid = 1;
 
 % create a cloud of 50 free ions
 N = 50;
-AddAtoms(sim, createIonCloud(1e-4, Ca, N));
+createIonCloud(sim, 1e-4, Ca, N);
 
 %Add the linear Paul trap electric field.
 %(Numbers from Gingell's thesis, p47)
