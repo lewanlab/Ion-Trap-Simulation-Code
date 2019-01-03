@@ -28,11 +28,10 @@ classdef LAMMPSSimulation < handle & matlab.mixin.SetGet
         %ELEMENTS Time-Ordered list of simulation elements
         Elements
         
-        %ATOMLIST list of function handles that will create atoms.
+        %ATOMLIST list of function handles that will create atoms
         AtomList
         
-        %SIMULATIONBOX Describes a box within which particles are
-        %simulated.
+        %SIMULATIONBOX Defines the simulation region
         SimulationBox
         
         %LIMITINGTIMESTEP Allows fixes which require a max timestep to
