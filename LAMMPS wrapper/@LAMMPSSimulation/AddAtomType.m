@@ -9,9 +9,7 @@ function atomType = AddAtomType( sim, charge, amuMass )
 %  AddAtomType(sim, 1, 40) % calcium 40+ ion
 % See Also: AddAtoms
 
-if sim.HasExecuted
-    error('Cannot add atom type: simulation has already executed.');
-end
+sim.assertNotRun();
 
 id = length(sim.AtomTypes(:))+1;
 atomType = AtomType(sim, id, charge, amuMass);

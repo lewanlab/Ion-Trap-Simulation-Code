@@ -24,8 +24,6 @@ getFileName = @(x) sprintf('output%d.txt', x);
 
 for num=NumberNH3
     
-    
-    
     sim = LAMMPSSimulation();
     sim.GPUAccel = 0;
     SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
@@ -37,8 +35,8 @@ for num=NumberNH3
     % Create the ion clouds.
     rIC = 1e-3; % place atoms randomly within this radius
     
-    sim.AddAtoms(createIonCloud(rIC, NH3, num))
-    sim.AddAtoms(createIonCloud(rIC, Ca40, NumberCa))
+    cloudNH3 = createIonCloud(sim, rIC, NH3, num);
+    cloudCa40 = createIonCloud(sim, rIC, Ca40, NumberCa);
     
     % add the electric field
     sim.Add(linearPT(Vo, Ve, z0, r0, geomC, rf));

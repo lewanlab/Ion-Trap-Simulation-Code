@@ -10,11 +10,14 @@ function indices = GetSpeciesIndices(sim)
 %  calcium = i{1};
 % See Also: AddAtomType, AddAtoms
 
-indices = {};
-numPerSpecies = [];
-for i=1:length(sim.AtomList)
-    numPerSpecies(end+1) = sim.AtomList(i).atomNumber;
-    indices{end+1} = sum(numPerSpecies(1:end-1))+1:sum(numPerSpecies(:));
+indices = cell(length(sim.AtomTypes), 1);
+atoms = sim.AtomList;
+for i=1:length(sim.AtomTypes)
+    type = sim.AtomTypes(i);
+    atomTypes = [atoms.Type];
+    mask = [atomTypes.ID] == type.ID;
+    subset = atoms(mask);
+    indices{i} = [subset.ID];
 end
 
 end

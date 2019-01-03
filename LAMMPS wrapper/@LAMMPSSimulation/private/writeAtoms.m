@@ -3,7 +3,11 @@ function writeAtoms( sim, fHandle )
 %log file
 
 %Write atom insertion commands
-fwriteCfg(fHandle, sim.AtomList);
+fprintf(fHandle, '# Placing atoms\n');
+for i=1:length(sim.AtomList)
+    atom = sim.AtomList(i);
+    fprintf(fHandle, 'create_atoms %d single %e %e %e units box\n', atom.Type.ID, atom.X, atom.Y, atom.Z);
+end
 
 %Definitions for atom types
 fprintf(fHandle, '# Atom definitions\n');

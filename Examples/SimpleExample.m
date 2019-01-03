@@ -24,7 +24,7 @@ calciumIons = sim.AddAtomType(charge, mass);
 % number generation in placing the atoms.
 N = 250;
 seed = 1;
-sim.AddAtoms(createIonCloud(1e-3, calciumIons, N, seed));
+cloud = createIonCloud(sim, 1e-3, calciumIons, N, seed);
 
 %Add the linear Paul trap electric field.
 RF = 3.85e6;

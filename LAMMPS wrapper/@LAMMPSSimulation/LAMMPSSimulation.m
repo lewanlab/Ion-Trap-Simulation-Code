@@ -15,7 +15,7 @@ classdef LAMMPSSimulation < handle & matlab.mixin.SetGet
         %GPUACCEL Enable/Disable gpu acceleration through the gpu package.
         GPUAccel
         
-        %NEIGHBORLIST Select style used for neighbour list 
+        %NEIGHBORLIST Select style used for neighbour list
         NeighborList % (see http://lammps.sandia.gov/doc/neighbor.html)
         
         %NEIGHBORSKIN Size of the skin used for neighbor calculations
@@ -61,7 +61,7 @@ classdef LAMMPSSimulation < handle & matlab.mixin.SetGet
             % SYNTAX: LAMMPSSimulation()
             
             sim.Elements = InputFileElement.empty(1,0); %create empty array of fix objects.
-            sim.AtomList = struct('cfgFileHandle', {}, 'atomNumber', {});
+            sim.AtomList = AtomPlacement.empty(1,0);
             sim.AtomTypes = AtomType.empty(1,0);
             sim.Groups = LAMMPSGroup.empty(1,0);
             sim.SimulationBox = struct('width', {}, 'height', {}, 'length', {});
@@ -76,15 +76,22 @@ classdef LAMMPSSimulation < handle & matlab.mixin.SetGet
         end
         
         SetSimulationDomain(obj, length, width, height)
-        AddAtoms(obj, atoms)
+        id = AddAtom(obj, atoms)
         [atomTypeStruct] = AddAtomType(obj, charge, mass);
         Execute(obj)
         WriteInputFile(obj)
-        Unfix(obj, fix)        
+        Unfix(obj, fix)
         Add(sim, obj)
         indices = GetSpeciesIndices(obj)
-        Remove(sim, obj)      
+        Remove(sim, obj)
         g = Group(sim, content)
+        
+        function assertNotRun(sim)
+            %ASSERTNOTRUN Asserts that the simulation has not yet run.
+            if sim.HasExecuted
+                error('Simulation has already executed. State cannot be modified.');
+            end
+        end
         
     end
 end

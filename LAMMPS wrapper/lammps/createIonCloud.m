@@ -1,22 +1,20 @@
-function [ ionStruct ] = createIonCloud( radius, atomType, number, randomSeed)
-%CREATEIONCLOUD Creates a cloud of ions that may be added to the trap. 
-%
-% 'number' ions are added of the specified type (defined previously using
-% AddAtomType), arranged randomly within the specified radius (m). the
-% 'randomSeed' may be specified manually to ensure sequences are
-% repeatable, otherwise a new random number is used.
-%
-% SYNTAX: createIonCloud(radius, atomType, number, randomSeed)
+function [ ionStruct ] = createIonCloud( sim, radius, atomType, N, seed)
+%CREATEIONCLOUD Adds a cloud of ions to the simulation. 
+%  Creates N atoms of the specified atomType and adds them to the
+%  simulation sim. Atoms are placed at random positions uniformly
+%  distributed within a sphere of specified radius. The seed for the random
+%  number generator may be specified.
+% 
+% SYNTAX: createIonCloud(sim, radius, atomType, N, seed)
 %
 % Example:
-%   createIonCloud(1e-4, calciumIon, 40)
-% See Also: AddAtomType
+%   createIonCloud(sim, 1e-4, calciumIon, 40)
 
-if nargin < 4
-    randomSeed = randi(100000,1);
+if nargin < 5
+    seed = randi(100000,1);
 end
 
-rng(randomSeed);
+rng(seed);
 
 % Lammps does have a function that can create ions in a cloud like
 % configuration; however, it requires a lattice to be declared, and is
@@ -27,7 +25,7 @@ x = ones(0,1);
 y = x;
 z = x;
 
-for i=1:number
+for i=1:N
     %Select a random length
     d = rand * radius;
     
@@ -38,8 +36,8 @@ for i=1:number
     %Add positions to x, y, z;
     x(end+1) = d * sin(a) * cos(b);
     y(end+1) = d * sin(a) * sin(b);
-    z(end+1) = d* cos(a);
+    z(end+1) = d * cos(a);
 end
 
-ionStruct = placeAtoms(atomType, x', y', z');
+ionStruct = placeAtoms(sim, atomType, x', y', z');
 end

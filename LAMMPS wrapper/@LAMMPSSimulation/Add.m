@@ -10,9 +10,7 @@ function Add( sim, inputFileElement )
 % See Also: DUMP, MINIMIZE, RUNCOMMAND, THERMALVELOCITIES,
 % LINEARPT, SHO, LANGEVINBATH, LASERCOOL, EFIELD, HARMONICOSCILLATOR
 
-if sim.HasExecuted
-    warning('Avoid editing the simulation once LAMMPS has executed.');
-end
+sim.assertNotRun();
 
 if isa(inputFileElement, 'InputFileElement')
     sim.Elements{end+1} = inputFileElement;
