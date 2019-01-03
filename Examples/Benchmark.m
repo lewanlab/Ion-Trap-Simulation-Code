@@ -22,7 +22,7 @@ sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 charge = 1;
 mass = 100;
 ions = sim.AddAtomType(charge, mass);
-sim.AddAtoms(createIonCloud(1e-5, ions, NumberOfIons, 1337));
+createIonCloud(sim, 1e-5, ions, NumberOfIons, 1337);
 %sim.Add(custom('fix rebalance all balance 1000 1.3 shift xyz 10 1.05'))
 %Add the linear Paul trap electric field.
 RF = 3.85e7;
@@ -38,7 +38,7 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(evolve(3000));
+sim.Add(evolve(10000));
 sim.Execute();
 
 figure;

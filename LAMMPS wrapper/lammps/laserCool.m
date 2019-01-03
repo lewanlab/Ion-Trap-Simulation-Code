@@ -12,7 +12,7 @@ function [ fixObj ] = laserCool( atomType, gamma )
 % 
 % See Also: langevinBath
 
-if ~isfield(atomType, 'id') || ~isfield(atomType, 'charge') || ~isfield(atomType, 'mass') || ~isfield(atomType, 'group')
+if ~isa(atomType, 'AtomType')
    error('must specify a valid atom species.'); 
 end
 
@@ -33,7 +33,7 @@ end
 fixObj = LAMMPSFix();
 fixObj.time = 0.1 / max(gamma(:));
 fixObj.createInputFileText = @laserCoolCfg;
-fixObj.InputFileArgs =  { atomType.group.ID, gamma };
+fixObj.InputFileArgs =  { atomType.Group.ID, gamma };
 
 end
 

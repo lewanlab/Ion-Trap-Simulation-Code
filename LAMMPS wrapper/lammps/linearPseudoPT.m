@@ -13,19 +13,19 @@ function [ fix ] = linearPseudoPT( OscillatingV, EndcapV, Z0, R0, GeometricConst
 % 
 % See Also: linearPaulTrap, http://tf.nist.gov/general/pdf/1226.pdf
 
-a_r = -4 * (atomType.charge * 1.6e-19) * GeometricConstant * EndcapV / ...
-    ((atomType.mass *  1.660e-27) * Z0^2 * (RFFrequency * 2 * pi)^2);
+a_r = -4 * (atomType.Charge * 1.6e-19) * GeometricConstant * EndcapV / ...
+    ((atomType.Mass *  1.660e-27) * Z0^2 * (RFFrequency * 2 * pi)^2);
 a_z = - 2 * a_r;
 
-q_r = 2 * (atomType.charge * 1.6e-19) * OscillatingV / ...
-    ((atomType.mass *  1.660e-27) * R0^2 * (RFFrequency * 2 * pi)^2);
+q_r = 2 * (atomType.Charge * 1.6e-19) * OscillatingV / ...
+    ((atomType.Mass *  1.660e-27) * R0^2 * (RFFrequency * 2 * pi)^2);
 
 f_r = ((RFFrequency * 2 * pi) / 2 * (a_r + (q_r^2)/2)^0.5) / 2 / pi;
 f_z = ((RFFrequency * 2 * pi) / 2 * (a_z)^0.5 ) / 2 / pi;
 
 fprintf('Frequency of motion: f_r=%e, f_z=%e\n', f_r, f_z)
 
-fix = harmonicOscillator(f_r, f_r, f_z, atomType.group);
+fix = harmonicOscillator(f_r, f_r, f_z, atomType.Group);
 
 end
 

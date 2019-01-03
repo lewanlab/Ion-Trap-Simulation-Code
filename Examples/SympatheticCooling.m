@@ -33,11 +33,11 @@ NH3 = AddAtomType(sim, 1, 17);
 Ca40 = AddAtomType(sim, 1, 40);
 
 % Create the ion clouds.
-rIC = 5e-4; % place atoms randomly within this radius
+radius = 5e-4; % place atoms randomly within this radius
 NumberNH3 = 20;
 NumberCa  = 50;
-sim.AddAtoms(createIonCloud(rIC, NH3, NumberNH3))
-sim.AddAtoms(createIonCloud(rIC, Ca40, NumberCa))
+NH3Ions = createIonCloud(sim, radius, NH3, NumberNH3);
+Ca40Ions = createIonCloud(sim, radius, Ca40, NumberCa);
 
 % add the electric field
 sim.Add(linearPT(Vo, Ve, z0, r0, geomC, rf));
@@ -67,12 +67,10 @@ sim.Execute();
 [t, id, x,y,z, sx,sy,sz] = readDump('output.txt');
 t = (t-minimisationSteps)*sim.TimeStep;
 
-species = sim.GetSpeciesIndices;
-
 v2 = @(ind) sum(sx(ind, :).^2 + sy(ind, :).^2 + sz(ind,:).^2, 1);
 
-T_NH3 = v2(species{1}) * Const.amu * NH3.mass / 3 / Const.kB;
-T_Ca = v2(species{2}) * Const.amu * Ca40.mass / 3 / Const.kB;
+T_NH3 = v2([NH3Ions.ID]) * Const.amu * NH3.Mass / 3 / Const.kB;
+T_Ca = v2([Ca40Ions.ID]) * Const.amu * Ca40.Mass / 3 / Const.kB;
 
 
 % Plot a representation of the final Coulomb crystal
@@ -81,7 +79,7 @@ set(ax, 'Position', [ 0.020 0.1100 0.22 0.8150 ]);
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/300;255;
 color = repmat(pastelRed, size(x, 1), 1);
-color(species{1}, :) = repmat(pastelBlue, length(species{1}), 1);
+color([NH3Ions.ID], :) = repmat(pastelBlue, length([NH3Ions.ID]), 1);
 depthPlot(x(:,end),y(:,end),z(:,end),color, [50 200]); axis equal
 view(45, 22);
 box off; axis off

@@ -24,19 +24,19 @@ endCapV = 0.18; %V
 sim = LAMMPSSimulation();
 SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
-lightIons = AddAtomType(sim, 1, 138);
-heavyIons = AddAtomType(sim, 33, 1.4e6);
+lightIon = AddAtomType(sim, 1, 138);
+heavyIon = AddAtomType(sim, 33, 1.4e6);
 
 % Create the ion clouds.
 rIC = 1e-3; % place atoms randomly within this radius
 Number = 10;
 
-sim.AddAtoms(createIonCloud(rIC, lightIons, Number))
-sim.AddAtoms(createIonCloud(rIC, heavyIons, 1))
+lightIons = createIonCloud(sim, rIC, lightIon, Number);
+heavyIons = createIonCloud(sim, rIC, heavyIon, 1);
 
 % Add the linear Paul trap electric fields for each:
-[thVoltA, ~] = getVs4aq(heavyIons, TrapFreqA, traplength, radius, geomC, 0, 0.3);
-[thVoltB, ~] = getVs4aq(lightIons, TrapFreqB, traplength, radius, geomC, 0, 0.3);
+[thVoltA, ~] = getVs4aq(heavyIon, TrapFreqA, traplength, radius, geomC, 0, 0.3);
+[thVoltB, ~] = getVs4aq(lightIon, TrapFreqB, traplength, radius, geomC, 0, 0.3);
 
 sim.Add(linearPT([thVoltA thVoltB]', endCapV, traplength, radius, geomC, [TrapFreqA TrapFreqB]'));
 
@@ -59,15 +59,13 @@ sim.Execute();
 %% Post process results
 [~, id, x,y,z] = readDump('positions.txt');
 
-indices = sim.GetSpeciesIndices();
-
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 
 figure;
 hold on
 color = repmat(pastelBlue, size(x, 1), 1);
-color(indices{2}, :) = pastelRed;
+color([heavyIons.ID], :) = pastelRed;
 % plot3(x(indices{1},end), y(indices{1},end), z(indices{1}, end), 'xr');
 % plot3(x(indices{2},end), y(indices{2},end), z(indices{2}, end), 'bo');
 depthPlot(x(:,end),y(:,end),z(:,end),color)

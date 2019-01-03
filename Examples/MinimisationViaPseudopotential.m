@@ -29,7 +29,7 @@ charge = -1;
 mass = 30;
 Number = 10;
 ions = AddAtomType(sim, charge, mass);
-AddAtoms(sim, createIonCloud(radiusofIonCloud, ions, Number));
+createIonCloud(sim, radiusofIonCloud, ions, Number);
 
 %Add the pseudopot Paul trap
 pseudopot = linearPseudoPT(300, -0.01, 5.5e-3, 7e-3, 0.244, 3.85e6, ions);

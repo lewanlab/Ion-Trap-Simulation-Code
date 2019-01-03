@@ -10,4 +10,3 @@ for i=1:length(s)
 end
 
 end
-

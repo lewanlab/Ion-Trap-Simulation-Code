@@ -14,7 +14,7 @@ SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 charge = -1;
 mass = 30;
 ions = AddAtomType(sim, charge, mass);
-AddAtoms(sim, placeAtoms(ions, [0 0 0]', [0 0 0]', [-1 0 1]'*1e-4));
+placeAtoms(sim, ions, [0 0 0]', [0 0 0]', [-1 0 1]'*1e-4);
 
 %Add the linear Paul trap pseudopotential.
 RF = 3.85e6;

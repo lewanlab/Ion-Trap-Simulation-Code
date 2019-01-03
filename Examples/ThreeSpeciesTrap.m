@@ -22,22 +22,22 @@ geomC = 0.244; %dimensionless geometric factor
 sim = LAMMPSSimulation();
 SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
-CalciumIons = AddAtomType(sim, 1, 40);
-NDIons = AddAtomType(sim, 1, 20);
-AlexaFluora = AddAtomType(sim, 1, 60);
+CaIon = AddAtomType(sim, 1, 40);
+NDIon = AddAtomType(sim, 1, 20);
+AFIon = AddAtomType(sim, 1, 60);
 
 radiusofIonCloud = 1e-4;
 Number = 20;
 
-AddAtoms(sim, createIonCloud(radiusofIonCloud, CalciumIons, Number))
-AddAtoms(sim, createIonCloud(radiusofIonCloud, NDIons, Number))
-AddAtoms(sim, createIonCloud(radiusofIonCloud, AlexaFluora, Number))
+CaIons = createIonCloud(sim, radiusofIonCloud, CaIon, Number);
+NDIons = createIonCloud(sim, radiusofIonCloud, NDIon, Number);
+AFIons = createIonCloud(sim, radiusofIonCloud, AFIon, Number);
 
 % Define pseudopotentials for purposes of minimisation. We need one for each
 % atomic species because the pseudopotential for an RF trap is q/m dependent.
-pseudoPot1 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, CalciumIons);
-pseudoPot2 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, NDIons);
-pseudoPot3 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, AlexaFluora);
+pseudoPot1 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, CaIon);
+pseudoPot2 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, NDIon);
+pseudoPot3 = linearPseudoPT(oscV, endcapV, z0, r0, geomC, RF, AFIon);
 
 % add the pseudopotentials to the simulation
 sim.Add(pseudoPot1);
@@ -67,24 +67,27 @@ sim.Execute();
 
 [~, ~, x,y,z] = readDump('positions.txt');
 
-indices = sim.GetSpeciesIndices();
-
 % Select some colors to use for each species
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 grey = [110 110 110] / 255;
 
+CaIDs = [CaIons.ID];
+NDIDs = [NDIons.ID];
+AFIDs = [AFIons.ID];
+
+% color each species
 color = repmat(pastelBlue, size(x, 1), 1);
-color(indices{2}, :) = repmat(pastelRed, length(indices{2}), 1);
-color(indices{3}, :) = repmat(grey, length(indices{3}), 1);
+color(NDIDs, :) = repmat(pastelRed, length(NDIDs), 1);
+color(AFIDs, :) = repmat(grey, length(AFIDs), 1);
 
 %Plot the end points of the trajectories
 frames = size(x,1)-10:size(x,1); %select last ten outputs
 figure;
 hold on
-h1 = depthPlot(1e6*x(indices{1},end), 1e6*y(indices{1},end), 1e6*z(indices{1},end), color(indices{1},:)); hold on
-h2 = depthPlot(1e6*x(indices{2},end), 1e6*y(indices{2},end), 1e6*z(indices{2},end), color(indices{2},:));
-h3 = depthPlot(1e6*x(indices{3},end), 1e6*y(indices{3},end), 1e6*z(indices{3},end), color(indices{3},:)); hold off
+h1 = depthPlot(1e6*x(CaIDs,end), 1e6*y(CaIDs,end), 1e6*z(CaIDs,end), color(CaIDs,:)); hold on
+h2 = depthPlot(1e6*x(NDIDs,end), 1e6*y(NDIDs,end), 1e6*z(NDIDs,end), color(NDIDs,:));
+h3 = depthPlot(1e6*x(AFIDs,end), 1e6*y(AFIDs,end), 1e6*z(AFIDs,end), color(AFIDs,:)); hold off
 hold off
 legend([h1 h2 h3], 'Ca', 'ND', 'AlexaFluora', 'Location', 'NorthEast');
 view(45,20);
