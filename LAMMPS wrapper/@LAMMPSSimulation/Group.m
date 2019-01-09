@@ -10,7 +10,10 @@ function [ g ] = Group( sim, content )
 %         sim.Group( [ species1, species2 ] )
 
 % Deduce group style from input type
-if isnumeric(content)
+if isa(content, 'AtomPlacement')
+    style = 'id';
+    c = [content.ID];
+elseif isnumeric(content)
     style = 'id';
     c = content;
 elseif isa(content, 'AtomType')

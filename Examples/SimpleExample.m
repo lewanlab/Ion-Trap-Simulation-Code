@@ -44,7 +44,7 @@ sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 
 % Run simulation
-sim.Add(evolve(20000));
+sim.Add(evolve(15000));
 sim.Execute();
 
 %% Plot the results
@@ -55,36 +55,65 @@ sim.Execute();
 % we will just plot the end part of the simulation after some cooling to an
 % ordered phase has taken place.
 
+% Setup figure size for paper.
+clf
+set(gcf, 'Color', 'w', 'Units', 'centimeters');
+pos = get(gcf, 'Position');
+set(gcf, 'Position', [ pos(1) pos(2) 9 8.5 ]);
+
 % We load the results from the output file:
-[timestep, ~, x,y,z] = readDump('positions.txt');
-x = x*1e6; y = y*1e6; z = z*1e6; 
+% [timestep, ~, x,y,z] = readDump('positions.txt');
+% x = x*1e6; y = y*1e6; z = z*1e6;
 
 % Subfigure a)
 %  -3d trajectory of ion cloud
 pastelBlue = [112 146 190]/255;
-subplot(1,2,1);
+% subplot(1,2,1);
+ax = axes('Units', 'centimeters', 'Position', [ 1.1 1.5 3.2 6.5 ]);
 plot(timestep(1:20:end), z(1:30,1:20:end)', 'Color', pastelBlue); hold on;
 plot(timestep, z(1,:)', 'Color', [ 0.1 0.1 0.1 ], 'LineWidth', 1.0); hold off;
-xlim([ 1 size(z, 2) ]); ylim([-150 150]); set(gcf, 'Color', 'w');
-xlabel('Timestep', 'Interpreter', 'Latex', 'FontSize', 14); ylabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14);
+xlim([ 0 size(z, 2) ]); ylim([-150 150]); set(gcf, 'Color', 'w');
+xlabel('timestep', 'Interpreter', 'Latex', 'FontSize', 11);
+set(gca, 'XTick', [ 0, 5000, 10000, 15000 ], 'GridLineStyle', ':');
+set(get(gca, 'YAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
+set(get(gca, 'XAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', 'FontSize', 10, 'Exponent', 3);
+grid on
+lab = ylabel('z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 10);
+set(lab, 'Units', 'centimeters', 'Position', [ -0.6 3.24 0]);
+get(lab, 'Position');
+
 
 % Subfigure b)
 %  Final trajectories of ions, resembling a Coulomb crystal. The crystal is
 %  rendered in 3D.
 
-subplot(1,2,2)
+%subplot(1,2,2)
+ax = axes('Units', 'centimeters', 'Position', [ 5.5 1.2 2.9 7 ]);
 
-depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue);
-xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
-grid off;  view(-45,30); axis equal ;%axis vis3d
-set(gcf, 'Position', [ 781 468 740 511 ], 'Color', 'w'); box on;
+depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue, [ 20 50 ]);
+% xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 2.7 0 0 ]);
+% ylab = ylabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 0.3 0 0 ]);
+xlab = xlabel('x ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 2.05 -0.4 0 ], 'Rotation', 29);
+ylab = ylabel('y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 1 -0.4 0 ], 'Rotation', -29);
+% zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10);
+set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
+set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex');
+set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex');
+set(get(gca, 'ZAxis'), 'TickLabelInterpreter', 'Latex');
+grid on;  view(-45,30); axis equal ;%axis vis3d
+% set(xlab, 'Units', 'centimeters');
+xlim([-50 50])
+ylim([-50 50]);
+zlim([-150 150]);
+
+set(get(gca, 'XAxis'), 'TickDirection', 'in', 'FontSize', 11)
+set(get(gca, 'YAxis'), 'TickDirection', 'in')
+set(get(gca, 'ZAxis'), 'TickDirection', 'in')
+set(gca, 'GridLineStyle', ':');
 
 % Subfigure labels
-annotation('textbox', 'String', 'a)', 'FontSize', 14, 'LineStyle', 'none', 'Position', [ 0 0.93 0.05 0.05 ])
-annotation('textbox', 'String', 'b)', 'FontSize', 14, 'LineStyle', 'none', 'Position', [ 0.5 0.93 0.05 0.05 ])
+annotation('textbox', 'String', 'a)', 'FontSize', 12, 'LineStyle', 'none', 'Position', [ -0.015 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
+annotation('textbox', 'String', 'b)', 'FontSize', 12, 'LineStyle', 'none', 'Position', [ 0.5 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
 
 % Render to file
 set(gcf, 'Units', 'centimeters');

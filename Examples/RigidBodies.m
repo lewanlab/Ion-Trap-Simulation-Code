@@ -1,15 +1,12 @@
-%% Simple example
+%% Rigid Bodies
 % This example follows broadly the same structure as the 'SimpleExample.m'
-% script. We additionally create a charged rod of three ions fixed as a
-% rigid body and add them to the simulation. To emphasise the elements
-% required for rigid body simulation we shall reduce comments elsewhere.
+% script. We additionally create a charged rod of three ions, fixed into a
+% rigid body, and add them to the simulation. Comments in other sections
+% are removed for clarity.
 close all
 clearvars
 
-%Create an empty experiment.
 sim = LAMMPSSimulation();
-
-% Define simulation region.
 sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 
 % Add a new atom type:
@@ -17,50 +14,37 @@ charge = 1;
 mass = 40;
 Ca = sim.AddAtomType(charge, mass);
 
-% Additionally define an atom type the same as the first to be fixed
-% together
-rod1 = sim.AddAtomType(charge, mass);
-
-% position the ions to fix into a rigid rod.
-rodx = (-2:1:2) * 5e-6; rody = ones(size(rodx)) * 1e-6; rodz = zeros(size(rodx));
-placeAtoms(sim, rod1, rodx', rody', rodz');
-
-% We create a new group, comprised of 'rod1' ions, and set the Rigid
-% property to true.
-sim.Group(rod1).Rigid = 1;
-% Can also group atoms together by id, for example:
-% sim.Group( [ 4 5 6 ] ).Rigid = 1;
-
 % create a cloud of 50 free ions
-N = 50;
-createIonCloud(sim, 1e-4, Ca, N);
+createIonCloud(sim, 1e-4, Ca, 50);
 
-%Add the linear Paul trap electric field.
-%(Numbers from Gingell's thesis, p47)
+% position the ions that will form the rigid rod.
+rodx = (-2:1:2) * 5e-6; rody = ones(size(rodx)) * 1e-6; rodz = zeros(size(rodx));
+rodAtoms = placeAtoms(sim, Ca, rodx', rody', rodz');
+
+% We create a new group, 'rod', which is composed of the rod Atoms, and
+% set the Rigid property to true.
+rod = sim.Group(rodAtoms);
+rod.Rigid = true;
+
+% Create the Paul trap field.
 RF = 3.85e6;
 z0 = 5.5e-3 / 2;
 r0 = 7e-3 / 2;
 geometricKappa = 0.244;
 U0 = 15;
 V0 = 500;
-
 a = -4 * geometricKappa / z0 .^2 / (RF * 2 * pi).^2 * U0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
 q = 2 / r0 .^2 / (RF * 2 * pi).^2 * V0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
 fprintf('System has a=%.5f, q=%.5f\n', a,q)
-
 sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
-%Add some damping bath
+
 sim.Add(langevinBath(0, 1e-5));
 
-% Minimise first in this bath
+% Output data, but only for the final frames of the simulation.
 sim.Add(evolve(10000));
-
-%Configure outputs.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 2));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
-
-% Run simulation
 sim.Add(evolve(100));
 sim.Execute();
 
@@ -76,11 +60,13 @@ sim.Execute();
 [timestep, id, x,y,z] = readDump('positions.txt');
 x = x*1e6; y = y*1e6; z = z*1e6; 
 
-totalIons = size(x, 1); species = sim.GetSpeciesIndices; rod = species{1};
+totalIons = size(x, 1);
+rodMask = ismember(1:totalIons,[rodAtoms.ID]);
+
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 c = repmat(pastelBlue, totalIons, 1);
-c(rod,:) = repmat(pastelRed, length(rod), 1);
+c(rodMask,:) = repmat(pastelRed, length(rodAtoms), 1);
 
 
 h = depthPlot(x(:,end),y(:,end),z(:,end), c, [100 250]*3); hold on
@@ -102,7 +88,7 @@ while (ishandle(h))
         end
         
         set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
-        set(h2, 'XData', x(1:3,i)', 'YData', y(1:3,i)', 'ZData', z(1:3,i)');
+        set(h2, 'XData', x(rodMask,i)', 'YData', y(rodMask,i)', 'ZData', z(rodMask,i)');
         title(sprintf('Frame %d', i));
         pause(0.04);
     end
