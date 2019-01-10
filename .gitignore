@@ -6,3 +6,4 @@
 **/*.fig
 Simulations/**
 **/*.cite
+**/*.mat
