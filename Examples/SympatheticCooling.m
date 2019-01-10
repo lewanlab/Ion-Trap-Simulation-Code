@@ -61,40 +61,76 @@ sim.Add(evolve(interval*2));
 sim.Execute();
 
 %%
-% Analyse the simulation results, calculating the temperature of each
+% Load simulation results and calculate the temperature of each
 % species.
 
 [t, id, x,y,z, sx,sy,sz] = readDump('output.txt');
 t = (t-minimisationSteps)*sim.TimeStep;
 
 v2 = @(ind) sum(sx(ind, :).^2 + sy(ind, :).^2 + sz(ind,:).^2, 1);
-
 T_NH3 = v2([NH3Ions.ID]) * Const.amu * NH3.Mass / 3 / Const.kB;
 T_Ca = v2([Ca40Ions.ID]) * Const.amu * Ca40.Mass / 3 / Const.kB;
 
 
+%%
+% Plot the results clearly
+
+clf
+set(gcf, 'Color', 'w', 'Units', 'centimeters');
+pos = get(gcf, 'Position');
+set(gcf, 'Position', [ pos(1) pos(2) 9 8.5 ]);
+
 % Plot a representation of the final Coulomb crystal
 ax = subplot(1, 4, 1);
-set(ax, 'Position', [ 0.020 0.1100 0.22 0.8150 ]);
+% set(ax, 'Position', [ 0.020 0.1100 0.22 0.8150 ]);
+set(ax, 'Units', 'centimeters', 'Position', [ 0.0 1 3 7 ]);
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/300;255;
 color = repmat(pastelRed, size(x, 1), 1);
 color([NH3Ions.ID], :) = repmat(pastelBlue, length([NH3Ions.ID]), 1);
-depthPlot(x(:,end),y(:,end),z(:,end),color, [50 200]); axis equal
+depthPlot(1e6*x(:,end),1e6*y(:,end),1e6*z(:,end),color, [ 40 80 ]); axis equal
 view(45, 22);
-box off; axis off
+box off; %axis off
+xlim([-50 50]);
+ylim([-50 50]);
+zlim([-250 250]);
+set(gca, 'ZTick', -250:50:250, 'ZTickLabel', {});
+set(gca, 'XTick', -50:50:50, 'XTickLabel', {});
+set(gca, 'YTick', -50:50:50, 'YTickLabel', {});
+set(get(gca, 'XAxis'), 'TickDirection', 'in', 'TickLength', [ 0.1 0.02]);
+set(get(gca, 'YAxis'), 'TickDirection', 'in', 'TickLength', [0.1 0.02]);
+set(get(gca, 'ZAxis'), 'TickDirection', 'in', 'TickLength', [0.1 0.02]);
+set(gca, 'GridLineStyle', '-');
+hold on;
+
+% plot the scale bar
+plot3([40 40], [50 50], [-100 -200], 'k-');
+plot3([50 30], [50 50], [-200 -200], 'k-');
+plot3([50 30], [50 50], [-100 -100], 'k-');
+tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$100 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 2.3 0.65 3 1 ]);
+set(get(tb, 'text'), 'Rotation', 90);
+
+% label the axes
+xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 0.5 0.15 1 ], 'Rotation', -23);
+ylab = ylabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 1.4 0.1 1 ], 'Rotation', 23);
+zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ -0.1 3.5 0 ]);
 
 % Plot the energies of the two species as a function of time
-subplot(1, 4, [ 2 3 4 ]);
+% subplot(1, 4, [ 2 3 4 ]);
+ax = axes('Units', 'centimeters', 'Position', [ 4.5 1.2 4.3 6.8 ])
 plot(t*1e6, T_NH3 / NumberNH3 * 1e3, '-', 'Color', pastelBlue*0.8); hold on;
 plot(t*1e6, T_Ca / NumberCa * 1e3, '-', 'Color', pastelRed); hold off
-xlabel('time ($\mu$s)', 'Interpreter', 'Latex');
-ylabel('Temperature (mK)');
+xlabel('time ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 11);
+ylabel('Temperature (mK)', 'Interpreter', 'Latex', 'FontSize', 11);
+set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 11);
+set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 11);
+grid on;
+set(gca, 'GridLineStyle', ':');
 
 hold on;
 yl = ylim;
 plot( [ 1 1 ] * interval * sim.TimeStep * 1e6, [ yl ], '--k');
-text(interval * sim.TimeStep * 1e6 + 20, interp1([0 1], yl, 0.9), '$t_1$', 'FontSize', 14, 'Interpreter', 'Latex');
+text(interval * sim.TimeStep * 1e6 + 20, interp1([0 1], yl, 0.9), '$t_1$', 'FontSize', 11, 'Interpreter', 'Latex');
 ylim(yl);
 hold off;
 
@@ -102,8 +138,8 @@ xlim([ 0 max(t(:)*1e6) ]);
 set(gcf, 'Color', 'w');
 
 % Subfigure labels
-annotation('textbox', 'String', 'a)', 'FontSize', 14, 'LineStyle', 'none', 'Position', [ 0 0.93 0.05 0.05 ])
-annotation('textbox', 'String', 'b)', 'FontSize', 14, 'LineStyle', 'none', 'Position', [ 0.22 0.93 0.05 0.05 ])
+annotation('textbox', 'String', 'a)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0 7.5 1 1 ])
+annotation('textbox', 'String', 'b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 3.3 7.5 1 1 ])
 
 % Render to file
 set(gcf, 'Units', 'centimeters');

@@ -47,6 +47,11 @@ sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 sim.Add(evolve(15000));
 sim.Execute();
 
+%% Load the data
+% Load the results from the output file:
+[timestep, ~, x,y,z] = readDump('positions.txt');
+x = x*1e6; y = y*1e6; z = z*1e6;
+
 %% Plot the results
 % Originally atoms start off as a randomly placed mess, but due to the
 % action of the Langevin bath they are cooled into a Coulomb crystal
@@ -60,10 +65,6 @@ clf
 set(gcf, 'Color', 'w', 'Units', 'centimeters');
 pos = get(gcf, 'Position');
 set(gcf, 'Position', [ pos(1) pos(2) 9 8.5 ]);
-
-% We load the results from the output file:
-% [timestep, ~, x,y,z] = readDump('positions.txt');
-% x = x*1e6; y = y*1e6; z = z*1e6;
 
 % Subfigure a)
 %  -3d trajectory of ion cloud
@@ -88,28 +89,38 @@ get(lab, 'Position');
 %  rendered in 3D.
 
 %subplot(1,2,2)
-ax = axes('Units', 'centimeters', 'Position', [ 5.5 1.2 2.9 7 ]);
+ax = axes('Units', 'centimeters', 'Position', [ 5.0 1.0 3.5 7 ]);
 
-depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue, [ 20 50 ]);
-% xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 2.7 0 0 ]);
-% ylab = ylabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 0.3 0 0 ]);
-xlab = xlabel('x ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 2.05 -0.4 0 ], 'Rotation', 29);
-ylab = ylabel('y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 1 -0.4 0 ], 'Rotation', -29);
-% zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10);
+depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue, [ 30 70 ]);
+xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 1 0.35 0 ], 'Rotation', -30);
+ylab = ylabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 2.5 0.35 0 ], 'Rotation', 30);
+zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 0 3 0 ]);
 set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'ZAxis'), 'TickLabelInterpreter', 'Latex');
-grid on;  view(-45,30); axis equal ;%axis vis3d
+grid on;  view(45,30); axis equal ;%axis vis3d
 % set(xlab, 'Units', 'centimeters');
 xlim([-50 50])
 ylim([-50 50]);
-zlim([-150 150]);
+zlim([-100 100]);
 
 set(get(gca, 'XAxis'), 'TickDirection', 'in', 'FontSize', 11)
 set(get(gca, 'YAxis'), 'TickDirection', 'in')
 set(get(gca, 'ZAxis'), 'TickDirection', 'in')
-set(gca, 'GridLineStyle', ':');
+set(gca, 'GridLineStyle', '-');
+
+set(gca, 'XTick', -50:50:50, 'XTickLabel', {});
+set(gca, 'YTick', -50:50:50, 'YTickLabel', {});
+set(gca, 'ZTick', -100:50:100, 'ZTickLabel', {});
+
+% plot the scale bar
+hold on
+plot3([45 45], [50 50], [-50 -0], 'k-');
+plot3([40 50], [50 50], [-50 -50], 'k-');
+plot3([40 50], [50 50], [-0 -0], 'k-');
+tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$50 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 8.35 2.6 3 1 ]);
+set(get(tb, 'text'), 'Rotation', 90);
 
 % Subfigure labels
 annotation('textbox', 'String', 'a)', 'FontSize', 12, 'LineStyle', 'none', 'Position', [ -0.015 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
