@@ -18,7 +18,7 @@ ionCharge = +1;
 
 %Parameters for the trap.
 TrapA = -0.001;
-TrapQs = 0.06:0.03:0.3;
+TrapQs = 0.05:0.025:0.3;
 
 %Physical parameters of the trap.
 Trapfrequency = 10e6; %Hz
@@ -41,7 +41,7 @@ SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
 C40Ion = AddAtomType(sim, ionCharge, ionMass);
 radiusofIonCloud = 1e-3;
-AddAtoms(sim, createIonCloud(radiusofIonCloud, C40Ion, 1, 1e-4))
+createIonCloud(sim, radiusofIonCloud, C40Ion, 1, 1e-4);
 
 ionMasskg = ionMass * 1.66e-27; %in kilograms
 ionChargeC = ionCharge * 1.6e-19; %in Coulombs
@@ -99,3 +99,9 @@ xlabel('Trap Q');
 ylabel('Secular freq (kHz)');
 legend('LAMMPS x', 'LAMMPS y', 'LAMMPS z', 'Theory x', 'Theory y', 'Theory z');
 saveas(gr, 'pseudopot.fig');
+save('results.mat', ...
+    'TrapQs', ...
+    'pseudoX', 'pseudoY', 'pseudoZ', ...
+    'theoreticalRadialFreq', ...
+    'theoreticalZFreq' ...
+    );
