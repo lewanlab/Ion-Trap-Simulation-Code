@@ -31,7 +31,8 @@ end
 % a simulation with sufficient time for the crystal to cool, then measure
 % the atomic separations.
 
-NumberOfIons = [2,3,5,7,8];
+NumberOfIons = 1:10;
+results = struct('N', {}, 'positions', {});
 
 for i=1:length(NumberOfIons)
     close all;
@@ -54,7 +55,7 @@ for i=1:length(NumberOfIons)
     SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
     ions = sim.AddAtomType(ionCharge, ionMass);
     [oscV, endcapV] = getVs4aq(ions, Trapfrequency, EndcapZ0, R0, geometricC, TrapA, TrapQ);
-    AddAtoms(sim, createIonCloud(1e-3, ions, NumberOfIons(i), 1e-4))
+    createIonCloud(sim, 1e-3, ions, NumberOfIons(i), 1e-4);
     sim.Add(linearPT(oscV, endcapV, EndcapZ0, R0, geometricC, Trapfrequency));
     sim.Add(langevinBath(3e-4, 2e-5));
     
@@ -116,6 +117,8 @@ for i=1:length(NumberOfIons)
         xlabel('time (s)');
         ylabel('Z-position (mm)');
         
+        results(end+1) = struct('N', i, 'positions', z(end, :));
+        
         print(zPosFig, '-dpdf', fullfile('output',sprintf('%dionsZpos.pdf', NumberOfIons(i)))); 
     end
     
@@ -133,3 +136,5 @@ for i=1:length(NumberOfIons)
     
     close all
 end
+
+save('results.mat', 'results', 'lengthScale');
