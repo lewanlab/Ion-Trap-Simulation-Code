@@ -10,7 +10,7 @@ sim = LAMMPSSimulation();
 SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
 ions = AddAtomType(sim, charge, mass);
-AddAtoms(sim, createIonCloud(radiusofIonCloud, ions, Number, 1337))
+createIonCloud(sim, radiusofIonCloud, ions, Number, 1337);
 [OscV, EndcapV] = getVs4aq(ions, RF, z0, r0, geomC, TrapA, TrapQ);
 
 %Add the pseudopot Paul trap

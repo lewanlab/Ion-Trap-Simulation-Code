@@ -36,7 +36,7 @@ fr = RF/2*((TrapQ.^2)/2 + -abs(TrapA)).^0.5;
 fz = RF/2*sqrt(-2*TrapA);
 
 %Calculate theoretical eigenfrequencies of normal mode motion.
-totalAtoms = sum(cat(1,sim.AtomList.atomNumber));
+totalAtoms = length(sim.AtomList);
 qQ = ones(totalAtoms, totalAtoms) * charge;
 massM = ones(3,totalAtoms) * mass;
 
