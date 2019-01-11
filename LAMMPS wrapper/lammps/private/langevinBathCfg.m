@@ -1,5 +1,9 @@
-function [ strings ] = langevinBathCfg( fixID, temperature, dampingTime, group )
+function [ strings ] = langevinBathCfg( fixID, temperature, dampingTime, group, seed )
 %LANGEVINBATHCFG Creates the cfg file txt for a langevin bath
+
+if nargin < 5
+    seed = 1337;
+end
 
 if nargin < 4
     groupName = 'all';
@@ -12,7 +16,7 @@ else
 end
 
 strings = { '#Adding a langevin bath...' };
-strings{end+1} = sprintf('fix %s %s langevin %e %e %e 1337', fixID, groupName, temperature, temperature, dampingTime); 
+strings{end+1} = sprintf('fix %s %s langevin %e %e %e %d', fixID, groupName, temperature, temperature, dampingTime, seed); 
 strings{end+1} =  '';
 
 end

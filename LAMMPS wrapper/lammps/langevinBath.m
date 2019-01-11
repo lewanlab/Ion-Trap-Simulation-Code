@@ -1,4 +1,4 @@
-function [ fix ] = langevinBath( temperature, dampingTime, group )
+function [ fix ] = langevinBath( temperature, dampingTime, group, seed )
 %LANGEVINBATH Creates a langevin bath of a given temperature (in Kelvin).
 % The langevin bath applies a viscous damping force to each atom
 % proportional to its velocity plus a stochastic, white noise force. The
@@ -18,13 +18,14 @@ function [ fix ] = langevinBath( temperature, dampingTime, group )
 % See Also: laserCool, http://lammps.sandia.gov/doc/fix_langevin.html
 
 fix = LAMMPSFix();
+fix.createInputFileText = @langevinBathCfg;
 
 if nargin < 3
-    fix.createInputFileText = @langevinBathCfg;
     fix.InputFileArgs = { temperature, dampingTime };
-else
-    fix.createInputFileText = @langevinBathCfg;
+elseif nargin < 4    
     fix.InputFileArgs = { temperature, dampingTime, group };
+else
+    fix.InputFileArgs = { temperature, dampingTime, group, seed };
 end
 
 
