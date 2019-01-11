@@ -25,7 +25,7 @@ randDir = rand(3,1);
 randDir = randDir / norm(randDir);
 gamma = randDir / timeConst;
 
-AddAtoms(sim, createIonCloud(1e-6, ion, 30, 0));
+createIonCloud(sim, 1e-6, ion, 30, 0);
 Add(sim, thermalVelocities(1, 'no', 1));
 Add(sim, laserCool(ion, gamma));
 
