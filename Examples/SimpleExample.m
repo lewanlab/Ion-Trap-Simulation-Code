@@ -22,7 +22,7 @@ calciumIons = sim.AddAtomType(charge, mass);
 
 % Create a cloud of ions based on this atom type. Seed is used for random
 % number generation in placing the atoms.
-N = 250;
+N = 100;
 seed = 1;
 cloud = createIonCloud(sim, 1e-3, calciumIons, N, seed);
 
@@ -31,8 +31,8 @@ RF = 3.85e6;
 z0 = 5.5e-3 / 2;
 r0 = 7e-3 / 2;
 geometricKappa = 0.244;
-U0 = 15;
-V0 = 500;
+U0 = 7;
+V0 = 300;
 
 sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
@@ -74,10 +74,11 @@ ax = axes('Units', 'centimeters', 'Position', [ 1.1 1.5 3.2 6.5 ]);
 plot(timestep(1:20:end), z(1:30,1:20:end)', 'Color', pastelBlue); hold on;
 plot(timestep, z(1,:)', 'Color', [ 0.1 0.1 0.1 ], 'LineWidth', 1.0); hold off;
 xlim([ 0 size(z, 2) ]); ylim([-150 150]); set(gcf, 'Color', 'w');
-xlabel('timestep', 'Interpreter', 'Latex', 'FontSize', 11);
+xlabel('timestep', 'Interpreter', 'Latex', 'FontSize', 10);
 set(gca, 'XTick', [ 0, 5000, 10000, 15000 ], 'GridLineStyle', ':');
 set(get(gca, 'YAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', 'FontSize', 10, 'Exponent', 3);
+set(gca, 'YTick', -150:50:100);
 grid on
 lab = ylabel('z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(lab, 'Units', 'centimeters', 'Position', [ -0.6 3.24 0]);
@@ -91,10 +92,10 @@ get(lab, 'Position');
 %subplot(1,2,2)
 ax = axes('Units', 'centimeters', 'Position', [ 5.0 1.0 3.5 7 ]);
 
-depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue, [ 30 70 ]);
+depthPlot(x(:,end), y(:,end), z(:,end), pastelBlue, [ 20 70 ]);
 xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 1 0.35 0 ], 'Rotation', -30);
 ylab = ylabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 2.5 0.35 0 ], 'Rotation', 30);
-zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 0 3 0 ]);
+% zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ 0 3 0 ]);
 set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex');
@@ -123,8 +124,8 @@ tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$50 \mu$m', 'LineS
 set(get(tb, 'text'), 'Rotation', 90);
 
 % Subfigure labels
-annotation('textbox', 'String', 'a)', 'FontSize', 12, 'LineStyle', 'none', 'Position', [ -0.015 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
-annotation('textbox', 'String', 'b)', 'FontSize', 12, 'LineStyle', 'none', 'Position', [ 0.5 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
+annotation('textbox', 'String', '(a)', 'FontSize', 11, 'LineStyle', 'none', 'Position', [ -0.015 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
+annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Position', [ 0.5 0.93 0.05 0.05 ], 'Interpreter', 'Latex')
 
 % Render to file
 set(gcf, 'Units', 'centimeters');

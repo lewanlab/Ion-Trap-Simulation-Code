@@ -50,7 +50,7 @@ sim.Add(evolve(minimisationSteps));
 % Having minimised the system, output the coordinates of both species
 % and time averaged velocities from which we can calculate the secular
 % temperature.
-sim.Add(dump('output.txt', {'id', 'x', 'y', 'z', timeAvg({'vx', 'vy', 'vz'}, 1/rf)}, 20));
+sim.Add(dump('sympcool.txt', {'id', 'x', 'y', 'z', timeAvg({'vx', 'vy', 'vz'}, 1/rf)}, 20));
 sim.Add(evolve(interval));
 
 % At t1, remove the langevin bath and add laser cooling for just one species
@@ -64,7 +64,7 @@ sim.Execute();
 % Load simulation results and calculate the temperature of each
 % species.
 
-[t, id, x,y,z, sx,sy,sz] = readDump('output.txt');
+[t, id, x,y,z, sx,sy,sz] = readDump('sympcool.txt');
 t = (t-minimisationSteps)*sim.TimeStep;
 
 v2 = @(ind) sum(sx(ind, :).^2 + sy(ind, :).^2 + sz(ind,:).^2, 1);
@@ -97,9 +97,9 @@ zlim([-250 250]);
 set(gca, 'ZTick', -250:50:250, 'ZTickLabel', {});
 set(gca, 'XTick', -50:50:50, 'XTickLabel', {});
 set(gca, 'YTick', -50:50:50, 'YTickLabel', {});
-set(get(gca, 'XAxis'), 'TickDirection', 'in', 'TickLength', [ 0.1 0.02]);
-set(get(gca, 'YAxis'), 'TickDirection', 'in', 'TickLength', [0.1 0.02]);
-set(get(gca, 'ZAxis'), 'TickDirection', 'in', 'TickLength', [0.1 0.02]);
+set(get(gca, 'XAxis'), 'TickDirection', 'in', 'TickLength', [ 0.1 0.02], 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
+set(get(gca, 'YAxis'), 'TickDirection', 'in', 'TickLength', [0.1 0.02], 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
+set(get(gca, 'ZAxis'), 'TickDirection', 'in', 'TickLength', [0.1 0.02], 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(gca, 'GridLineStyle', '-');
 hold on;
 
@@ -107,7 +107,7 @@ hold on;
 plot3([40 40], [50 50], [-100 -200], 'k-');
 plot3([50 30], [50 50], [-200 -200], 'k-');
 plot3([50 30], [50 50], [-100 -100], 'k-');
-tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$100 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 2.3 0.65 3 1 ]);
+tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$100 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 2.3 1.15 3 1 ]);
 set(get(tb, 'text'), 'Rotation', 90);
 
 % label the axes
@@ -117,20 +117,20 @@ zlab = zlabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters
 
 % Plot the energies of the two species as a function of time
 % subplot(1, 4, [ 2 3 4 ]);
-ax = axes('Units', 'centimeters', 'Position', [ 4.5 1.2 4.3 6.8 ])
+ax = axes('Units', 'centimeters', 'Position', [ 4.5 1.2 4.3 6.8 ]);
 plot(t*1e6, T_NH3 / NumberNH3 * 1e3, '-', 'Color', pastelBlue*0.8); hold on;
 plot(t*1e6, T_Ca / NumberCa * 1e3, '-', 'Color', pastelRed); hold off
-xlabel('time ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 11);
-ylabel('Temperature (mK)', 'Interpreter', 'Latex', 'FontSize', 11);
-set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 11);
-set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 11);
+xlabel('time ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 10);
+ylabel('Temperature (mK)', 'Interpreter', 'Latex', 'FontSize', 10);
+set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
+set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 grid on;
 set(gca, 'GridLineStyle', ':');
 
 hold on;
 yl = ylim;
 plot( [ 1 1 ] * interval * sim.TimeStep * 1e6, [ yl ], '--k');
-text(interval * sim.TimeStep * 1e6 + 20, interp1([0 1], yl, 0.9), '$t_1$', 'FontSize', 11, 'Interpreter', 'Latex');
+text(interval * sim.TimeStep * 1e6 + 30, interp1([0 1], yl, 0.9), '$t_\mathrm{cool}$', 'FontSize', 10, 'Interpreter', 'Latex');
 ylim(yl);
 hold off;
 
@@ -138,8 +138,8 @@ xlim([ 0 max(t(:)*1e6) ]);
 set(gcf, 'Color', 'w');
 
 % Subfigure labels
-annotation('textbox', 'String', 'a)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0 7.5 1 1 ])
-annotation('textbox', 'String', 'b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 3.3 7.5 1 1 ])
+annotation('textbox', 'String', '(a)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0 7.5 1 1 ])
+annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 3.3 7.5 1 1 ])
 
 % Render to file
 set(gcf, 'Units', 'centimeters');
