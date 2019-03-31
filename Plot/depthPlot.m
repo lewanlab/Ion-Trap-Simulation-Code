@@ -1,4 +1,4 @@
-function handle = depthPlot( x,y,z, fillColor, mSizes, markertype )
+function handle = depthPlot( x,y,z, fillColor, mSizes, markertype, lightFactors, varargin)
 %DEPTHPLOT Plots a series of points but lerps the marker color and size
 %between given values to give an illusion of depth
 
@@ -16,6 +16,10 @@ end
 
 if nargin < 6
     markertype = 'filled';
+end
+
+if nargin < 7
+    lightFactors = [ 0.5 1 ];
 end
 
 
@@ -44,8 +48,8 @@ end
 
     function c = getColor(dist)
         dist3 = repmat(dist, 1, 3);
-        b = fillColor;
-        a = fillColor .* .5;
+        b = fillColor * lightFactors(2);
+        a = fillColor .* lightFactors(1);
 
         c = a .* dist3 + (1 - dist3) .* b;
     end
@@ -75,7 +79,7 @@ view(-45,45);
 dist = getNormalisedDepths(x,y,z,getCameraViewDirection(gca));
 fillC = getColor(dist);
 markerSize = getSize(dist);
-handle = scatter3(x,y,z,markerSize,fillC,markertype, 'LineWidth', 1.5);
+handle = scatter3(x,y,z,markerSize,fillC,markertype, 'LineWidth', 1.5, varargin{:});
 if strcmp(markertype, 'filled')
     set(handle,'MarkerEdgeColor', 'k');
 end
