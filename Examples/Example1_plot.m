@@ -33,12 +33,11 @@ get(lab, 'Position');
 % Subfigure b)
 %  Final trajectories of ions, resembling a Coulomb crystal. The crystal is
 %  rendered in 3D.
-
 ax = axes('Units', 'centimeters', 'Position', [ 1.1 0.5 2.2 2.2 ]);
 depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ], 'filled', [ 0.2 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
 xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Rotation', -0);
 zlab = zlabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
-set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
+set(gca,'TickLength',[0.02 0.02], 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'ZAxis'), 'TickLabelInterpreter', 'Latex');
@@ -57,7 +56,7 @@ ax = axes('Units', 'centimeters', 'Position', [ 4.2 0.5 4.4 2.2 ]);
 depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ], 'filled', [ 0.2 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
 ylab = ylabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Rotation', 0);
 zlab = zlabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
-set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
+set(gca,'TickLength',[0.02 0.02], 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex');
 set(get(gca, 'ZAxis'), 'TickLabelInterpreter', 'Latex');
