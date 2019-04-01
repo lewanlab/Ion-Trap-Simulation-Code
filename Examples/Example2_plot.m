@@ -85,8 +85,8 @@ tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$50 \mu$m', 'LineS
 % Subfigure a)
 %  Plot Temperature of both species as a function of time.
 ax = axes('Units', 'centimeters', 'Position', [ 1.1 3.3 3.8 2.8 ]);
-plot(t*1e6, T_NH3 / NumberNH3 * 1e3, '-', 'Color', [ 0.3 0.4 0.5 ]*0.9); hold on;
-plot(t*1e6, T_Ca / NumberCa * 1e3, '-', 'Color', [ 0.8 0.16 0.08 ]);
+plot(t(2:end)*1e6, T_NH3(2:end) / NumberNH3 * 1e3, '-', 'Color', [ 0.3 0.4 0.5 ]*0.9); hold on;
+plot(t(2:end)*1e6, T_Ca(2:end) / NumberCa * 1e3, '-', 'Color', [ 0.8 0.16 0.08 ]);
 xlabel('time ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 10);
 ylabel('$T_i$ (mK)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ -0.6 1.4 1 ]);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
