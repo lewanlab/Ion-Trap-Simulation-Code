@@ -27,7 +27,7 @@ set(get(gca, 'XAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', '
 set(get(gca, 'YAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'ZAxis'), 'TickDirection', 'in', 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(gca, 'GridLineStyle', '-');
-hold on;
+hold on; box on;
 xlab = xlabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
 ylab = ylabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
 zlab = zlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
@@ -56,7 +56,7 @@ color = repmat(pastelRed, size(x, 1), 1);
 color([NH3Ions.ID], :) = repmat(pastelBlue, length([NH3Ions.ID]), 1);
 depthPlot(1e6*x(:,end), 1e6*y(:,end), 1e6*z(:,end), color, [ 20 70 ], 'filled', [ 0.2 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
 view(0, 90);
-box off;
+box on;
 xlim([-50 50]);
 ylim([-50 50]);
 set(gca, 'XTick', -250:50:250, 'XTickLabel', {});
