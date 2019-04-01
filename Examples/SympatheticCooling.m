@@ -18,7 +18,7 @@ interval = 60000;
 % Define trap parameters
 rf = 5.634e6; % Hz
 Vo = 252.5; % V
-Ve = 5; % V
+Ve = 8; % V
 geomC = 0.3;
 r0  = 3.5e-3;
 z0  = 10e-3;

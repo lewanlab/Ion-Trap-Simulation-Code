@@ -34,11 +34,9 @@ get(lab, 'Position');
 %  Final trajectories of ions, resembling a Coulomb crystal. The crystal is
 %  rendered in 3D.
 
-%subplot(1,2,2)
 ax = axes('Units', 'centimeters', 'Position', [ 1.1 0.5 2.2 2.2 ]);
-depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ], 'filled', [ 0.3 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
+depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ], 'filled', [ 0.2 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
 xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Rotation', -0);
-% ylab = ylabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Rotation', 0);
 zlab = zlabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
 set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex');
@@ -48,9 +46,6 @@ grid on;  view(0,0); axis equal ;%axis vis3d
 xlim([-50 50])
 ylim([-150 150]);
 zlim([-50 50]);
-% set(get(gca, 'XAxis'), 'TickDirection', 'in', 'FontSize', 11)
-% set(get(gca, 'YAxis'), 'TickDirection', 'in')
-% set(get(gca, 'ZAxis'), 'TickDirection', 'in')
 set(gca, 'GridLineStyle', '-');
 box on
 set(gca, 'XTick', -50:50:50, 'XTickLabel', {});
@@ -59,9 +54,7 @@ set(gca, 'ZTick', -50:50:50, 'ZTickLabel', {});
 
 % Panel c)
 ax = axes('Units', 'centimeters', 'Position', [ 4.2 0.5 4.4 2.2 ]);
-% depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ]);
-depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ], 'filled', [ 0.3 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
-xlab = xlabel('x', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Rotation', -0);
+depthPlot(x(:,end), z(:,end), y(:,end), pastelBlue, [ 20 70 ], 'filled', [ 0.2 1 ], 'LineWidth', 0.5, 'MarkerEdgeColor', 'k');
 ylab = ylabel('z', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Rotation', 0);
 zlab = zlabel('y', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters');
 set(gca,'LineWidth',1,'TickLength',[0.02 0.02], 'FontSize', 10);
@@ -90,12 +83,11 @@ u2xp = @(u) ((u-xl(1))/diff(xl)) .* p(3) + p(1);
 barc = [ 0.5 0.5 0.5 ];
 ax = axes('Position', [ 0 0 1 1 ]);
 plot(u2xp([ 50  50  ]), u2yp([ -45 -55 ]), 'Color', barc, 'LineWidth', 1.25); hold on;
-plot(u2xp([ 50  101 ]), u2yp([ -50 -50 ]), 'Color', barc, 'LineWidth', 1.25); hold on;
-plot(u2xp([ 101 101 ]), u2yp([ -45 -55 ]), 'Color', barc, 'LineWidth', 1.25); hold off;
+plot(u2xp([ 50  100 ]), u2yp([ -50 -50 ]), 'Color', barc, 'LineWidth', 1.25); hold on;
+plot(u2xp([ 100 100 ]), u2yp([ -45 -55 ]), 'Color', barc, 'LineWidth', 1.25); hold off;
 xlim([ 0 fp(3) ]); ylim([ 0 fp(4) ]);
 set(ax, 'Visible', 'off');
 tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$50 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 7.45 -0.5 3 1 ]);
-% set(get(tb, 'text'), 'Rotation', 90);
 
 
 % Subfigure labels
