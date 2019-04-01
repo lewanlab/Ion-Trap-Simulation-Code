@@ -2,6 +2,11 @@ function handle = depthPlot( x,y,z, fillColor, mSizes, markertype, lightFactors,
 %DEPTHPLOT Plots a series of points but lerps the marker color and size
 %between given values to give an illusion of depth
 
+ip = inputParser;
+ip.addParameter('DistanceLimits', []);
+ip.KeepUnmatched = 1;
+ip.parse(varargin{:});
+
 if (size(fillColor, 2) ~= 3 && ~(size(fillColor, 1) ~= 1 || size(fillColor, 1) ~= size(x,1)))
     error('colors must be specified as Nx3');
 end
@@ -22,11 +27,19 @@ if nargin < 7
     lightFactors = [ 0.5 1 ];
 end
 
-
 if size(fillColor) == [1 3]
    % repeat fill color for all atoms in list
    fillColor = repmat(fillColor, size(x,1), 1);
 end
+
+% Create plot varargs
+plotVarargs = {};
+unmatched = ip.Unmatched;
+for argName=fields(unmatched)'
+    plotVarargs{end+1} = argName{1};
+    plotVarargs{end+1} = unmatched.(argName{1});
+end
+
 
     function direction = getCameraViewDirection(axForGraph)
         %gets camera view direction for given axes
@@ -39,8 +52,13 @@ end
         cam = repmat(dir', size(x,1), 1);
         dist = sum(pos.*cam, 2);
         
-        miD = min(dist(:));
-        maD = max(dist(:));
+        if isempty(ip.Results.DistanceLimits)
+            miD = min(dist(:));
+            maD = max(dist(:));
+        else
+            miD = ip.Results.DistanceLimits(1);
+            maD = ip.Results.DistanceLimits(2);
+        end
         
         %normalise distances between 0 and 1.
         dist = (dist - miD)/(maD-miD);
@@ -79,7 +97,7 @@ view(-45,45);
 dist = getNormalisedDepths(x,y,z,getCameraViewDirection(gca));
 fillC = getColor(dist);
 markerSize = getSize(dist);
-handle = scatter3(x,y,z,markerSize,fillC,markertype, 'LineWidth', 1.5, varargin{:});
+handle = scatter3(x,y,z,markerSize,fillC,markertype, 'LineWidth', 1.5, plotVarargs{:});
 if strcmp(markertype, 'filled')
     set(handle,'MarkerEdgeColor', 'k');
 end

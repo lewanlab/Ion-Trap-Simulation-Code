@@ -18,7 +18,7 @@ Ca = sim.AddAtomType(charge, mass);
 createIonCloud(sim, 1e-4, Ca, 20);
 
 % position the ions that will form the rigid rod.
-rodz = (-5:2:5) * 5e-6 + 10e-6; rody = zeros(size(rodz)); rodx = zeros(size(rodz));
+rodz = (-2:0.5:2) * 5e-6 + 10e-6; rody = zeros(size(rodz)); rodx = zeros(size(rodz));
 rodAtoms = placeAtoms(sim, Ca, rodx', rody', rodz');
 
 % We create a new group, 'rod', which is composed of the rod Atoms, and
@@ -31,7 +31,7 @@ RF = 3.85e6;
 z0 = 5.5e-3 / 2;
 r0 = 7e-3 / 2;
 geometricKappa = 0.244;
-U0 = 5;
+U0 = 8;
 V0 = 500;
 a = -4 * geometricKappa / z0 .^2 / (RF * 2 * pi).^2 * U0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
 q = 2 / r0 .^2 / (RF * 2 * pi).^2 * V0 * ((charge * 1.6e-19) / (mass * 1.67e-27));
