@@ -35,7 +35,22 @@ set(get(gca, 'YAxis'), 'FontSize', 10, 'TickLabelInterpreter', 'Latex');
 set(gca, 'YTick', -3:1:3);
 ylim([ -3.5 3.5 ]);
 
-legend([h1(1) h2(1)], {'theory', 'simulated'}, 'Interpreter', 'Latex', 'FontSize', 10, 'box', 'off', 'Units', 'centimeters', 'Position', [ 0.3 6.3 4 0.8 ]);
+% Plot theory lines for odd and even numbers
+% N = [results.N];
+Nsmooth = linspace(0.5, 11, 500);
+th = 2.018 ./ (Nsmooth).^0.559;
+hold on;
+plot(Nsmooth, th/2, 'k-')
+plot(Nsmooth, -th/2, 'k-')
+
+Nsmooth = linspace(0.5, 11, 500);
+th = 2.018 ./ (Nsmooth).^0.559;
+hold on;
+plot(Nsmooth, th, 'k:')
+plot(Nsmooth, 0*th, 'k:')
+plot(Nsmooth, -th, 'k:')
+
+legend([h1(1) h2(1)], {'theory', 'simulated'}, 'Interpreter', 'Latex', 'FontSize', 10, 'box', 'off', 'Units', 'centimeters', 'Position', [ 0.3 1.3 4 0.8 ]);
 
 set(gcf, 'Units', 'centimeters');
 pos = get(gcf, 'Position');
