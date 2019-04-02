@@ -13,21 +13,21 @@ set(gcf, 'Position', [ pos(1) pos(2) 9 8 ], 'Color', 'w');
 
 % Plot the results
 pastelBlue = [112 146 190]/255;
-plot(TrapQs, theoreticalRadialFreq, '-', 'Color', 'k'); hold on;
-plot(TrapQs, theoreticalZFreq, '-', 'Color', pastelBlue);
-plot(TrapQs, pseudoX, 'o', 'Color', 'k', 'MarkerSize', 6, 'LineWidth', 1.5);
-h1 = plot(TrapQs, pseudoZ, 'o', 'Color', pastelBlue, 'MarkerSize', 6, 'LineWidth', 1.5);
+plot(TrapQs, theoreticalRadialFreq*1e-6, '-', 'Color', 'k'); hold on;
+plot(TrapQs, theoreticalZFreq*1e-6, '-', 'Color', pastelBlue);
+plot(TrapQs, pseudoX*1e-6, 'o', 'Color', 'k', 'MarkerSize', 6, 'LineWidth', 1.5);
+h1 = plot(TrapQs, pseudoZ*1e-6, 'o', 'Color', pastelBlue, 'MarkerSize', 6, 'LineWidth', 1.5);
 grid on
 set(gca, 'GridLineStyle', ':');
 
 % and full rf
 load('results_fullrf.mat');
-plot(TrapQs, pseudoX, 'x', 'Color', 'k', 'MarkerSize', 9, 'LineWidth', 1.5);
-h2 = plot(TrapQs, pseudoZ, 'x', 'Color', pastelBlue, 'MarkerSize', 9, 'LineWidth', 1.5);
+plot(TrapQs, pseudoX*1e-6, 'x', 'Color', 'k', 'MarkerSize', 9, 'LineWidth', 1.5);
+h2 = plot(TrapQs, pseudoZ*1e-6, 'x', 'Color', pastelBlue, 'MarkerSize', 9, 'LineWidth', 1.5);
 
 xlabel('$q_y$', 'Interpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
-ylabel('$f_u$ (kHz)', 'Interpreter', 'Latex', 'FontSize', 10);
+ylabel('$f_u$ (MHz)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 
 legend([h1 h2], {'pseudopotential', 'full rf'}, 'Interpreter', 'Latex', 'box', 'off', 'Location', 'northwest');
