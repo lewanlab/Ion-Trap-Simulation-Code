@@ -14,8 +14,8 @@ charge = 1;
 mass = 40;
 Ca = sim.AddAtomType(charge, mass);
 
-% create a cloud of 50 free ions
-createIonCloud(sim, 1e-4, Ca, 20);
+% create a cloud of free ions
+createIonCloud(sim, 1e-4, Ca, 30);
 
 % position the ions that will form the rigid rod.
 rodz = (-2:0.5:2) * 5e-6 + 10e-6; rody = zeros(size(rodz)); rodx = zeros(size(rodz));
