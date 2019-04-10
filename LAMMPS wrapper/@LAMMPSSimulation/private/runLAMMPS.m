@@ -2,9 +2,16 @@ function [result] = runLAMMPS( inputFileName )
 %RUNLAMMPS Runs lammps with the given file as an input argument.
 result = false;
 
+c = onCleanup(@() killProc());
+    function killProc()
+        if exist('process', 'var') && process.isAlive
+            disp('Terminating lammps process.');
+            process.destroy();
+        end
+    end
+
 %Whatever error is thrown (or if user terminates), kill the lammps process
 %if it has started.
-c = onCleanup(@()eval(['try;', 'process.destroy();', 'disp(''Terminating lammps process.'');', 'catch;', 'end;']));
 
 [directoryS,~,~] = fileparts(mfilename('fullpath'));
 [directoryS,~,~] = fileparts(directoryS);
@@ -27,15 +34,16 @@ if exist(fullfile(directoryS, 'Lammps.cfg'), 'file')
     list.add(lammpsPath);
     list.add('-in');
     list.add(inputFileName);
-%     list.add('-np');
-%     list.add(sprintf('%d',getenv('NUMBER_OF_PROCESSORS')));
+    %     list.add('-np');
+    %     list.add(sprintf('%d',getenv('NUMBER_OF_PROCESSORS')));
     pb = java.lang.ProcessBuilder(list);
     process = pb.start();
+    %c = onCleanup(@()eval(['try;', 'disp(''Terminating lammps process.'');', 'process.destroy();', 'disp(''Terminating lammps process.'');', 'catch;', 'end;']));
     
     pause(0.3);
     if ~process.isAlive && process.exitValue ~= 0
         error('LAMMPS executable did not run. Please ensure the program will run without errors in a terminal.');
-    end   
+    end
     
     is = process.getInputStream();
     reader = java.io.BufferedReader(java.io.InputStreamReader(is));
@@ -75,6 +83,7 @@ if exist(fullfile(directoryS, 'Lammps.cfg'), 'file')
     reader.close();
     process.waitFor();
     result = true;
+    
 else
     error(['Cannot find Lammps.cfg file. Please make sure this exists'...
         ' within the folder `LAMMPS Wrapper`. This file should be a'...
