@@ -1,11 +1,10 @@
-close all
-clearvars
+function walltime = Benchmark(NumberOfIons, GPUAccel)
 
-if ~exist('NumberOfIons', 'var')
+if nargin < 1
     NumberOfIons = 1000;
 end
 
-if ~exist('GPUAccel', 'var')
+if nargin < 2
     GPUAccel = 1;
 end
 
@@ -31,17 +30,17 @@ sim.Add(langevinBath(3e-3, 1e-5));
 
 %Configure outputs.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 100));
-sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 100)}));
 
 % Run simulation
-sim.Add(evolve(10000));
+sim.Add(evolve(100000));
 
 timer = tic;
 sim.Execute();
 walltime = toc(timer);
 
-figure;
-[timestep, ~, x,y,z] = readDump('positions.txt');
+figure(1); clf; set(gcf, 'Color', 'w');
+[~, ~, x,y,z] = readDump('positions.txt');
 plot3(x',y',z','-','Color', [0.8 0.8 0.8]); hold on
 plot3(x(:,end)',y(:,end)',z(:,end)','k.');
 plot3(0,0,0,'g+');  hold off
+end
