@@ -8,3 +8,4 @@ Simulations/**
 **/*.cite
 **/*.mat
 **/*.png
+bin/**

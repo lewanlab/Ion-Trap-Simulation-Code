@@ -32,10 +32,15 @@ if exist(fullfile(directoryS, 'Lammps.cfg'), 'file')
     pb = java.lang.ProcessBuilder(list);
     process = pb.start();
     
+    pause(0.3);
+    if ~process.isAlive && process.exitValue ~= 0
+        error('LAMMPS executable did not run. Please ensure the program will run without errors in a terminal.');
+    end   
+    
     is = process.getInputStream();
     reader = java.io.BufferedReader(java.io.InputStreamReader(is));
     
-    while ~reader.ready()
+    while ~reader.ready() && process.isAlive
         pause(0.1);
     end
     line = reader.readLine();
