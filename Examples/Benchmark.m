@@ -10,6 +10,7 @@ end
 
 sim = LAMMPSSimulation();
 sim.GPUAccel = GPUAccel;
+sim.Verbose = 0;
 
 sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 
