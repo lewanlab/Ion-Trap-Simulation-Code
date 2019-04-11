@@ -1,58 +1,39 @@
 function [ strings ] = linearPaulTrapCfg(fixID, OscillatingV, EndcapV, Z0, R0, GeometricConstant, RFFrequency, Anisotropy, offset )
 %LINEARPAULTRAPCFG Writes the config file for a linear paul trap.
 
-strings =           { sprintf('#Creating a Linear Paul Trap... (fixID=%s)', fixID)};
-%strings{end+1} =     sprintf('variable trapF%s\t\tequal %e', fixID, RFFrequency*2*pi);
-strings{end+1} =     sprintf('variable endCapV%s\t\tequal %e', fixID, EndcapV);
-strings{end+1} =     sprintf('variable radius%s\t\tequal %e', fixID, R0);
-strings{end+1} =     sprintf('variable zLength%s\t\tequal %e', fixID, Z0);
-strings{end+1} =     sprintf('variable geomC%s\t\tequal %e', fixID, GeometricConstant);
-strings{end+1} =     '' ;
-
-strings{end+1} =     '#Define frequency components' ;
-
-for i=1:size(OscillatingV,1)
-    strings{end+1} =     sprintf('variable oscVx%s%d\t\tequal %e', fixID, i, OscillatingV(i));
-    strings{end+1} =     sprintf('variable oscVy%s%d\t\tequal %e', fixID, i, OscillatingV(i) * Anisotropy);
-    strings{end+1} =     sprintf('variable phase%s%d\t\tequal "%e * step*dt"', fixID, i, RFFrequency(i)*2*pi);
-    
-    strings{end+1} =     sprintf('variable oscConstx%s%d\t\tequal "v_oscVx%s%d/(v_radius%s*v_radius%s)"', fixID, i, fixID, i, fixID, fixID);
-    strings{end+1} =     sprintf('variable oscConsty%s%d\t\tequal "v_oscVy%s%d/(v_radius%s*v_radius%s)"', fixID, i, fixID, i, fixID, fixID);
-end
-
-strings{end+1} =     sprintf('variable statConst%s\t\tequal "v_geomC%s * v_endCapV%s / (v_zLength%s * v_zLength%s)"', fixID, fixID, fixID, fixID, fixID);
-strings{end+1} =     '' ;
-
-xC = '';
-yC = '';
-
+% Displacement of the trap centre:
 xPos = sprintf('(x-%e)', offset(1));
 yPos = sprintf('(y-%e)', offset(2));
+if offset(1) == 0; xPos = 'x'; end
+if offset(2) == 0; yPos = 'y'; end
 
-%Simplify this case for 0 displacement so that unneccesary operations are
-%not used.
-if offset(1) == 0
-    xPos = 'x';
+blockTitle = sprintf('#Creating a Linear Paul Trap... (fixID=%s)', fixID);
+
+% Calculate potential gradients
+Vgrad = OscillatingV / (R0).^2;
+Vstat = GeometricConstant * EndcapV / (Z0).^2;
+
+% Create strings describing voltages.
+voltStrx = {};
+voltStry = {};
+for i=1:length(Vgrad)
+    voltStrx{i} = sprintf('%s * cos(%s * step*dt)', Vgrad(i), RFFrequency(i)*2*pi );
+    voltStry{i} = sprintf('%s * cos(%s * step*dt)', Vgrad(i)*Anisotropy, RFFrequency(i)*2*pi );
 end
+voltStrx = strjoin(voltStrx, '+');
+voltStry = strjoin(voltStry, '+');
 
-if offset(2) == 0
-    yPos = 'y';
-end
+% Calculate per-atom forces
+Ex_varname = [ 'Ex' fixID ];
+Ey_varname = [ 'Ex' fixID ];
+Ez_varname = [ 'Ez' fixID ];
+ExStr = sprintf('variable %s atom "(%s) * (%s) + %.8f * x"', Ex_varname, voltStrx, xPos, Vstat);
+EyStr = sprintf('variable %s atom "(%s) * -(%s) + %.8f * y"', Ey_varname, voltStry, yPos, Vstat);
+EzStr = sprintf('variable %s atom "-%.8f * z"', Ez_varname, 2*Vstat);
 
+% Add fix
+fixStr = sprintf('fix %s all efield v_%s v_%s v_%s', fixID, Ex_varname, Ey_varname, Ez_varname);
+strings = { blockTitle, ExStr, EyStr, EzStr, fixStr };
 
-for i=1:size(OscillatingV,1)
-    %Construct a string referencing the constants for this frequency.
-    xC = [xC sprintf('v_oscConstx%s%d * cos(v_phase%s%d) * %s + ', fixID, i, fixID, i, xPos)];
-    yC = [yC sprintf('v_oscConsty%s%d * cos(v_phase%s%d) * -%s + ', fixID, i, fixID, i, yPos)];
-end
-
-
-strings{end+1} =     sprintf('variable oscEX%s atom "%s + v_statConst%s * %s"', fixID, xC(1:end-3),fixID, xPos);
-strings{end+1} =     sprintf('variable oscEY%s atom "%s + v_statConst%s * %s"', fixID, yC(1:end-3),fixID, yPos);
-
-strings{end+1} =     sprintf('variable statEZ%s atom "v_statConst%s * 2 * -z"', fixID, fixID);
-
-strings{end+1} =     sprintf('fix %s all efield v_oscEX%s v_oscEY%s v_statEZ%s', fixID, fixID,fixID, fixID);
-strings{end+1} = '';
 end
 
