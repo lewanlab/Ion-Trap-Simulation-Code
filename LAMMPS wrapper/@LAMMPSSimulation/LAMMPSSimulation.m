@@ -21,6 +21,9 @@ classdef LAMMPSSimulation < handle & matlab.mixin.SetGet
         %NEIGHBORSKIN Size of the skin used for neighbor calculations
         NeighborSkin % (see http://lammps.sandia.gov/doc/neighbor.html)
         
+        %VERBOSE Whether lammps terminal should be flushed to see progress.
+        Verbose = 1;
+        
     end
     
     properties (SetAccess=private)

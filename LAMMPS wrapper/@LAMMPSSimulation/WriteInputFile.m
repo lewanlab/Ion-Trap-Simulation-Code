@@ -43,7 +43,9 @@ fprintf(fHandle, 'timestep %e\n\n', sim.TimeStep);
 
 % Intermittently write status update to output stream so we know the
 % simulation is proceeding as it should.
-writeOutputStreamConfig(fHandle);
+if sim.Verbose
+    writeOutputStreamConfig(fHandle);
+end
 
 % Write all defined groups to output file
 writeGroups(sim, fHandle)
