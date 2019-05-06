@@ -3,7 +3,8 @@
 % wall time required to complete the simulation.
 
 Numbers = [ 1 2 3 6 10 18 32 56 100 178 316 562 800 1000 2000 ];
-GPUAccel = 1;
+Numbers = 10;
+GPUAccel = 0;
 results = struct('N', {}, 'time', {});
 
 for NumberOfIons=Numbers

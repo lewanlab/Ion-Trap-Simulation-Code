@@ -62,6 +62,8 @@ end
         
         %normalise distances between 0 and 1.
         dist = (dist - miD)/(maD-miD);
+        dist = min(dist, 1);
+        dist = max(dist, 0);
     end
 
     function c = getColor(dist)

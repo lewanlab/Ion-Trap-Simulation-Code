@@ -27,7 +27,7 @@ h2 = plot(TrapQs, pseudoZ*1e-6, 'x', 'Color', pastelBlue, 'MarkerSize', 9, 'Line
 
 xlabel('$q_y$', 'Interpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
-ylabel('$f_u$ (MHz)', 'Interpreter', 'Latex', 'FontSize', 10);
+ylabel('$\omega_u/2\pi$ (MHz)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 
 legend([h1 h2], {'pseudopotential', 'full rf'}, 'Interpreter', 'Latex', 'box', 'off', 'Location', 'northwest');

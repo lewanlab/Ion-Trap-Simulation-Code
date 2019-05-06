@@ -19,19 +19,19 @@ colors = [ (colors(1:2:end,:)); colors(1:2:end,:); ];
 
 % Plot temperatures and theory
 for i=1:size(T,2)
-    plot(t*1e3, T(:,i)*1e6, '-', 'Color', colors(i,:)); hold on;
+    plot(t*1e6, T(:,i)*1e6, '-', 'Color', colors(i,:)); hold on;
     theoryT = (initialT + (bathT(i) - initialT)*(1-exp(1).^(-2*t/timeConstant(i))));
-    plot(t*1e3, theoryT*1e6, ':', 'Color', colors(i,:));
+    plot(t*1e6, theoryT*1e6, ':', 'Color', colors(i,:));
 end
 
 grid on
 set(gca, 'GridLineStyle', ':');
 
-xlabel('$t$ (ms)', 'Interpreter', 'Latex', 'FontSize', 10);
+xlabel('$t$ ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'XAxis'), 'FontSize', 10, 'TickLabelInterpreter', 'Latex');
-xlim([ 0 0.05 ]);
+xlim([ 0 50 ]);
 
-ylabel('$T$ ($\mu$K)', 'Interpreter', 'Latex', 'FontSize', 10);
+ylabel('$T_j$ ($\mu$K)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'YAxis'), 'FontSize', 10, 'TickLabelInterpreter', 'Latex');
 % ylim([ -3.5 3.5 ]);
 

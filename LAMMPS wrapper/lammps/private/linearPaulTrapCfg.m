@@ -25,7 +25,7 @@ voltStry = strjoin(voltStry, '+');
 
 % Calculate per-atom forces
 Ex_varname = [ 'Ex' fixID ];
-Ey_varname = [ 'Ex' fixID ];
+Ey_varname = [ 'Ey' fixID ];
 Ez_varname = [ 'Ez' fixID ];
 ExStr = sprintf('variable %s atom "(%s) * (%s) + %.8f * x"', Ex_varname, voltStrx, xPos, Vstat);
 EyStr = sprintf('variable %s atom "(%s) * -(%s) + %.8f * y"', Ey_varname, voltStry, yPos, Vstat);

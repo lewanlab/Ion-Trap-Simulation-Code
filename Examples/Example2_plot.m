@@ -91,7 +91,7 @@ xlabel('time ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 10);
 ylabel('$T_i$ (mK)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ -0.6 1.4 1 ]);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
-set(gca, 'YTick', [ 0 0.5 1 ], 'YTickLabels', { '0.0', '0.5', '1.0' });
+set(gca, 'YTick', [ 0 0.5 1 1.5 2], 'YTickLabels', { '0.0', '0.5', '1.0', '1.5', '2.0' });
 grid on; set(gca, 'GridLineStyle', ':');
 %  plot dashed line at t_cool.
 yl = ylim; ylim(yl); plot( [ 1 1 ] * interval * sim.TimeStep * 1e6, yl, '--k');
@@ -101,7 +101,7 @@ hold off;
 
 % Subfigure labels
 annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0.0 3.2 1 1 ])
-annotation('textbox', 'String', '(c)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 3.6 3.2 1 1 ])
+annotation('textbox', 'String', '(c)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 3.5 3.2 1 1 ])
 annotation('textbox', 'String', '(a)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0.0 5.5 1 1 ])
 
 % Render to file
