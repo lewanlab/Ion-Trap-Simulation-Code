@@ -12,4 +12,5 @@ The physics behind each verification is described in the accompanying paper, alo
 | NormalModes_Linear       | Uses a simulation to determine the normal mode spectrum of ions in a linear chain. `NormalModes_Linear.m` runs the simulations, `PlotPaperGraph.m` plots the graph used in the paper. |
 | CoolingMechanisms/LangevinBath | Simulates groups of non-interacting atoms that are coupled to a Langevin bath, and shows the atoms thermalize to the correct temperature over the expected time. `LangevinBath.m` performs the calculation, `PlotPaperGraph.m` plots the graph used in the paper. |
 | CoolingMechanisms/LaserCool | Simulates a number of atoms with laser cooling applied along one direction, to show that the velocity parallel to the beam is damped. `LaserCool.m` runs the simulations. |
-|--------------------------|-------|
+
+
