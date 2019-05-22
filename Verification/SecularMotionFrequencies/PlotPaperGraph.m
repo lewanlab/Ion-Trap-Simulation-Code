@@ -32,8 +32,8 @@ set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 
 legend([h1 h2], {'pseudopotential', 'full rf'}, 'Interpreter', 'Latex', 'box', 'off', 'Location', 'northwest');
 
-annotation('textbox', 'LineStyle', 'none', 'String', '$f_r$', 'Interpreter', 'Latex', 'FontSize', 11, 'Units', 'centimeters', 'Position', [ 4 4 1 1 ]);
-annotation('textbox', 'LineStyle', 'none', 'String', '$f_z$', 'Interpreter', 'Latex', 'FontSize', 11, 'Units', 'centimeters', 'Position', [ 4 2 1 1 ], 'Color', pastelBlue);
+annotation('textbox', 'LineStyle', 'none', 'String', '$\omega_r$', 'Interpreter', 'Latex', 'FontSize', 11, 'Units', 'centimeters', 'Position', [ 4 4 1 1 ]);
+annotation('textbox', 'LineStyle', 'none', 'String', '$\omega_z$', 'Interpreter', 'Latex', 'FontSize', 11, 'Units', 'centimeters', 'Position', [ 4 2 1 1 ], 'Color', pastelBlue);
 
 set(gcf, 'Units', 'centimeters');
 pos = get(gcf, 'Position');

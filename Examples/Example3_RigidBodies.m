@@ -40,8 +40,7 @@ sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 % sim.Add(thermalVelocities(1, 'yes'));
 sim.Add(langevinBath(0, 1e-5));
 
-% Output data, but only for the final frames of the simulation.
-sim.Add(evolve(1));
+% Output data
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 2));
 sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 sim.Add(evolve(5000));

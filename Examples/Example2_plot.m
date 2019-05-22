@@ -85,8 +85,8 @@ tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$50 \mu$m', 'LineS
 % Subfigure c)
 %  Plot Temperature of both species as a function of time.
 ax = axes('Units', 'centimeters', 'Position', [ 4.8 1.1 3.8 2.8 ]);
-plot(t(2:end)*1e6, T_NH3(2:end) / NumberNH3 * 1e3, '-', 'Color', [ 0.3 0.4 0.5 ]*0.9); hold on;
-plot(t(2:end)*1e6, T_Ca(2:end) / NumberCa * 1e3, '-', 'Color', [ 0.8 0.16 0.08 ]);
+h1 = plot(t(2:end)*1e6, T_NH3(2:end) / NumberNH3 * 1e3, '-', 'Color', [ 0.3 0.4 0.5 ]*0.9); hold on;
+h2 = plot(t(2:end)*1e6, T_Ca(2:end) / NumberCa * 1e3, '-', 'Color', [ 0.8 0.16 0.08 ]);
 xlabel('time ($\mu$s)', 'Interpreter', 'Latex', 'FontSize', 10);
 ylabel('$T_i$ (mK)', 'Interpreter', 'Latex', 'FontSize', 10, 'Units', 'centimeters', 'Position', [ -0.6 1.4 1 ]);
 set(get(gca, 'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
@@ -95,9 +95,11 @@ set(gca, 'YTick', [ 0 0.5 1 1.5 2], 'YTickLabels', { '0.0', '0.5', '1.0', '1.5',
 grid on; set(gca, 'GridLineStyle', ':');
 %  plot dashed line at t_cool.
 yl = ylim; ylim(yl); plot( [ 1 1 ] * interval * sim.TimeStep * 1e6, yl, '--k');
-text(interval * sim.TimeStep * 1e6 + 30, interp1([0 1], yl, 0.9), '$t_\mathrm{cool}$', 'FontSize', 10, 'Interpreter', 'Latex'); 
+text(interval * sim.TimeStep * 1e6 - 280, interp1([0 1], yl, 0.9), '$t_\mathrm{cool}$', 'FontSize', 10, 'Interpreter', 'Latex'); 
 xlim([ 0 max(t(:)*1e6) ]);
 hold off;
+
+leg = legend([ h1 h2 ], { '$\mathrm{NH}^+_3$', '${}^{40}\mathrm{Ca}^+$'}, 'Interpreter', 'Latex', 'box', 'off', 'units', 'centimeters', 'position', [ 7.1 2.8 1 1 ]);
 
 % Subfigure labels
 annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0.0 3.2 1 1 ])

@@ -33,11 +33,11 @@ r0 = 7e-3 / 2;
 geometricKappa = 0.244;
 U0 = 7;
 V0 = 300;
-
 sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
 
 %Add some damping bath
-sim.Add(langevinBath(1e-3, 1e-5, sim.Group(calciumIons)));
+T = 1e-3;
+sim.Add(langevinBath(T, 10e-6, sim.Group(calciumIons)));
 
 %Configure outputs.
 sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
