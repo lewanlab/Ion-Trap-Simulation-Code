@@ -1,10 +1,8 @@
 %% Plot the results
-% Originally atoms start off as a randomly placed mess, but due to the
-% action of the Langevin bath they are cooled into a Coulomb crystal
-% formation. As a result, the first half of the simulation's trajectories
-% look very hectic as we have a gas-like phase. To make the plot clearer,
-% we will just plot the end part of the simulation after some cooling to an
-% ordered phase has taken place.
+% This plots the figure used in the paper.
+
+[timestep, ~, x,y,z] = readDump('positions.txt');
+x = x*1e6; y=y*1e6; z=z*1e6; % convert to um
 
 % Setup figure size for paper.
 clf

@@ -1,5 +1,5 @@
 %%
-% Plot the results clearly
+% Plot results from Example 2 as for the paper.
 
 clf
 set(gcf, 'Color', 'w', 'Units', 'centimeters');

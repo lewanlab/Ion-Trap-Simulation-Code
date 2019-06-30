@@ -32,8 +32,15 @@ sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 sim.Add(evolve(10000));
 sim.Execute();
 
-%% Post process output
-[~, ~, x,y,z] = readDump('positions.txt');
+%% Load the data
+% Load the results from the output file:
+[timestep, ~, x,y,z] = readDump('positions.txt');
 
-figure;
-plot3(x',y',z');
+%% Plot
+% Plot the final positions of atoms
+
+color = [112 146 190]/255;
+clf;
+depthPlot(x(:,end), y(:,end), z(:,end), color, [ 20 70 ]);
+xlabel('x'); ylabel('y'); zlabel('z');
+axis equal;
