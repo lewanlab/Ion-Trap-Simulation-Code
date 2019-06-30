@@ -29,7 +29,7 @@ make ps # list package status
 ```
 This will make the `lmp-serial` executable. You should also include the `gpu` package if you want to use GPU-accelerated styles.
 
-Once you have a `LAMMPS` executable, you must configure LIon to use the executable. In the folder `LAMMPS Wrapper`, create a file called `lammps.cfg` which contains the path to the `LAMMPS` executable you want to use. For example, `C:\lammps\lmp_win_no-mpi.exe`.
+Once you have a `LAMMPS` executable, you must configure LIon to use the executable. In the folder `LAMMPS Wrapper`, create a file called `lammps.cfg` which contains the path to the `LAMMPS` executable you want to use. For example, the contents of this file might be `C:\Program Files\LAMMPS 64-bit 5Jun2019\bin\lmp_serial.exe` to use the serial LAMMPS executable from the chosen installation.
 
 To add LIon functions to your Matlab path variable, run the `SetPaths` function. LIon is now ready to use.
 
