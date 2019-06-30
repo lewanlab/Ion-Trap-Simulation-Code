@@ -94,12 +94,19 @@ set(get(gca, 'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(gca, 'YTick', [ 0 0.5 1 1.5 2], 'YTickLabels', { '0.0', '0.5', '1.0', '1.5', '2.0' });
 grid on; set(gca, 'GridLineStyle', ':');
 %  plot dashed line at t_cool.
-yl = ylim; ylim(yl); plot( [ 1 1 ] * interval * sim.TimeStep * 1e6, yl, '--k');
+yl = ylim; liney = linspace(yl(1), yl(2), 58); liney(3:4:end) = NaN;
+plot( ones(size(liney)) * interval * sim.TimeStep * 1e6, liney, '-k');
 text(interval * sim.TimeStep * 1e6 - 280, interp1([0 1], yl, 0.9), '$t_\mathrm{cool}$', 'FontSize', 10, 'Interpreter', 'Latex'); 
 xlim([ 0 max(t(:)*1e6) ]);
-hold off;
 
-leg = legend([ h1 h2 ], { '$\mathrm{NH}^+_3$', '${}^{40}\mathrm{Ca}^+$'}, 'Interpreter', 'Latex', 'box', 'off', 'units', 'centimeters', 'position', [ 7.1 2.8 1 1 ]);
+% Resorted to custom legend because the size of the default lines was
+% horrible.
+plot([ 1000 1200 ], 1.75 * [ 1 1 ], '-', 'Color', [ 0.3 0.4 0.5 ]*0.9);
+plot([ 1000 1200 ], 1.41 * [ 1 1 ], '-', 'Color', [ 0.8 0.16 0.08 ]);
+text(1220, 1.76, '$\mathrm{NH}^+_3$', 'Interpreter', 'Latex');
+text(1200, 1.41, '${}^{40}\mathrm{Ca}^+$', 'Interpreter', 'Latex');
+
+% leg = legend([ h1 h2 ], { '$\mathrm{NH}^+_3$', '${}^{40}\mathrm{Ca}^+$'}, 'Interpreter', 'Latex', 'box', 'off', 'units', 'centimeters', 'position', [ 7.1 2.8 1 1 ]);
 
 % Subfigure labels
 annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 0.0 3.2 1 1 ])

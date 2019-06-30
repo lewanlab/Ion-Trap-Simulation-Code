@@ -10,7 +10,7 @@ rY = diff(y(rodEnds, :),1);
 rZ = diff(z(rodEnds, :),1);
 rR = (rX.^2 + rY.^2).^0.5;
 theta = rad2deg(atan(rZ./rR));
-phi = wrapTo2Pi(atan2(rY, rX));
+phi = wrapToPi(atan2(rY, rX));
 
 
 % Setup figure size for paper.
@@ -21,11 +21,11 @@ set(gcf, 'Position', [ pos(1) pos(2) 9 9 ]);
 
 py = 0.7;
 % Create axes layout
-ax_a = axes('Units', 'centimeters', 'Position', [ 0.05 0.6 2.6 3*2.6 ]); box on;
-ax_theta = axes('Units', 'centimeters', 'Position', [ 3.9 6.4 4.9 2.0 ]); box on;
-ax_phi = axes('Units', 'centimeters', 'Position', [ 3.9 3.9 4.9 2.0 ]); box on;
+ax_a = axes('Units', 'centimeters', 'Position', [ 0.35 0.6 2.6 3*2.6 ]); box on;
+ax_theta = axes('Units', 'centimeters', 'Position', [ 4.1 6.4 4.7 2.0 ]); box on;
+ax_phi = axes('Units', 'centimeters', 'Position', [ 4.1 3.9 4.7 2.0 ]); box on;
 
-ax_b = axes('Units', 'centimeters', 'Position', [ 4 py 2.0 2.0 ]); box on;
+ax_b = axes('Units', 'centimeters', 'Position', [ 4.1 py 2.0 2.0 ]); box on;
 ax_c = axes('Units', 'centimeters', 'Position', [ 6.7 py 2.0 2.0 ]); box on;
 % ax_d = axes('Units', 'centimeters', 'Position', [ 3.4 10+2.4+py 2.4 2.4 ]); box on;
 % ax_e = axes('Units', 'centimeters', 'Position', [ 6.4 10+2.4+py 2.4 2.4 ]); box on;
@@ -54,9 +54,14 @@ l = xlabel(ax_b, 'x', 'Interpreter', 'Latex', 'Fontsize', 10); set(l, 'Units', '
 l = ylabel(ax_b, 'y', 'Interpreter', 'Latex', 'Fontsize', 10); set(l, 'Units', 'centimeters', 'Position', [ 1.6 0.3 1 ]);
 hold on;
 plot3([ 25 25; 25 25; 25 25; ]', -[ 0 0; 0 25; 25 25 ]', [ -69 -75; -72 -72; -69 -75 ]', 'Color', barc, 'LineWidth', 1.25);
-tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$25 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 1.55 1.02 3 1 ], 'FontSize', 10);
+tb = annotation('textbox', 'Interpreter', 'Latex', 'String', '$25 \mu$m', 'LineStyle', 'none', 'Units', 'centimeters', 'Position', [ 1.85 1.02 3 1 ], 'FontSize', 10);
 set(get(tb, 'Text'), 'Rotation', -29)
-
+h = xlabel(ax_a, 'x', 'Interpreter', 'Latex', 'FontSize', 10);
+set(h, 'Units', 'centimeters', 'Position', [ 2 0.4 1 ]);
+h = ylabel(ax_a, 'y', 'Interpreter', 'Latex', 'FontSize', 10);
+set(h, 'Units', 'centimeters', 'Position', [ 0.6 0.4 1 ]);
+h = zlabel(ax_a, 'z', 'Interpreter', 'Latex', 'FontSize', 10);
+set(h, 'Units', 'centimeters', 'Position', [ 0 3.9 1 ]);
 
 panelNum = 4; panelTimestepSpan = 2000;
 frameNum = @(panel) floor(size(x,2) + (panel-1) / panelNum * panelTimestepSpan - panelTimestepSpan);
@@ -119,7 +124,7 @@ grid(ax_theta,'on');
 %  Angle phi of rod over time
 t = timestep * sim.TimeStep * 1e3;
 xlim(ax_phi, [ min(t) max(t) ]);
-ylim(ax_phi, [ 0 2*pi ]);
+ylim(ax_phi, [ -pi pi ]);
 hold(ax_phi,'on');
 plot(ax_phi, frameNum(1) * [1 1] * sim.TimeStep * 1e3, ylim, '-', 'Color', keyframeColor);
 plot(ax_phi, frameNum(2) * [1 1] * sim.TimeStep * 1e3, ylim, '-', 'Color', keyframeColor);
@@ -128,8 +133,8 @@ set(get(ax_phi,'XAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 set(get(ax_phi,'YAxis'), 'TickLabelInterpreter', 'Latex', 'FontSize', 10);
 xlabel(ax_phi, 'Time (ms)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(ax_phi, 'GridLineStyle', ':');
-set(ax_phi, 'YTick', [ 0 pi 2*pi]); 
-set(ax_phi, 'YTickLabels', {'0', '$\pi$', '$2\pi$'});
+set(ax_phi, 'YTick', [ -pi 0 pi ]); 
+set(ax_phi, 'YTickLabels', {'$-\pi$', '0', '$\pi$'});
 l = ylabel(ax_phi, '$\phi$ (rad)', 'Interpreter', 'Latex', 'FontSize', 10);
 set(l, 'Units', 'centimeters', 'Position', [ -0.6 1 0 ]);
 grid(ax_phi,'on');
@@ -140,16 +145,16 @@ bgAx = axes('units', 'normalized', 'position', [ 0 0 1 1 ]);
 uistack(bgAx, 'bottom');
 v = 0.4;
 xlim(bgAx, [ 0 1 ]); ylim(bgAx, [ 0 1 ]); hold(bgAx, 'on');
-plot(0.487 * [ 1 1 ], [ 0.5 0.8 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
-plot(0.542 * [ 1 1 ], [ 0.5 0.8 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
-plot( [ 0.87 0.542 ], [ 0.295 0.432 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
-plot( [ 0.56 0.487 ], [ 0.295 0.432 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
+plot(0.508 * [ 1 1 ], [ 0.5 0.8 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
+plot(0.56 * [ 1 1 ], [ 0.5 0.8 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
+plot( [ 0.87 0.56 ], [ 0.295 0.432 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
+plot( [ 0.57 0.508 ], [ 0.295 0.432 ], '-', 'Color', keyframeColor, 'LineWidth', 3);
 set(bgAx, 'Visible', 'off')
 
 
 annotation('textbox', 'String', '(a)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ -0.15 8 1 1 ])
-annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 2.8 8 1 1 ])
-annotation('textbox', 'String', '(c)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 2.8 2.05 1 1 ])
+annotation('textbox', 'String', '(b)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 2.9 8 1 1 ])
+annotation('textbox', 'String', '(c)', 'FontSize', 11, 'LineStyle', 'none', 'Interpreter', 'Latex', 'Units', 'centimeters', 'Position', [ 2.9 2.05 1 1 ])
 
 uistack(annotations_ax, 'top');
 
