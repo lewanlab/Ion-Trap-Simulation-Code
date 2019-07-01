@@ -66,6 +66,6 @@ plot(t,T); hold on;
 % Plot theoretical lines for each group. It should be a decay from initial
 % temperature to final temperature with rate constant 2*c (because T
 % \propto v^2).
-for i=1:5
+for i=1:length(bathT)
     plot(t, initialT + (bathT(i) - initialT)*(1-exp(1).^(-2*t/timeConstant(i))), 'k:');
 end

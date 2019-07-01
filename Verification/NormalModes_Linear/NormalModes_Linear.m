@@ -55,18 +55,12 @@ for i=1:length(NumberOfIons)
     sim.Add(evolve(40000));
     
     sim.Remove(bath);
+    % Deliver periodic 'kicks' by randomizing the velocity, such that we
+    % excite many modes over the simulation. This is performed by the
+    % langevin bath.
     sim.Add(langevinBath(3e-4, 1e-4));
     sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
     sim.Add(evolve(100000));
-    
-    %Deliver periodic 'kicks' by randomizing the velocity, such that we excite
-    %many modes over the simulation.
-    temp = 1e-8;
-    for k=1:4
-%          sim.Add(thermalVelocities(temp, 'no'));
-%          sim.Add(evolve(1000));
-    end
-    
     sim.Execute();
     
     % Load the trajectories for analysis

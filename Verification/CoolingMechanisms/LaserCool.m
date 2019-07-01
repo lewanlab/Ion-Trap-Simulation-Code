@@ -57,9 +57,12 @@ for i=1:size(v, 1)
     csim(i) = f.b;
 end
 
+fprintf('\n\n');
+fprintf('Laser cooling test simulation results:\n');
+fprintf('--------------------------------------\n');
 fprintf('Exponential fit for N=%d atoms:\n', size(v,1))
 fprintf('c: mean = %.4e, std = %.4e\n', mean(csim), std(csim))
-fprintf('Original value = %.4e\n', norm(c))
+fprintf('Original value = %.4e\n', -norm(c))
 
 h1 = plot(t*1e6, va', 'Color', [ 0.8 0.8 0.8 ]); hold on
 h2 = plot(t*1e6, vb', 'Color', [ 0.5 0.5 0.5 ]); hold on
