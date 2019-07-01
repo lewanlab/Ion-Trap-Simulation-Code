@@ -1,5 +1,5 @@
 %% Rigid Bodies:
-% Plot a graph for the paper.
+% Plot a graph of the rigid body motion for the paper.
 
 keyframeColor = [ 1 1 1 ] * 0.7;
 

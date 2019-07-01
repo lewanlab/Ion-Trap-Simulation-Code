@@ -46,63 +46,49 @@ sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
 sim.Add(evolve(5000));
 sim.Execute();
 
-%% Plot the results
-% Originally atoms start off as a randomly placed mess, but due to the
-% action of the Langevin bath they are cooled into a Coulomb crystal
-% formation. As a result, the first half of the simulation's trajectories
-% look very hectic as we have a gas-like phase. To make the plot clearer,
-% we will just plot the end part of the simulation after some cooling to an
-% ordered phase has taken place.
+%% Load data and plot
+% Loads simulated trajectories. Plots a small animation showing the rod and
+% ions moving together.
 
-% We load the results from the output file:
+% Load results from the output file:
 [timestep, id, x,y,z] = readDump('positions.txt');
 x = x*1e6; y = y*1e6; z = z*1e6; 
 
 totalIons = size(x, 1);
 rodMask = ismember(1:totalIons,[rodAtoms.ID]);
 
+% Determine colors of ions
 pastelBlue = [112 146 190]/255;
 pastelRed = [237 28 36]/255;
 c = repmat(pastelBlue, totalIons, 1);
 c(rodMask,:) = repmat(pastelRed, length(rodAtoms), 1);
 
+% Plot the data in 3D
+clf;
+h = depthPlot(x(:,end),y(:,end),z(:,1), c, [100 250]); hold on
+% set(gcf, 'Position', [0 0 800 600], 'Units', 'pixels');
+axis equal;
 
-h = depthPlot(x(:,end),y(:,end),z(:,end), c, [100 250]); hold on
-h2 = plot3(x(1:3,end), y(1:3, end), z(1:3, end), '-', 'LineWidth', 3, 'Color', pastelRed); hold off
-%axis vis3d
-set(gcf, 'Position', [0 0 800 600], 'Units', 'pixels')
+% set axis labels and limits
+xlabel('X (\mum)');
+ylabel('Y (\mum)');
+zlabel('Z (\mum)');
+xlim( [ min(x(:)) max(x(:)) ] );
+ylim( [ min(y(:)) max(y(:)) ] );
+zlim( [ min(z(:)) max(z(:)) ] );
 
-% xlim(xlim() * 1.7); ylim(ylim() * 1.7); zlim(zlim() * 1.7);
-xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-set(gca,'LineWidth',1.5,'TickLength',[0.05 0.05], 'FontSize', 12);
 
-% start update loop to animate video
+% Update loop for animation. Set data in plot, then pause.
 while (ishandle(h))
-    for i=1:2:size(x,2)
+    for i=1:5:size(x,2)
+        
         if ~ishandle(h) 
+            % stop if window is closed.
             break;
         end
         
         set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
-        set(h2, 'XData', x(rodMask,i)', 'YData', y(rodMask,i)', 'ZData', z(rodMask,i)');
         title(sprintf('Frame %d', i));
         pause(0.04);
     end
-    pause(1);
 end
-
-%%
-% Produce the final figure.
-
-h = depthPlot(x(:,end),y(:,end),z(:,end), c, [100 250]*3); hold on
-%axis vis3d
-set(gcf, 'Position', [0 0 400 500], 'Units', 'pixels')
-xlabel('X ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-ylabel('Y ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-zlabel('Z ($\mu$m)', 'Interpreter', 'Latex', 'FontSize', 14)
-view([ 45, 30 ]); axis equal;
-
-set(gcf, 'Color', 'w');
-title('');
