@@ -63,31 +63,27 @@ pastelRed = [237 28 36]/255;
 c = repmat(pastelBlue, totalIons, 1);
 c(rodMask,:) = repmat(pastelRed, length(rodAtoms), 1);
 
-% Plot the data in 3D
-clf;
-h = depthPlot(x(:,end),y(:,end),z(:,1), c, [100 250]); hold on
-% set(gcf, 'Position', [0 0 800 600], 'Units', 'pixels');
-axis equal;
+f = clf;
 
-% set axis labels and limits
-xlabel('X (\mum)');
-ylabel('Y (\mum)');
-zlabel('Z (\mum)');
-xlim( [ min(x(:)) max(x(:)) ] );
-ylim( [ min(y(:)) max(y(:)) ] );
-zlim( [ min(z(:)) max(z(:)) ] );
-
-
-% Update loop for animation. Set data in plot, then pause.
-while (ishandle(h))
+% Plot animation
+while (ishandle(f))
     for i=1:5:size(x,2)
         
-        if ~ishandle(h) 
+        if ~ishandle(f)
             % stop if window is closed.
             break;
         end
         
-        set(h, 'XData', x(:,i)', 'YData', y(:,i)', 'ZData', z(:,i)');
+        depthPlot(x(:,i),y(:,i),z(:,i), c, [100 250]);
+        axis equal;
+        
+        % set axis labels and limits
+        xlabel('X (\mum)');
+        ylabel('Y (\mum)');
+        zlabel('Z (\mum)');
+        xlim( [ min(x(:)) max(x(:)) ] );
+        ylim( [ min(y(:)) max(y(:)) ] );
+        zlim( [ min(z(:)) max(z(:)) ] );
         title(sprintf('Frame %d', i));
         pause(0.04);
     end

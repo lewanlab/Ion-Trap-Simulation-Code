@@ -55,40 +55,11 @@ sim.Execute();
 
 [~, ~, x,y,z] = readDump('positions.txt');
 
-x = x';
-y = y';
-z = z';
-
-figure;
-hold on
-title('Paths of Atoms For Dynamics After Minimisation');
-plot3(x(1:10:end, :)*1e6,y(1:10:end, :)*1e6,z(1:10:end, :)*1e3);
-plot3(x(end,:)*1e6,y(end,:)*1e6,z(end,:)*1e3, 'x');
-xlabel('X position (\(\mu m\))', 'Interpreter', 'Latex');
-ylabel('Y position (\(\mu m\))', 'Interpreter', 'Latex');
-zlabel('Z position (\(mm\))', 'Interpreter', 'Latex');
-
-
-%Compare positions before and after short dynamical run to check
-%minimisation works.
-figure;
-hold on
-title('Positions of atoms before and after a short dynamical evolution');
-plot3(x(1,:)*1e6,y(1,:)*1e6,z(1,:)*1e3, 'rx');
-plot3(x(end,:)*1e6,y(end,:)*1e6,z(end,:)*1e3, 'gx');
-xlabel('X position (\(\mu m\))', 'Interpreter', 'Latex');
-ylabel('Y position (\(\mu m\))', 'Interpreter', 'Latex');
-zlabel('Z position (\(mm\))', 'Interpreter', 'Latex');
-legend('before', 'after');
-
-numAtoms = size(x, 2);
-figure;
-hold on
-title('Position of each atom');
-plot(1:numAtoms,sort(x(1, :)), 'r-');
-plot(1:numAtoms,sort(y(1, :)), 'g-');
-plot(1:numAtoms,sort(z(1, :)), 'b-');
-plot(1:numAtoms,sort(x(end, :)), 'r:');
-plot(1:numAtoms,sort(y(end, :)), 'g:');
-plot(1:numAtoms,sort(z(end, :)), 'b:');
-legend('X before', 'Y before', 'Z before', 'X after', 'Y after', 'Z after');
+clf;
+plot3(x(:, 1:10:end)'*1e6,y(:,1:10:end)'*1e6,z(:,1:10:end)'*1e3); hold on;
+plot3(x(:,end)*1e6,y(:,end)*1e6,z(:,end)*1e3, 'x');
+xlabel('x (\mum)');
+ylabel('y (\mum)');
+zlabel('z (\mum)');
+view([ -45 1 ]);
+title('Atomic trajectories after minimisation');
