@@ -3,8 +3,8 @@
 % 
 % This script verifies that the linear Paul trap pseudopotential
 % implementation in (py)Lion gives the correct force. It uses a single ion
-% and is as such very fast to run, but it cannot verify that ion-ion
-% interactions are correct as a result. Mathieu parameters for the
+% and is as such very fast to run, but as a result it cannot verify that
+% ion-ion interactions are correct. Mathieu parameters for the
 % translational motion (a and q) are varied and the secular frequencies
 % extracted from the simulation results. These are plotted against
 % theoretical predictions.
