@@ -39,6 +39,21 @@ This code has been tested to work on Windows with the `LAMMPS-64bit-stable` inst
 
 A number of examples are available in the Examples folder. These show how to run simulations with one or more ion species, to define the trap parameters, apply cooling to the ions, and define a collection of ions as a rigid body.
 
+# Documentation
+
+The code is documented as per the Matlab style guidelines. Use `doc` and `help` in combination with LIon commands/classes to open the relevant documentation.
+
+# File structure
+
+The files in the repository are as follows:
+* `LAMMPS Wrapper/@LAMMPSSimulation`: Implements the LAMMPSSimulation class, which deals with much of writing simulation config files, managing various fix/atom ids, running the simulation, etc.
+* `LAMMPS Wrapper/lammps`: Contains the high-level commands that are used to describe the simulation.
+* `Plot`: Useful functions for plotting 3d scatter plots in Matlab with support for color and size dependent from distance from camera.
+* `Verification`: A collection of scripts used to test the correct implementation of LIon. See `Verification/readme.md`.
+* `Examples`: Example simulations showing different features of LIon, also benchmarking simulations.
+* `Analysis`: Functions to read dump files of atomic trajectories that are output by LAMMPS.
+* `Util`: A number of miscellaneous utility methods used for some verifications and examples.
+
 # License 
 
 MIT, see `license.txt`.
