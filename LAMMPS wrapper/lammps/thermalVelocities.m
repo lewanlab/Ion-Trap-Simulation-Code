@@ -15,7 +15,7 @@ function [ runCmd ] = thermalVelocities( temperature, zeroTotalMom, seed)
 % See Also: http://lammps.sandia.gov/doc/velocity.html
 
 if nargin < 3
-    seed = floor(rand(1) * 10000);
+    seed = 1+floor(rand(1) * 10000);
 end
 
 if nargin < 2
