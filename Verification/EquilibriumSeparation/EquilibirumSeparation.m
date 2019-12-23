@@ -57,7 +57,7 @@ for i=1:length(NumberOfIons)
     [oscV, endcapV] = getVs4aq(ions, Trapfrequency, EndcapZ0, R0, geometricC, TrapA, TrapQ);
     createIonCloud(sim, 1e-3, ions, NumberOfIons(i), 1e-4);
     sim.Add(linearPT(oscV, endcapV, EndcapZ0, R0, geometricC, Trapfrequency));
-    sim.Add(langevinBath(3e-4, 2e-5));
+    sim.Add(langevinBath(0, 2e-5));
     
     %Configure output to a file
     sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 10));
