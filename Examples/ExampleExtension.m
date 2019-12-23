@@ -6,7 +6,7 @@ sim = LAMMPSSimulation();
 sim.SetSimulationDomain(1e-3,1e-3,1e-3);
 
 
-charge = 1;
+charge = 0;
 mass = 40;
 calciumIons = sim.AddAtomType(charge, mass);
 
@@ -14,38 +14,29 @@ N = 100;
 seed = 1;
 cloud = createIonCloud(sim, 1e-3, calciumIons, N, seed);
 
-% Configure trap
-RF = 3.85e6;
-z0 = 5.5e-3 / 2;
-r0 = 7e-3 / 2;
-geometricKappa = 0.244;
-U0 = 7;
-V0 = 300;
-sim.Add(linearPT(V0, U0, z0, r0, geometricKappa, RF));
+% Give initial velocities to the atoms
+initialT = 1e-3;
+sim.Add(thermalVelocities(initialT, 'no'));
 
 % Add v^2 damping
-sim.Add(velocitySquaredDamping(1, calciumIons.Group))
+sim.Add(velocitySquaredDamping(5e4, calciumIons.Group))
 
 % Configure outputs.
-sim.Add(dump('positions.txt', {'id', 'x', 'y', 'z'}, 1));
-sim.Add(dump('secV.txt', {'id', timeAvg({'vx', 'vy', 'vz'}, 1/RF)}));
+sim.Add(dump('velocity.txt', {'id', 'vx', 'vy', 'vz' }, 10));
 
 % Run simulation
 sim.Add(evolve(15000));
+sim.TimeStep = 1e-8;
 sim.Execute();
 
 %% Load the data
 % Load the results from the output file:
-[timestep, ~, x,y,z] = readDump('positions.txt');
+[t_v, ~, vx,vy,vz] = readDump('velocity.txt');
 
 %% Plot
-% Plot the final positions of atoms
+% Plot the velocities of each atom over time
 
-color = [112 146 190]/255;
-clf;
-depthPlot(x(:,end), y(:,end), z(:,end), color, [ 20 70 ]);
-xlabel('x'); ylabel('y'); zlabel('z');
-axis equal;
-
-
-
+set(gcf, 'Color', 'w')
+semilogy(t_v, (vx.^2+vy.^2+vz.^2).^0.5)
+xlabel('timestep')
+ylabel('velocity')
