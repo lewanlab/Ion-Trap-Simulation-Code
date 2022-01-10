@@ -1,50 +1,14 @@
-# LIon: A package for simulating trapped ion trajectories.
-
-LIon enables a user to author molecular dynamics simulations of ions in electrodynamic traps.
-The simulations themselves are performed in [LAMMPS](https://lammps.sandia.gov/), an established and feature-rich code.
-
-# Features 
-* LIon's output is verified by comparison to theory through a number of simulations (see Verification folder).
-* Multiple ion species.
-* Pseudopotential approximation.
-* GPU accelerated force calculation (useful for large numbers of particles).
-* Use multiple trap driving frequencies, see [Phys. Rev. A 94, 02360](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.94.023609) for details.
-* Define rigid bodies from groups of ions to simulate larger charged objects and investigate rotational motion.
-
-# Installation
-
-First install `LAMMPS` using your preferred method.
-Pre-built binaries are available from the `LAMMPS` website [here](https://lammps.sandia.gov/download.html).
-
-If compiling from source make sure the `rigid` and `misc` packages are included in the build. There is good information available on the `LAMMPS` website [here](https://lammps.sandia.gov/doc/Build.html).
-Something like the following should work:
-```
-make yes-rigid
-make yes-misc
-make serial
-
-# other useful commands
-make package # list available packages and help
-make ps # list package status
-```
-This will make the `lmp-serial` executable. You should also include the `gpu` package if you want to use GPU-accelerated styles.
-
-Once you have a `LAMMPS` executable, you must configure LIon to use the executable. In the folder `LAMMPS Wrapper`, create a file called `lammps.cfg` which contains the path to the `LAMMPS` executable you want to use. For example, the contents of this file might be `C:\Program Files\LAMMPS 64-bit 5Jun2019\bin\lmp_serial.exe` to use the serial LAMMPS executable from the chosen installation.
-
-To add LIon functions to your Matlab path variable, run the `SetPaths` function. LIon is now ready to use.
-
-This code has been tested to work on Windows with the `LAMMPS-64bit-stable` installation from 2019-06-04.
+# LIon
+Simulation code was developed using LIon. Documentation and source code are available [here](bitbucket.org/footgroup/lion.git) and the publication associated with this software can be found [here](https://arxiv.org/abs/1907.10514). The original LIon repository was modified in order to improve accuracy and data handling efficiency. LIon serves as an interface between Matlab and [LAMMPS](https://www.lammps.org/), which is a robust molecular dynamics simulator. LAMMPS has been installed to JILA's computer cluster. In order to run simulations, you must have a cluster account.
 
 # Getting Started
+Clone this repository to your cluster folder. In order to run a simulation, you must modify the *RunJob.m* file according to your needs and submit it on the terminal with the command 
+```sbatch Job```.
+The *RunJob.m* file currently has an example of a simulation with 100 Ca+ ions and 50 ions of mass 35amu. In order to try this simulation you must define an output folder and filename. This script should also produce a simulated experimental image.
+Simulation outputs will be located at the defined destination folder. Information regarding the available functions and their parameters can be found in the documentation file in this repository. Most functions are also commented to guide the user.
 
-A number of examples are available in the Examples folder. These show how to run simulations with one or more ion species, to define the trap parameters, apply cooling to the ions, and define a collection of ions as a rigid body.
-
-# Documentation
-
-The code is documented as per the Matlab style guidelines. Use `doc` and `help` in combination with LIon commands/classes to open the relevant documentation, eg `doc laserCool`.
 
 # File structure
-
 The files in the repository are as follows:
 
 * `LAMMPS Wrapper/@LAMMPSSimulation`: Implements the LAMMPSSimulation class, which deals with much of writing simulation config files, managing various fix/atom ids, running the simulation, etc.
@@ -53,14 +17,9 @@ The files in the repository are as follows:
 
 * `Plot`: Useful functions for plotting 3d scatter plots in Matlab with support for color and size dependent from distance from camera.
 
-* `Verification`: A collection of scripts used to test the correct implementation of LIon. See `Verification/readme.md`.
-
-* `Examples`: Example simulations showing different features of LIon, also benchmarking simulations.
-
 * `Analysis`: Functions to read dump files of atomic trajectories that are output by LAMMPS.
 
 * `Util`: A number of miscellaneous utility methods used for some verifications and examples.
 
-# License 
+* `Propio`: Custom functions to simulate scenarios relevant to the group's research 
 
-MIT, see `license.txt`.
