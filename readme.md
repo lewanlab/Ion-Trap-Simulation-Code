@@ -30,9 +30,9 @@ There are two main simulation scripts
 
 The main scripts can be modified by adding or removing the following functions in order to adapt the simulated scenario
 * `NeutralHeating`: this function adds neutral heating to a specific species 
-  * `HeatRate`: Calculates the heating rate caused by a specific background gas. It's output is meant to be used as an input for NeutralHeating
+  * `HeatRate`: Calculates the heating rate caused by a specific background gas. It's output is meant to be used as an input for `NeutralHeating`
 * `StoLaserCool`: Improved version of the laser cooling model of LIon. More information can be found in Andres' thesis
-  * LaserParameters: Calculates laser cooling damping rate and dopler cooling limit of a single species. It is automatically called by StoLaserCooled
+  * LaserParameters: Calculates laser cooling damping rate and dopler cooling limit of a single species. It is automatically called by `StoLaserCooled`
 
 # Analysis
 Analysis functions take the file name defined in `RunJob.m` as input and read the results from the output files. There are two types of analysis functions and each type has a 2 ion and Ca+ only version. 
