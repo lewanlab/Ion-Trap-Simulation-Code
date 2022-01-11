@@ -7,7 +7,7 @@ SetPaths();
 filename = '100Ca-50m35';
 
 % Define destination folder 
-directory = '/users/lewandow/anvi2437/lion/Jobs/400V-RF/StoLC/m35/';
+directory = '/users/lewandow/';
 
 % Create destination folder and move to that folder
 mkdir(directory, filename);
