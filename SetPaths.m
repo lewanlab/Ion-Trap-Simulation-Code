@@ -5,4 +5,5 @@ if isempty(strfind(path,'LAMMPS Wrapper'))
     addpath(genpath(sprintf('%s\\Tools', cd)))
     addpath(genpath(sprintf('%s\\Util', cd)))
     addpath(genpath(sprintf('%s\\Plot', cd)))
+    addpath(genpath(sprintf('%s\\Simulation Scripts', cd)))
 end
