@@ -38,7 +38,7 @@ The main scripts can be modified by adding or removing the following functions i
 Analysis functions take the file name defined in `RunJob.m` as input and read the results from the output files. There are two types of analysis functions and each type has a 2 ion and Ca+ only version. 
 * `PlotResults`: Generates plots of secular temperature, Ca and total energy vs time. Also produces final rms velocity histograms for the axial and radial direction.
 * `Plot3D`: Generates a 3D representation of the simulated crystal.
-When running these functions, donwload the *Ener* and *Info* output files to your computer and run the script locally to manipulate the plots. 
+You must download this entire repository to your computer and run `SetPaths` in order to use these scripts. To read simulation data donwload the *Ener* and *Info* output files and run the script locally to manipulate the plots. 
 * `ExpImg`: Generates a simulated experimental image of the crystal. This function should be called in `RunJob.m` after any of the main scripts with their last parameter set to 1. The produced jpg file will be located at the output folder. 
 
 Simulation scripts produce 4 different output text files
