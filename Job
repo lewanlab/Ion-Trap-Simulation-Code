@@ -1,0 +1,31 @@
+#!/bin/bash
+#SBATCH -J CrystalSIM
+
+#SBATCH -p jila
+
+#SBATCH -n 4
+
+#SBATCH -N 1
+
+#SBATCH --mem=100G
+
+# Maximum expected wall time this job will require
+# Format is DD-HH:MM:SS, this one will end in 15 seconds
+#SBATCH -t 3:0:15
+
+#SBATCH --mail-type=END,FAIL,TIME_LIMIT_90
+
+# Lines after this will be executed as if typed on a command line.
+# This script is executed from the directory you submitted your job from;
+# unlike the old cluster, there is no need for "cd $PBS_O_WORKDIR"
+
+# You should make sure the appropriate environment module is loaded
+# for the software you want to use: this is the "module load" command.
+# Replace matlab with the package you'll use.
+
+module load matlab
+
+# The following example runs a MATLAB program stored in example.m
+# Replace this with commands to run your job.
+
+matlab < RunJob.m 
