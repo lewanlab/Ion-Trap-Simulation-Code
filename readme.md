@@ -26,7 +26,8 @@ The files in the repository are as follows:
 # Simulation Scripts
 There are two main simulation scripts 
 * `FullSim`: This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a specific temperature and then are laser cooled. 
-* `FullSimCaOnly`: Same as FullSim but for single species Coulomb crystals (Ca+)
+* `FullSimCaOnly`: Same as FullSim but for single species Coulomb crystals (Ca+).
+
 The main scripts can be modified by adding or removing the following functions in order to adapt the simulated scenario
 * `NeutralHeating`: this function adds neutral heating to a specific species 
   * `HeatRate`: Calculates the heating rate caused by a specific background gas. It's output is meant to be used as an input for NeutralHeating
