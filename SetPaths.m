@@ -1,5 +1,5 @@
-if isempty(strfind(path,'LAMMPS Wrapper'))
-   addpath(genpath(sprintf('%s/LAMMPS Wrapper', cd)))
+if isempty(strfind(path,'LAMMPS wrapper'))
+   addpath(genpath(sprintf('%s/LAMMPS wrapper', cd)))
     addpath(genpath(sprintf('%s/Analysis', cd)))
     addpath(genpath(sprintf('%s/DCDplotting', cd)))
     addpath(genpath(sprintf('%s/Tools', cd)))
