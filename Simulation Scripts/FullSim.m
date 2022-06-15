@@ -181,6 +181,14 @@ LastDarkx = x(NumberCa+1:end,end);
 LastDarky = y(NumberCa+1:end,end);
 LastDarkz = z(NumberCa+1:end,end);
 
+%added 6/15/2022 OKC
+LastCavx = vx(1:NumberCa,end);
+LastCavy = vy(1:NumberCa,end);
+LastCavz = vz(1:NumberCa,end);
+LastDarkvx = vx(NumberCa+1:end,end);
+LastDarkvy = vy(NumberCa+1:end,end);
+LastDarkvz = vz(NumberCa+1:end,end);
+
 if ImgSim == 1
 % Position file for image simulation
 posname = insertBefore(filename,1,'Positions-');
@@ -230,6 +238,18 @@ fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', LastDarky);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', LastDarkz);
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastCavx');
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastCavz');
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', vrmsDarkx');
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastDarkvz');
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastCavy');
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastDarkvx');
 
 %Final velocities to file
 Velname = insertBefore(filename,1,'FinVel-');
@@ -246,15 +266,15 @@ fprintf(fileID,'%6.8f   %6.8f   %6.8f \r\n',VelocitiesDark');
 
 %Save raw (non-rms) final velocities to file; next 11 lines added by OKC 6/15/2022
 RawVelname = insertBefore(filename,1,'RawFinVel-');
-RawVelocitiesCa = [vx(1:NumberCa),end) vy(1:NumberCa),end) vz(1:NumberCa),end)];
-RawVelocitiesDark = [vy(NumberCa+1:end,end) vy(NumberCa+1:end,end) vz(NumberCa+1:end,end)];
+RawVelocitiesCa = [LastCavx(:,end) LastCavy(:,end) LastCavz(:,end)];
+RawVelocitiesDark = [LastDarkvx(:,end) LastDarkvy(:,end) LastDarkvz(:,end)];
 fileID2 = fopen(RawVelname,'wt');
 fprintf(fileID2,'Ca+ Ions \r\n');
-fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
 fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesCa');
 fprintf(fileID2,'\r\n');
 fprintf(fileID2,'Dark Ions \r\n');
-fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
 fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
 
 %Delete the data files so data does not get mixed if the code is run again
