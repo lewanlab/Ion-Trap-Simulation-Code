@@ -244,6 +244,19 @@ fprintf(fileID,'Dark Ions \r\n');
 fprintf(fileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
 fprintf(fileID,'%6.8f   %6.8f   %6.8f \r\n',VelocitiesDark');
 
+%Save raw (non-rms) final velocities to file; next 11 lines added by OKC 6/15/2022
+RawVelname = insertBefore(filename,1,'RawFinVel-');
+RawVelocitiesCa = [vx(1:NumberCa),end) vy(1:NumberCa),end) vz(1:NumberCa),end)];
+RawVelocitiesDark = [vy(NumberCa+1:end,end) vy(NumberCa+1:end,end) vz(NumberCa+1:end,end)];
+fileID2 = fopen(RawVelname,'wt');
+fprintf(fileID2,'Ca+ Ions \r\n');
+fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesCa');
+fprintf(fileID2,'\r\n');
+fprintf(fileID2,'Dark Ions \r\n');
+fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
+
 %Delete the data files so data does not get mixed if the code is run again
 fclose('all');
 delete 'sim.lammps';
