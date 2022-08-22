@@ -9,7 +9,7 @@ pixsize = 16e-6;
 mag = 10.3;    
 binsize = pixsize/mag;
 dof = 3.5e-6; 
-blurparam = 0.25; %Must be determined experimentaly, this is just a guess
+blurparam = 0.25; %Must be determined experimentally, this is just a guess
 numplanes = 20*dof/binsize/10;
 
 % Read Data
@@ -72,7 +72,7 @@ hist2d = zeros(numpix,numpix);
     end
 
 % Normalize 2D histogram
-hist2d = hist2d./(max(hist2d)+1e-6);
+hist2d = hist2d./(max(hist2d(:))+1e-6);
 hist2d = hist2d';
 
 % Generate fake color map
