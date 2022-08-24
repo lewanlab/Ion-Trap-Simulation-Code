@@ -2,7 +2,7 @@
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
 % specific temperature and then are laser cooled. 
 
-function  FullSim_new(filename,NumberCa,NumberDark,DarkMass,ImgSim)
+function  FullSim_wRawVel(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
