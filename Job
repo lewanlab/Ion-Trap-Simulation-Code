@@ -3,7 +3,7 @@
 
 #SBATCH -p jila
 
-#SBATCH -n 4
+#SBATCH -n 12
 
 #SBATCH -N 1
 
@@ -11,7 +11,7 @@
 
 # Maximum expected wall time this job will require
 # Format is DD-HH:MM:SS, this one will end in 15 seconds
-#SBATCH -t 3:0:15
+#SBATCH -t 4:0:15
 
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_90
 

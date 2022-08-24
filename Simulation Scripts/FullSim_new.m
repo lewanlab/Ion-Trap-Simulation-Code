@@ -2,7 +2,7 @@
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
 % specific temperature and then are laser cooled. 
 
-function  FullSim(filename,NumberCa,NumberDark,DarkMass,ImgSim)
+function  FullSim_new(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
@@ -11,8 +11,8 @@ minimisationSteps = 100000;
 
 % Define trap parameters
 rf = 3.552e6 ; % Hz
-Vo = 400; % V
-Ve = 3.5; % V
+Vo = 300; % V
+Ve = 4; %3.5; % V
 geomC = 0.22;
 r0  = 3.91e-3;
 z0  = 3.5e-3;
@@ -66,10 +66,10 @@ sim.Remove(allBath);
 lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
 %This block adds neutral heating to Ca+ and the dark ion with background
 %gas He
-%NH_Ca = NeutralHeating(Ca40,HeatRate('He',DarkMass,Initial_T));
-%NH_DarkIon = NeutralHeating(Dark,HeatRate('He',DarkMass,Initial_T));
-%sim.Add (NH_Ca);
-%sim.Add (NH_DarkIon);
+%NH_Ca = NeutralHeating(Ca40Ions,HeatRate('He',40,Initial_T));
+%NH_DarkIon = NeutralHeating(DarkIons,HeatRate('He',DarkMass,Initial_T));
+%sim.Add(NH_Ca);%hang-up is occurring here
+%sim.Add(NH_DarkIon);
 sim.Add(lasercool);
 sim.Add(evolve(interval*2));
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
@@ -155,6 +155,7 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 %Calculate the total energy in eV
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
 E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
+E_tDark = vrms2([DarkIons.ID])*DarkMass*Const.amu/(2*(NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
 
 %Generate Info file
@@ -181,23 +182,31 @@ LastDarkx = x(NumberCa+1:end,end);
 LastDarky = y(NumberCa+1:end,end);
 LastDarkz = z(NumberCa+1:end,end);
 
+%added 6/15/2022 OKC; velocities from midcycle
+LastCavx = vx(1:NumberCa,end-9:end);
+LastCavy = vy(1:NumberCa,end-9:end);
+LastCavz = vz(1:NumberCa,end-9:end);
+LastDarkvx = vx(NumberCa+1:end,end-9:end);
+LastDarkvy = vy(NumberCa+1:end,end-9:end);
+LastDarkvz = vz(NumberCa+1:end,end-9:end);
+
 if ImgSim == 1
 % Position file for image simulation
 posname = insertBefore(filename,1,'Positions-');
 PfileID = fopen(posname,'wt');
     steps = 1500 *(1/rf)/sim.TimeStep; %steps to cover 1500 rf periods
     fprintf(PfileID,'%e\n', NumberCa);
-    fprintf(PfileID,'%e ', x(1:steps*NumberCa));
+    fprintf(PfileID,'%e ', Cax(1:steps*NumberCa));
     fprintf(PfileID,'\n');
-    fprintf(PfileID,'%e ', y(1:steps*NumberCa));
+    fprintf(PfileID,'%e ', Cay(1:steps*NumberCa));
     fprintf(PfileID,'\n');
-    fprintf(PfileID,'%e ', z(1:steps*NumberCa));
+    fprintf(PfileID,'%e ', Caz(1:steps*NumberCa));
 end 
 
 %Print total energy, secular temperature and vrms velocities to Ener file 
 Efile = insertBefore(filename,1,'Ener-');
 EfileID = fopen(Efile,'wt');
-fprintf(EfileID,'%e ', E_t);
+fprintf(EfileID,'%e ', E_tDark);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', E_tCa);
 fprintf(EfileID,'\n'); 
@@ -230,6 +239,16 @@ fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', LastDarky);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', LastDarkz);
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastCavx);
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastCavz);
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastDarkvx);
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastDarkvz);
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastDarkvy);
 
 %Final velocities to file
 Velname = insertBefore(filename,1,'FinVel-');
@@ -243,6 +262,19 @@ fprintf(fileID,'\r\n');
 fprintf(fileID,'Dark Ions \r\n');
 fprintf(fileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
 fprintf(fileID,'%6.8f   %6.8f   %6.8f \r\n',VelocitiesDark');
+
+%Save raw (non-rms) final velocities to file; next 11 lines added by OKC 6/15/2022
+RawVelname = insertBefore(filename,1,'RawFinVel-');
+RawVelocitiesCa = [LastCavx(:,end-9:end) LastCavy(:,end-9:end) LastCavz(:,end-9:end)];
+RawVelocitiesDark = [LastDarkvx(:,end-9:end) LastDarkvy(:,end-9:end) LastDarkvz(:,end-9:end)];
+fileID2 = fopen(RawVelname,'wt');
+fprintf(fileID2,'Ca+ Ions \r\n');
+fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
+fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesCa');
+fprintf(fileID2,'\r\n');
+fprintf(fileID2,'Dark Ions \r\n');
+fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
+fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
 
 %Delete the data files so data does not get mixed if the code is run again
 fclose('all');
