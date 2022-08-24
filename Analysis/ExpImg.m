@@ -185,5 +185,3 @@ title(filename);
 Image = getframe(gcf);
 imgname = insertAfter(filename, length(filename),'.jpg');
 imwrite(Image.cdata, imgname);
-
->>>>>>> 697a784d5b0e08f279bdbb3e83d534e49533adcb
