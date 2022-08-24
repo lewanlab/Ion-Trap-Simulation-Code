@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 %% ExpImg
 %This script generates an experimental image from a position file using
 %1500 rf cycles worth of data
