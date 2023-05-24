@@ -7,7 +7,7 @@ SetPaths();
 filename = '750Ca_150ND3_imagetest'; %Type desired name here
 
 % Define destination folder 
-directory = '/data/lewandow/elka1772'; %Type your desired path here
+directory = '/data/lewandow/elka1772/'; %Type your desired path here
 
 % Create destination folder and move to that folder
 mkdir(directory, filename);
