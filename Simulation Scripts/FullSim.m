@@ -10,7 +10,7 @@ interval = 60000;
 minimisationSteps = 100000;
 
 % Define trap parameters
-rf = 3.552e6 ; % Hz
+rf = 3.555e6 ; % Hz
 Vo = 400; % V
 Ve = 3.5; % V
 geomC = 0.22;
