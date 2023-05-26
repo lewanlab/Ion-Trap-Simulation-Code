@@ -90,7 +90,7 @@ VTKick = langevinBath(1435.48, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(minimisationSteps));
 sim.Remove(VTKick);
-sim.Add(evolve(interval*2));
+sim.Add(evolve(100));
 
 
 %Execute 
