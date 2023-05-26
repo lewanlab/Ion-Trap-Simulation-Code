@@ -81,6 +81,8 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 
+%Idea: Add Langevin Bath to an ion for a ceratin amount of time (using evolve), Then turn of Bath for that one ion, and evolve the system further
+
 %Execute 
 sim.Execute();
 
