@@ -88,9 +88,9 @@ sim.Add(evolve(interval));
 %Add Langevin Bath just to the "Active" Dark Ion Group
 VTKick = langevinBath(1435.48, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
-sim.Add(evolve(minimisationSteps));
+sim.Add(evolve(5));
 sim.Remove(VTKick);
-sim.Add(evolve(100));
+sim.Add(evolve(10));
 
 
 %Execute 
