@@ -34,8 +34,11 @@ Ca40 = AddAtomType(sim, 1, 40);
 radius = 5e-4; % place atoms randomly within this radius
 Ca40Ions = createIonCloud(sim, radius, Ca40, NumberCa);
 Ca40Group = sim.Group(Ca40Ions);
-DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
+DarkIons = createIonCloud(sim, radius, Dark, NumberDark - 1 );
 DarkGroup = sim.Group(DarkIons);
+%Eli Edit: THis Next group is so we can act stuff on it separately, same atom type and everything
+DarkIonsActive = createIonCloud(sim, radius, Dark, NumberDark - 1 );
+DarkGroupActive = sim.Group(DarkIonsActive);
 
 %Set how frequently data should be written to the output file. For energy
 %calculations set to 1 
