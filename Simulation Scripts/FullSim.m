@@ -6,8 +6,8 @@ function  FullSim(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
-interval = 60000;
-minimisationSteps = 100000;
+interval = 15000;
+minimisationSteps = 25000;
 
 % Define trap parameters
 rf = 3.555e6 ; % Hz
