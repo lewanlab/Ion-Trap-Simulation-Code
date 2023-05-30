@@ -18,8 +18,8 @@ cd (directory)
 % Starts simulation. In this case, we are simulating 100 Ca+ ions and 50
 % ions of mass 35amu and charge +e. To see details, open "FullSim.m"
 
-FullSim_wRawVel(filename,30,20,30,1);
-%filename, number of calcium ion, number of dark ions, mass of dark ions, 1
+FullSim_wRawVel(filename,30,20,30,0);
+%filename, number of calcium ion, number of dark ions, mass of dark ions, {1 = position file, 0 = no position file}
 
 % Generate simulated experimental image. To use this feature, the fourth
 % input of FullSim must have been set to 1, otherwise it can be set to something else to
