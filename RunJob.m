@@ -4,7 +4,7 @@ SetPaths();
 
 % Define the file name for the simulation. Make sure not to use an
 % existing one. The output folder will have the same name
-filename = '10DarkIons'; %Type desired name here
+filename = '30Ions20DarkIonsNoExtra'; %Type desired name here
 
 % Define destination folder 
 directory = '/data/lewandow/elka1772/'; %Type your desired path here
@@ -18,7 +18,7 @@ cd (directory)
 % Starts simulation. In this case, we are simulating 100 Ca+ ions and 50
 % ions of mass 35amu and charge +e. To see details, open "FullSim.m"
 
-FullSim_wRawVel(filename,100,20,30,1);
+FullSim_wRawVel(filename,30,20,30,1);
 %filename, number of calcium ion, number of dark ions, mass of dark ions, 1
 
 % Generate simulated experimental image. To use this feature, the fourth
