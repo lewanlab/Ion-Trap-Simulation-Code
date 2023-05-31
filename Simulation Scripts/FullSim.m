@@ -39,7 +39,7 @@ Ca40Group = sim.Group(Ca40Ions);
 
 %Eli Edit: THis Next group is so we can act stuff on it separately, same atom type and everything
 DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
-DarkGroupActive = sim.Group(NumberDark + NumberCa - 10: NumberDar + NumberCa)
+DarkGroupActive = sim.Group(NumberDark + NumberCa - 10: NumberDark + NumberCa)
 
 %DarkIonsActive = createIonCloud(sim, radius, Dark, 10 );
 %DarkGroupActive = sim.Group(DarkIonsActive);
