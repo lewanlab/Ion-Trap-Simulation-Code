@@ -79,6 +79,14 @@ lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
 %sim.Add (NH_DarkIon);
 sim.Add(lasercool);
 sim.Add(evolve(interval*2));
+
+%I moved the code up here because the slurm output file stops after the evolve command after dump
+VTKick = langevinBath(100000, 30e-7,DarkGroupActive);
+sim.Add(VTKick);
+sim.Add(evolve(1000));
+sim.Remove(VTKick);
+sim.Add(evolve(interval));
+
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
 sim.Add(evolve(interval));
 
@@ -90,11 +98,7 @@ sim.Add(evolve(interval));
 
 %Idea: Add Langevin Bath to an ion for a ceratin amount of time (using evolve), Then turn of Bath for that one ion, and evolve the system further
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(10000, 30e-7,DarkGroupActive);
-sim.Add(VTKick);
-sim.Add(evolve(minimisationSteps));
-sim.Remove(VTKick);
-sim.Add(evolve(interval));
+
 
 
 %Execute 
