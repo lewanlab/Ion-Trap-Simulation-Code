@@ -97,7 +97,7 @@ sim.Add(evolve(interval));
 
 %Idea: Add Langevin Bath to an ion for a ceratin amount of time (using evolve), Then turn of Bath for that one ion, and evolve the system further
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(1435.48, 3e-9,DarkGroupActive);
+VTKick = langevinBath(1435.48, 0.003e-9,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
