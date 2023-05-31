@@ -44,7 +44,7 @@ DarkGroupActive = sim.Group(DarkIonsActive);
 DarkIonsNotActive = createIonCloud(sim, radius, Dark, NumberDark - 10 );
 DarkGroupNotActive = sim.Group(DarkIonsNotActive);
 
-DarkIons =  DarkIonsActive + DarkIonsNotActive
+DarkIons = sim.Group( [ DarkGroupActive, DarkGroupNotActive ] )
 
 
 %Set how frequently data should be written to the output file. For energy
