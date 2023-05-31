@@ -58,7 +58,7 @@ timstp_per_datapoint = 1;
 sim.Add(linearPT(Vo, Ve, z0, r0, geomC, rf));
 
 % Minimise the system with a Langevin bath
-Initial_T = 1; %Changed from 0.01 to 1
+Initial_T = 0.01; %Changed from 0.01 to 1
 allBath = langevinBath(Initial_T, 30e-7);
 sim.Add(allBath);
 sim.Add(evolve(minimisationSteps));
@@ -99,7 +99,7 @@ sim.Add(evolve(interval));
 %Add Langevin Bath just to the "Active" Dark Ion Group
 VTKick = langevinBath(1435.48, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
-sim.Add(evolve(1000));
+sim.Add(evolve(10));
 sim.Remove(VTKick);
 sim.Add(evolve(interval*2));
 
