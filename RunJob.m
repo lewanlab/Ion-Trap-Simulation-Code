@@ -4,7 +4,7 @@ SetPaths();
 
 % Define the file name for the simulation. Make sure not to use an
 % existing one. The output folder will have the same name
-filename = 'EditsRecognized1'; %Type desired name here
+filename = 'EditsRecognized2'; %Type desired name here
 
 % Define destination folder 
 directory = '/data/lewandow/elka1772/'; %Type your desired path here
