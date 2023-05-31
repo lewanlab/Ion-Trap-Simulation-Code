@@ -75,6 +75,21 @@ sim.Add(evolve(interval*2));
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
 sim.Add(evolve(interval));
 
+%Note From Eli to Eli
+%Up to this point to the code has evolved to form the Coulomb crystal.
+%I Want to keep everything and the add a force to 1 ion (and eventually a couple ions) and evolve it further
+% (I don't know what the time for this evolution should be)
+% Then finally execute it
+
+%Idea: Add Langevin Bath to an ion for a ceratin amount of time (using evolve), Then turn of Bath for that one ion, and evolve the system further
+%Add Langevin Bath just to the "Active" Dark Ion Group
+VTKick = langevinBath(100000, 30e-7,DarkGroupActive);
+sim.Add(VTKick);
+sim.Add(evolve(1000));
+sim.Remove(VTKick);
+sim.Add(evolve(interval));
+
+
 %Execute 
 sim.Execute();
 
