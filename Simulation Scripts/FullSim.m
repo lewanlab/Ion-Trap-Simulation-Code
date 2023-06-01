@@ -172,16 +172,20 @@ vrmsDarky = vrmsfinaly(NumberCa+1:end);
 vrmsfinal_midcyle_Cax = sqrt(vrms2x(:,end-10));
 vrmsfinal_midcyle_Caz = sqrt(vrms2z(:,end-10));
 vrmsfinal_midcyle_Cay = sqrt(vrms2y(:,end-10));
-vrmsfinal_midcyle_Darkx = sqrt(vrms2x(NumberCa+1:end,end-10));
-vrmsfinal_midcyle_Darkz = sqrt(vrms2z(NumberCa+1:end,end-10));
-vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
+vrmsfinal_midcyle_Darkx = sqrt(vrms2x(NumberCa+1:end,end-10:end));
+vrmsfinal_midcyle_Darkz = sqrt(vrms2z(NumberCa+1:end,end-10:end));
+vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10:end));
+%Eli Note: Changed from vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10)); to vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10:end));
+%for all of Dark ones
+
+
 
 %Eli's intermediary Step to See how the information is stored using the info directly above
 Veltest = insertBefore(filename,1,'VelTest-')
 testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
 VTfileID = fopen(Veltest,'wt');
 fprintf(VTfileID,'Dark Ions \r\n');
-fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+%fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
 fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', testVelocitiesDark');
 
 %store final RF cycle-averaged velocities
