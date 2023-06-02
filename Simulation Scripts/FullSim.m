@@ -41,15 +41,6 @@ Ca40Group = sim.Group(Ca40Ions);
 DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
 DarkGroupActive = sim.Group(NumberDark + NumberCa : NumberDark + NumberCa);
 
-%DarkIonsActive = createIonCloud(sim, radius, Dark, 10 );
-%DarkGroupActive = sim.Group(DarkIonsActive);
-
-%DarkIonsNotActive = createIonCloud(sim, radius, Dark, NumberDark - 10 );
-%DarkGroupNotActive = sim.Group(DarkIonsNotActive);
-
-%DarkIons = sim.Group( [ DarkIonsActive, DarkIonsNotActive ] );
-
-
 %Set how frequently data should be written to the output file. For energy
 %calculations set to 1 
 timstp_per_datapoint = 1;
@@ -94,8 +85,6 @@ sim.Add(evolve(interval));
 %I Want to keep everything and the add a force to 1 ion (and eventually a couple ions) and evolve it further
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
-
-%Idea: Add Langevin Bath to an ion for a ceratin amount of time (using evolve), Then turn of Bath for that one ion, and evolve the system further
 %Add Langevin Bath just to the "Active" Dark Ion Group
 VTKick = langevinBath(1435.48, 3e-9,DarkGroupActive);
 sim.Add(VTKick);
@@ -156,7 +145,9 @@ vrms2z = [zeros(NumberCa+NumberDark,1) vrms2z] ;
 Darkvrms2x = sqrt(vrms2x(NumberCa+1:end,:));
 Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:));
 Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
-
+size(Darkvrms2x)
+size(Darkvrms2y)
+size(Darkvrms2z)
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
@@ -222,18 +213,18 @@ E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+Num
 
 
 %Eli's second attempt
-DarkVelname = insertBefore(filename,1,'DarkVel-');
-DarkVelocities = vrms2([DarkIons.ID]);
-RegionOfInterest = DarkVelocities;
-DarkfileID = fopen(DarkVelname,'wt');
-fprintf(DarkfileID,'%e ', RegionOfInterest);
+#DarkVelname = insertBefore(filename,1,'DarkVel-');
+#DarkVelocities = vrms2([DarkIons.ID]);
+#RegionOfInterest = DarkVelocities;
+#DarkfileID = fopen(DarkVelname,'wt');
+#fprintf(DarkfileID,'%e ', RegionOfInterest);
 
-SizevrmsCa = size(E_tCa)
-SizevrmsCaAndDark = size(E_t)
-SizeDark = size(DarkVelocities)
-SizeT = size(t)
-SizeTempCa = size(T_Ca)
-SizeTempDark = size(T_Dark)
+#SizevrmsCa = size(E_tCa)
+#SizevrmsCaAndDark = size(E_t)
+#SizeDark = size(DarkVelocities)
+#SizeT = size(t)
+#SizeTempCa = size(T_Ca)
+#SizeTempDark = size(T_Dark)
 
 %Generate Info file
 infoname = insertBefore(filename,1,'Info-');
