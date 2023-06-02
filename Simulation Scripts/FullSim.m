@@ -163,14 +163,7 @@ vrmsDarkx = vrmsfinalx(NumberCa+1:end);
 vrmsDarkz = vrmsfinalz(NumberCa+1:end);
 vrmsDarky = vrmsfinaly(NumberCa+1:end);
 
-%Eli's First DarkIon RMS Veolicty Edit
-Darkvrms2 = @(ind) sum(vrmsDarkx(ind, :) + vrmsDarky(ind, :) + vrmsDarkz(ind,:),1);
-DarkVelname = insertBefore(filename,1,'DarkVel-');
-%DarkVelocities = Darkvrms2(:,end-10:end); %I think this is what we want to edit to find the vrms of Dark Ions during VT kick 6/1/23
-DarkfileID = fopen(DarkVelname,'wt');
-fprintf(DarkfileID,'Dark Ions \r\n');
-fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', Darkvrms2);
-%DarkVeocities = [vrmsDarkx(NumberCa + 1:,end) vrmsDarky(NumberCa + 1:,end) vrmsDarkz(NumberCa + 1:,end)];
+
 
 %Store individual RMS velocities at the first half of the last RF cycle
 vrmsfinal_midcyle_Cax = sqrt(vrms2x(:,end-10));
@@ -185,12 +178,22 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 
 
 %Eli's intermediary Step to See how the information is stored using the info directly above
-%Veltest = insertBefore(filename,1,'VelTest-')
+%Eli's First DarkIon RMS Veolicty Edit
+%Darkvrms2 = @(ind) sum(vrmsDarkx(ind, :) + vrmsDarky(ind, :) + vrmsDarkz(ind,:),1);
+%DarkVelname = insertBefore(filename,1,'DarkVel-');
+%DarkVelocities = Darkvrms2(:,end-10:end); %I think this is what we want to edit to find the vrms of Dark Ions during VT kick 6/1/23
+%DarkfileID = fopen(DarkVelname,'wt');
+%fprintf(DarkfileID,'Dark Ions \r\n');
+%fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', Darkvrms2);
+
+DarkVelocities = [vrmsDarkx(NumberCa + 1:end,end) vrmsDarky(NumberCa + 1:end,end) vrmsDarkz(NumberCa + 1:end,end)];
+Veltest = insertBefore(filename,1,'VelTest-')
 %testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
-%VTfileID = fopen(Veltest,'wt');
-%fprintf(VTfileID,'Dark Ions \r\n');
-%fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
-%fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', testVelocitiesDark');
+VTfileID = fopen(Veltest,'wt');
+fprintf(VTfileID,'Dark Ions \r\n');
+fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
+
 
 %store final RF cycle-averaged velocities
 sx_finalCa = sx(1:NumberCa,end);
