@@ -187,20 +187,20 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
     %fprintf(fileID,formatSpec,C{row,:});
 %Eli's intermediary Step to See how the information is stored using the info directly above
 %Eli's First DarkIon RMS Veolicty Edit
-%Darkvrms2 = @(ind) sum(vrmsDark2x(ind, :) + vrmsDark2y(ind, :) + vrmsDark2z(ind,:),1);
-%DarkVelname = insertBefore(filename,1,'DarkVel-');
-%DarkVelocities = Darkvrms2(:,end-10:end); %I think this is what we want to edit to find the vrms of Dark Ions during VT kick 6/1/23
-%DarkfileID = fopen(DarkVelname,'wt');
-%fprintf(DarkfileID,'Dark Ions \r\n');
-%fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', Darkvrms2);
+Darkvrms2 = @(ind) sum(Darkvrms2x(ind, :) + Darkvrms2y(ind, :) + Darkvrms2z(ind,:),1);
+DarkVelname = insertBefore(filename,1,'DarkVel-');
+DarkVelocities = Darkvrms2; %I think this is what we want to edit to find the vrms of Dark Ions during VT kick 6/1/23
+DarkfileID = fopen(DarkVelname,'wt');
+fprintf(DarkfileID,'Dark Ions \r\n');
+fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
 
-DarkVelocities = Darkvrms2x(:,end-10);
-Veltest = insertBefore(filename,1,'VelTest-')
+#DarkVelocities = Darkvrms2x(:,end-10);
+#Veltest = insertBefore(filename,1,'VelTest-')
 %testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
-VTfileID = fopen(Veltest,'wt');
-fprintf(VTfileID,'Dark Ions \r\n');
+#VTfileID = fopen(Veltest,'wt');
+#fprintf(VTfileID,'Dark Ions \r\n');
 %fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
-fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
+#fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
 
 
 %store final RF cycle-averaged velocities
