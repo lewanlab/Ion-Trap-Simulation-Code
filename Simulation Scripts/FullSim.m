@@ -189,7 +189,7 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 %Eli's First DarkIon RMS Veolicty Edit
 Darkvrms2 = @(ind) sum(Darkvrms2x(ind, :) + Darkvrms2y(ind, :) + Darkvrms2z(ind,:),1);
 DarkVelname = insertBefore(filename,1,'DarkVel-');
-DarkVelocities = Darkvrms2; %I think this is what we want to edit to find the vrms of Dark Ions during VT kick 6/1/23
+DarkVelocities = Darkvrms2(:,339980:340020); %I think this is what we want to edit to find the vrms of Dark Ions during VT kick 6/1/23
 DarkfileID = fopen(DarkVelname,'wt');
 fprintf(DarkfileID,'Dark Ions \r\n');
 fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
