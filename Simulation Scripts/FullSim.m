@@ -187,13 +187,13 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
     %fprintf(fileID,formatSpec,C{row,:});
 %Eli's intermediary Step to See how the information is stored using the info directly above
 %Eli's First DarkIon RMS Veolicty Edit
-Darkvrms2 = @(ind) sum(Darkvrms2x(ind, :) + Darkvrms2y(ind, :) + Darkvrms2z(ind,:),1);
-TextDarkvrms2 = Darkvrms2([DarkIons.ID])
-DarkVelname = insertBefore(filename,1,'DarkVel-');
-DarkVelocities = TextDarkvrms2;
-DarkfileID = fopen(DarkVelname,'wt');
-fprintf(DarkfileID,'Dark Ions \r\n');
-fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
+%Darkvrms2 = @(ind) sum(Darkvrms2x(ind, :) + Darkvrms2y(ind, :) + Darkvrms2z(ind,:),1);
+%TextDarkvrms2 = Darkvrms2([DarkIons.ID])
+%DarkVelname = insertBefore(filename,1,'DarkVel-');
+%DarkVelocities = TextDarkvrms2;
+%DarkfileID = fopen(DarkVelname,'wt');
+%fprintf(DarkfileID,'Dark Ions \r\n');
+%fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
 
 %DarkVelocities = Darkvrms2x(:,end-10);
 %Veltest = insertBefore(filename,1,'VelTest-')
@@ -219,6 +219,15 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
 E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
+
+
+%Eli's second attempt
+DarkVelname = insertBefore(filename,1,'DarkVel-');
+DarkVelocities = vrms2([DarkIons.ID])
+DarkfileID = fopen(DarkVelname,'wt');
+fprintf(DarkfileID,'Dark Ions \r\n');
+fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
+
 
 %Generate Info file
 infoname = insertBefore(filename,1,'Info-');
