@@ -153,9 +153,12 @@ vrms2y = [zeros(NumberCa+NumberDark,1) vrms2y] ;
 vrms2z = [zeros(NumberCa+NumberDark,1) vrms2z] ;
 
 %Eli Edit
-Darkvrms2x = sqrt(vrms2x(NumberCa+1:end,:))
-Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:))
-Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:))
+%Darkvrms2x = sqrt(vrms2x(NumberCa+1:end,:));
+%Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:));
+%Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
+Darkvrms2x = vrms2x(NumberCa+1:end,:);
+Darkvrms2y = vrms2y(NumberCa+1:end,:);
+Darkvrms2z = vrms2z(NumberCa+1:end,:);
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
