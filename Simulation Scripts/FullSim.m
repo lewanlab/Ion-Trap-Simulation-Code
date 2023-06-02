@@ -226,7 +226,6 @@ DarkVelname = insertBefore(filename,1,'DarkVel-');
 DarkVelocities = vrms2([DarkIons.ID]);
 RegionOfInterest = DarkVelocities;
 DarkfileID = fopen(DarkVelname,'wt');
-fprintf(DarkfileID,'Dark Ions \r\n');
 fprintf(DarkfileID,'%e ', RegionOfInterest);
 
 SizevrmsCa = size(E_tCa)
