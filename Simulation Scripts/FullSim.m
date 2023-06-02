@@ -213,18 +213,18 @@ E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+Num
 
 
 %Eli's second attempt
-#DarkVelname = insertBefore(filename,1,'DarkVel-');
-#DarkVelocities = vrms2([DarkIons.ID]);
-#RegionOfInterest = DarkVelocities;
-#DarkfileID = fopen(DarkVelname,'wt');
-#fprintf(DarkfileID,'%e ', RegionOfInterest);
+%DarkVelname = insertBefore(filename,1,'DarkVel-');
+%DarkVelocities = vrms2([DarkIons.ID]);
+%RegionOfInterest = DarkVelocities;
+%DarkfileID = fopen(DarkVelname,'wt');
+%fprintf(DarkfileID,'%e ', RegionOfInterest);
 
-#SizevrmsCa = size(E_tCa)
-#SizevrmsCaAndDark = size(E_t)
-#SizeDark = size(DarkVelocities)
-#SizeT = size(t)
-#SizeTempCa = size(T_Ca)
-#SizeTempDark = size(T_Dark)
+%SizevrmsCa = size(E_tCa)
+%SizevrmsCaAndDark = size(E_t)
+%SizeDark = size(DarkVelocities)
+%SizeT = size(t)
+%SizeTempCa = size(T_Ca)
+%SizeTempDark = size(T_Dark)
 
 %Generate Info file
 infoname = insertBefore(filename,1,'Info-');
