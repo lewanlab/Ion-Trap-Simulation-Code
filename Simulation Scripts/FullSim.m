@@ -232,6 +232,9 @@ fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', RegionOfInterest);
 SizevrmsCa = size(E_tCa)
 SizevrmsCaAndDark = size(E_t)
 SizeDark = size(DarkVelocities)
+SizeT = size(t)
+SizeTempCa = size(T_Ca)
+SizeTempDark = size(T_Dark)
 
 %Generate Info file
 infoname = insertBefore(filename,1,'Info-');
