@@ -148,6 +148,9 @@ Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
 size(Darkvrms2x)
 size(Darkvrms2y)
 size(Darkvrms2z)
+size(vrms2x)
+size(vrms2y)
+size(vrms2z)
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
