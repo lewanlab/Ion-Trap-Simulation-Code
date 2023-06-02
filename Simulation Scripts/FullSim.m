@@ -176,7 +176,9 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 %for all of Dark ones
 
 
-
+%[nrows,ncols] = size(C);
+%for row = 1:nrows
+    %fprintf(fileID,formatSpec,C{row,:});
 %Eli's intermediary Step to See how the information is stored using the info directly above
 %Eli's First DarkIon RMS Veolicty Edit
 %Darkvrms2 = @(ind) sum(vrmsDarkx(ind, :) + vrmsDarky(ind, :) + vrmsDarkz(ind,:),1);
@@ -186,7 +188,7 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 %fprintf(DarkfileID,'Dark Ions \r\n');
 %fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', Darkvrms2);
 
-DarkVelocities = [vrmsDarkx(:,end-10) vrmsDarky(:,end-10) vrmsDarkz(:,end-10)];
+DarkVelocities = [vrmsDarkx];
 Veltest = insertBefore(filename,1,'VelTest-')
 %testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
 VTfileID = fopen(Veltest,'wt');
