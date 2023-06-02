@@ -194,13 +194,13 @@ DarkfileID = fopen(DarkVelname,'wt');
 fprintf(DarkfileID,'Dark Ions \r\n');
 fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
 
-#DarkVelocities = Darkvrms2x(:,end-10);
-#Veltest = insertBefore(filename,1,'VelTest-')
+%DarkVelocities = Darkvrms2x(:,end-10);
+%Veltest = insertBefore(filename,1,'VelTest-')
 %testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
-#VTfileID = fopen(Veltest,'wt');
-#fprintf(VTfileID,'Dark Ions \r\n');
+%VTfileID = fopen(Veltest,'wt');
+%fprintf(VTfileID,'Dark Ions \r\n');
 %fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
-#fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
+%fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
 
 
 %store final RF cycle-averaged velocities
