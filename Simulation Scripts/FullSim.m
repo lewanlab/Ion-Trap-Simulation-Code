@@ -148,10 +148,10 @@ Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
 %Adding up each element of each array to get a total vrms for each dark Ion at every point in time
 Darkvrms2 = Darkvrms2x + Darkvrms2y + Darkvrms2z;
 size(Darkvrms2)
-Darkvrms2x(1,1)
-Darkvrms2y(1,1)
-Darkvrms2z(1,1)
-Darkvrms2(1,1)
+Darkvrms2x(3,3)
+Darkvrms2y(3,3)
+Darkvrms2z(3,3)
+Darkvrms2(3,3)
 %size(Darkvrms2x)
 %size(Darkvrms2y)
 %size(Darkvrms2z)
