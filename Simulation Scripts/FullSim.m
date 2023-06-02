@@ -229,6 +229,9 @@ DarkfileID = fopen(DarkVelname,'wt');
 fprintf(DarkfileID,'Dark Ions \r\n');
 fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', RegionOfInterest);
 
+SizevrmsCa = size(E_tCa)
+SizevrmsCaAndDark = size(E_t)
+SizeDark = size(DarkVelocities)
 
 %Generate Info file
 infoname = insertBefore(filename,1,'Info-');
