@@ -153,12 +153,10 @@ vrms2y = [zeros(NumberCa+NumberDark,1) vrms2y] ;
 vrms2z = [zeros(NumberCa+NumberDark,1) vrms2z] ;
 
 %Eli Edit
-%Darkvrms2x = sqrt(vrms2x(NumberCa+1:end,:));
-%Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:));
-%Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
-Darkvrms2x = vrms2x(NumberCa+1:end,:);
-Darkvrms2y = vrms2y(NumberCa+1:end,:);
-Darkvrms2z = vrms2z(NumberCa+1:end,:);
+Darkvrms2x = sqrt(vrms2x(NumberCa+1:end,:));
+Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:));
+Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
+
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
@@ -196,7 +194,7 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 %fprintf(DarkfileID,'Dark Ions \r\n');
 %fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', Darkvrms2);
 
-DarkVelocities = Darkvrms2x;
+DarkVelocities = Darkvrms2x(:,end-10);
 Veltest = insertBefore(filename,1,'VelTest-')
 %testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
 VTfileID = fopen(Veltest,'wt');
