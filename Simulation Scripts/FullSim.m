@@ -224,7 +224,7 @@ E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+Num
 %Eli's second attempt
 DarkVelname = insertBefore(filename,1,'DarkVel-');
 DarkVelocities = vrms2([DarkIons.ID]);
-RegionOfInterest = DarkVelocities(339900:340100)
+RegionOfInterest = DarkVelocities;
 DarkfileID = fopen(DarkVelname,'wt');
 fprintf(DarkfileID,'Dark Ions \r\n');
 fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', RegionOfInterest);
