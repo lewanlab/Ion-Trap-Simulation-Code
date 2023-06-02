@@ -188,7 +188,7 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 %fprintf(DarkfileID,'Dark Ions \r\n');
 %fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', Darkvrms2);
 
-DarkVelocities = vrmsDarkx;
+DarkVelocities = vrms2x;
 Veltest = insertBefore(filename,1,'VelTest-')
 %testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
 VTfileID = fopen(Veltest,'wt');
