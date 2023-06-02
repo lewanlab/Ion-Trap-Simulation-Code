@@ -147,17 +147,16 @@ Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:));
 Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
 %Adding up each element of each array to get a total vrms for each dark Ion at every point in time
 Darkvrms2 = Darkvrms2x + Darkvrms2y + Darkvrms2z;
-size(Darkvrms2)
-Darkvrms2x(3,3)
-Darkvrms2y(3,3)
-Darkvrms2z(3,3)
-Darkvrms2(3,3)
-%size(Darkvrms2x)
-%size(Darkvrms2y)
-%size(Darkvrms2z)
-%size(vrms2x)
-%size(vrms2y)
-%size(vrms2z)
+DarkVelFile = insertBefore(filename,1,'Info-');
+DarkVelfileID = fopen(DarkVelFile,'wt');
+formatSpec = '%s %d %2.1f %s\n';
+[nrows,ncols] = size(Darkvrms2);
+for row = 1:nrows
+    fprintf(DarkVelfileID,formatSpec,C{row,:});
+end
+fclose(DarkVelfileID);
+%size(Darkvrms2)
+
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
