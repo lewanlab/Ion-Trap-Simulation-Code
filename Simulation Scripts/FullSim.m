@@ -149,12 +149,12 @@ Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
 Darkvrms2 = Darkvrms2x + Darkvrms2y + Darkvrms2z;
 Darkvrms = sqrt(Darkvrms2);
 %max(Darkvrms)
-[M,I] = max(Darkvrms)
+%[M,I] = max(Darkvrms)
 max(Darkvrms,[],2)
 DarkVelFile = insertBefore(filename,1,'DarkVel-');
 DarkVelfileID = fopen(DarkVelFile,'wt');
 %formatSpec = '%e';
-fprintf(DarkVelfileID,'%e ',Darkvrms(20,:));
+fprintf(DarkVelfileID,'%e ',Darkvrms(NumberDark + NumberCa,:));
 %[nrows,ncols] = size(Darkvrms);
 %for row = 1:nrows
 %    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,:));
