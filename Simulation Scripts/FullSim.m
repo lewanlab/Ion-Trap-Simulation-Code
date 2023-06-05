@@ -148,7 +148,8 @@ Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
 %Adding up each element of each array to get a total vrms for each dark Ion at every point in time
 Darkvrms2 = Darkvrms2x + Darkvrms2y + Darkvrms2z;
 Darkvrms = sqrt(Darkvrms2);
-max(Darkvrms)
+%max(Darkvrms)
+[M,I] = max(Darkvrms)
 max(Darkvrms,[],2)
 DarkVelFile = insertBefore(filename,1,'DarkVel-');
 DarkVelfileID = fopen(DarkVelFile,'wt');
