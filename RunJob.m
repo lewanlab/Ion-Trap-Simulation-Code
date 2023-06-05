@@ -18,7 +18,7 @@ cd (directory)
 % Starts simulation. In this case, we are simulating 100 Ca+ ions and 50
 % ions of mass 35amu and charge +e. To see details, open "FullSim.m"
 
-FullSim(filename,30,20,30,1);
+FullSim(filename,1000,200,30,1);
 %filename, number of calcium ion, number of dark ions, mass of dark ions, {1 = position file, 0 = no position file}
 
 % Generate simulated experimental image. To use this feature, the fourth
