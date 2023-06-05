@@ -39,7 +39,7 @@ Ca40Group = sim.Group(Ca40Ions);
 
 %Eli Edit: THis Next group is so we can act stuff on it separately, same atom type and everything
 DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
-DarkGroupActive = sim.Group(NumberDark + NumberCa : NumberDark + NumberCa);
+DarkGroupActive = sim.Group(NumberDark + NumberCa);
 
 %Set how frequently data should be written to the output file. For energy
 %calculations set to 1 
