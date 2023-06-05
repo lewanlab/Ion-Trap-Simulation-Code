@@ -154,11 +154,12 @@ max(Darkvrms,[],2)
 DarkVelFile = insertBefore(filename,1,'DarkVel-');
 DarkVelfileID = fopen(DarkVelFile,'wt');
 formatSpec = '%e';
-[nrows,ncols] = size(Darkvrms);
-for row = 1:nrows
-    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,:));
-    fprintf(DarkVelfileID,'\n');
-end
+fprintf(DarkVelfileID,formatSpec,Darkvrms(20,:))
+%[nrows,ncols] = size(Darkvrms);
+%for row = 1:nrows
+%    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,:));
+%    fprintf(DarkVelfileID,'\n');
+%end
 fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 fclose(DarkVelfileID);
