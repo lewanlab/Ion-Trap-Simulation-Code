@@ -153,8 +153,8 @@ Darkvrms = sqrt(Darkvrms2);
 max(Darkvrms,[],2)
 DarkVelFile = insertBefore(filename,1,'DarkVel-');
 DarkVelfileID = fopen(DarkVelFile,'wt');
-formatSpec = '%e';
-fprintf(DarkVelfileID,formatSpec,Darkvrms(20,:));
+%formatSpec = '%e';
+fprintf(DarkVelfileID,'%e ',Darkvrms(20,:));
 %[nrows,ncols] = size(Darkvrms);
 %for row = 1:nrows
 %    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,:));
@@ -162,7 +162,6 @@ fprintf(DarkVelfileID,formatSpec,Darkvrms(20,:));
 %end
 fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
-fclose(DarkVelfileID);
 %size(Darkvrms2)
 %size(Darkvrms2)
 %size(Darkvrms2x)
