@@ -156,8 +156,10 @@ DarkVelfileID = fopen(DarkVelFile,'wt');
 formatSpec = '%s %d %2.1f %s\n';
 [nrows,ncols] = size(Darkvrms);
 for row = 1:nrows
-    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,11900:12100));
+    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,:));
 end
+fprintf(DarkVelfileID,'\n');
+fprintf(DarkVelfileID,'%e ',t);
 fclose(DarkVelfileID);
 %size(Darkvrms2)
 %size(Darkvrms2)
