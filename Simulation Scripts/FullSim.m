@@ -86,11 +86,11 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(1500000000, 30e-7,DarkGroupActive);
+VTKick = langevinBath(15000000000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(1));
+sim.Add(evolve(10));
 
 
 
