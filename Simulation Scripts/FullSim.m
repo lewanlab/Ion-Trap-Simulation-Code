@@ -86,7 +86,7 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(1435.48, 3e-9,DarkGroupActive);
+VTKick = langevinBath(10000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
@@ -147,14 +147,15 @@ Darkvrms2y = sqrt(vrms2y(NumberCa+1:end,:));
 Darkvrms2z = sqrt(vrms2z(NumberCa+1:end,:));
 %Adding up each element of each array to get a total vrms for each dark Ion at every point in time
 Darkvrms2 = Darkvrms2x + Darkvrms2y + Darkvrms2z;
-max(Darkvrms2)
-max(Darkvrms2,[],2)
+Darkvrms = sqrt(Darkvrms2)
+max(Darkvrms)
+max(Darkvrms,[],2)
 DarkVelFile = insertBefore(filename,1,'DarkVel-');
 DarkVelfileID = fopen(DarkVelFile,'wt');
 formatSpec = '%s %d %2.1f %s\n';
-[nrows,ncols] = size(Darkvrms2);
+[nrows,ncols] = size(Darkvrms);
 for row = 1:nrows
-    fprintf(DarkVelfileID,formatSpec,Darkvrms2(row,11900:12100));
+    fprintf(DarkVelfileID,formatSpec,Darkvrms(row,11900:12100));
 end
 fclose(DarkVelfileID);
 %size(Darkvrms2)
