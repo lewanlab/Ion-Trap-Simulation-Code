@@ -22,7 +22,7 @@ z0  = 3.5e-3;
 sim = LAMMPSSimulation();
 
 %Trying in input a new Timestep 
-dt = 9.9749628433e-10
+dt = .99749628433e-9
 %sim.TimeStep(dt)
 sim.TimeStep = dt
 
