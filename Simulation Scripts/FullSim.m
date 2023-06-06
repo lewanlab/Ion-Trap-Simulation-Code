@@ -29,7 +29,8 @@ SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
 
 %Trying in input a new Timestep 
 dt = 1e-9
-sim.TimeStep(dt)
+%sim.TimeStep(dt)
+sim.TimeStep = dt
 
 % Set ion species
 Dark = AddAtomType(sim, 1, DarkMass);
