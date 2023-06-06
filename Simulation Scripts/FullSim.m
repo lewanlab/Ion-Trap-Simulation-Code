@@ -292,6 +292,7 @@ if ImgSim == 1
 posname = insertBefore(filename,1,'Positions-');
 PfileID = fopen(posname,'wt');
     steps = 1500 *(1/rf)/sim.TimeStep; %steps to cover 1500 rf periods
+    steps
     fprintf(PfileID,'%e\n', NumberCa);
     fprintf(PfileID,'%e ', Cax(1:steps*NumberCa));
     fprintf(PfileID,'\n');
