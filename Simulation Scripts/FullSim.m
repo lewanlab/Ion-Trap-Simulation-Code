@@ -21,16 +21,16 @@ z0  = 3.5e-3;
 % Create the simulation instance
 sim = LAMMPSSimulation();
 
+%Trying in input a new Timestep 
+dt = 1e-9
+%sim.TimeStep(dt)
+sim.TimeStep = dt
+
 % Disable GPU acceleration 
 sim.GPUAccel = 0;
 
 %Set starting volume
 SetSimulationDomain(sim, 1e-3,1e-3,1e-3);
-
-%Trying in input a new Timestep 
-dt = 1e-9
-%sim.TimeStep(dt)
-sim.TimeStep = dt
 
 % Set ion species
 Dark = AddAtomType(sim, 1, DarkMass);
