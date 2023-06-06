@@ -144,7 +144,7 @@ CoolOff =  sim.TimeStep*interval*1e6;
 %end
 
 %Fairly Important Eli Edit: Because I need to change the value of the Timestep, 282 of them now equal 
-% 1 RF cycle so I need to change the manual averaging of the raw velocities to match that
+% 1 RF cycle/period so I need to change the manual averaging of the raw velocities to match that
 % On a separate note I believe this will fix the fact that the array sizes are messed up
 for i = 0:282:length(vx)-282
     for j = 1:NumberCa+NumberDark
