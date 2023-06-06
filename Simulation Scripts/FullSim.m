@@ -106,11 +106,11 @@ sim.Execute();
 %% Load results
 % Load simulation results and calculate the secular temperature 
 [t,~, sx,sy,sz] = readDump(filename);
-t
+
 
 % Define starting time after the minimization
 t = (t-minimisationSteps)*sim.TimeStep*1e6;
-t
+
 
 % Calculate the velocity of each ion (using LAMMPS averaged data)
 v2 = @(ind) sum(sx(ind, :).^2 + sy(ind, :).^2 + sz(ind,:).^2,1);
@@ -376,6 +376,14 @@ fprintf(fileID2,'\r\n');
 fprintf(fileID2,'Dark Ions \r\n');
 fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
 fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
+
+%Checking the sizes of things again
+size(t)
+size(vrms2)
+size(Darkvrms2)
+size(E_tCa)
+size(E_t)
+
 
 %Delete the data files so data does not get mixed if the code is run again
 fclose('all');
