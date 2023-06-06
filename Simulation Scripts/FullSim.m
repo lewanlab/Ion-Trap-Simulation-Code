@@ -395,6 +395,7 @@ size(E_tCa)
 size(E_t)
 size(vx)
 size(vrms2x)
+size(Cax)
 
 
 %Delete the data files so data does not get mixed if the code is run again
