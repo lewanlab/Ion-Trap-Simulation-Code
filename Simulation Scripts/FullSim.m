@@ -106,11 +106,11 @@ sim.Execute();
 %% Load results
 % Load simulation results and calculate the secular temperature 
 [t,~, sx,sy,sz] = readDump(filename);
-size(t)
+t
 
 % Define starting time after the minimization
 t = (t-minimisationSteps)*sim.TimeStep*1e6;
-size(t)
+t
 
 % Calculate the velocity of each ion (using LAMMPS averaged data)
 v2 = @(ind) sum(sx(ind, :).^2 + sy(ind, :).^2 + sz(ind,:).^2,1);
