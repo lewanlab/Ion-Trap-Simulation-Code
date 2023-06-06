@@ -6,8 +6,8 @@ function  FullSim(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
-interval = 211500;
-minimisationSteps = 352500;
+interval = 176250;
+minimisationSteps = 105750;
 
 % Define trap parameters
 rf = 3.555e6 ; % Hz
@@ -96,7 +96,7 @@ VTKick = langevinBath(150000000000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(1));
+sim.Add(evolve(10));
 
 
 
