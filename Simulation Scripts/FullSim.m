@@ -379,7 +379,6 @@ fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
 
 %Checking the sizes of things again
 size(t)
-size(vrms2)
 size(Darkvrms2)
 size(E_tCa)
 size(E_t)
