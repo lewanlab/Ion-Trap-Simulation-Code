@@ -135,11 +135,22 @@ CoolOff =  sim.TimeStep*interval*1e6;
 %With these settings the timestep will be calculated in such way 
 %that 20 of them will equal 1 RF period
 
-for i = 0:20:length(vx)-20
+%for i = 0:20:length(vx)-20
+%    for j = 1:NumberCa+NumberDark
+%    vrms2x(j,i/20+1) = sum(vx(j,i+2:i+21).^2)/20;
+%    vrms2y(j,i/20+1) = sum(vy(j,i+2:i+21).^2)/20;
+%    vrms2z(j,i/20+1) = sum(vz(j,i+2:i+21).^2)/20;
+%    end
+%end
+
+%Fairly Important Eli Edit: Because I need to change the value of the Timestep, 282 of them now equal 
+% 1 RF cycle so I need to change the manual averaging of the raw velocities to match that
+% On a separate note I believe this will fix the fact that the array sizes are messed up
+for i = 0:282:length(vx)-282
     for j = 1:NumberCa+NumberDark
-    vrms2x(j,i/20+1) = sum(vx(j,i+2:i+21).^2)/20;
-    vrms2y(j,i/20+1) = sum(vy(j,i+2:i+21).^2)/20;
-    vrms2z(j,i/20+1) = sum(vz(j,i+2:i+21).^2)/20;
+    vrms2x(j,i/282+1) = sum(vx(j,i+2:i+283).^2)/282;
+    vrms2y(j,i/282+1) = sum(vy(j,i+2:i+283).^2)/282;
+    vrms2z(j,i/282+1) = sum(vz(j,i+2:i+283).^2)/282;
     end
 end
 
