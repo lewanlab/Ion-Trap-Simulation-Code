@@ -22,9 +22,9 @@ z0  = 3.5e-3;
 sim = LAMMPSSimulation();
 
 %Trying in input a new Timestep 
-dt = 1e-9
+%dt = 1e-9
 %sim.TimeStep(dt)
-sim.TimeStep = dt
+%sim.TimeStep = dt
 
 % Disable GPU acceleration 
 sim.GPUAccel = 0;
