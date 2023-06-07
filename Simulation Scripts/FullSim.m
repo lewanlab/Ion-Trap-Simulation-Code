@@ -181,15 +181,16 @@ fprintf(DarkVelfileID,'%e ',Darkvrms(NumberDark,:));
 %end
 fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
-%size(Darkvrms2)
-%size(Darkvrms2)
-%size(Darkvrms2x)
-%size(Darkvrms2y)
-%size(Darkvrms2z)
-%size(vrms2x)
-%size(vrms2y)
-%size(vrms2z)
 
+%Raw Dark Velocities
+Darkvx = vx(NumberCa+NumberDark-3:end,end);
+Darkvy = vy(NumberCa+NumberDark-3:end,end);
+Darkvz = vz(NumberCa+NumberDark-3:end,end);
+
+Darkvx2 = Darkvx.^2
+Darkvy2 = Darkvy.^2
+Darkvz2 = Darkvz.^2
+Darkv2Total = Darkvx2 + Darkvy2 + Darkvz2
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
