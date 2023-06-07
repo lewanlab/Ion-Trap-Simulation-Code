@@ -182,7 +182,7 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2000:4*interval+20000);
+Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2000:4*interval+2000);
 Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2000:4*interval+2000);
 Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2000:4*interval+2000);
 
