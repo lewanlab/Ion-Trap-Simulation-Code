@@ -196,7 +196,7 @@ RawDarkVelFile = insertBefore(filename,1,'DarkVel-');
 RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
 [nrows,ncols] = size(Darkv2Total);
 for row = 1:nrows
-    fprintf(RawDarkVelfileID,formatSpec,Darkv2Total(row,:));
+    fprintf(RawDarkVelfileID,'%e ',Darkv2Total(row,:));
     fprintf(RawDarkVelfileID,'\n');
 end
 
