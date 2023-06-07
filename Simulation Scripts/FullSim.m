@@ -183,9 +183,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-3:end,end);
-Darkvy = vy(NumberCa+NumberDark-3:end,end);
-Darkvz = vz(NumberCa+NumberDark-3:end,end);
+Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-50:4*interval+50);
+Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-50:4*interval+50));
+Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-50:4*interval+50));
 
 Darkvx2 = Darkvx.^2
 Darkvy2 = Darkvy.^2
@@ -253,21 +253,6 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
 E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
-
-
-%Eli's second attempt
-%DarkVelname = insertBefore(filename,1,'DarkVel-');
-%DarkVelocities = vrms2([DarkIons.ID]);
-%RegionOfInterest = DarkVelocities;
-%DarkfileID = fopen(DarkVelname,'wt');
-%fprintf(DarkfileID,'%e ', RegionOfInterest);
-
-%SizevrmsCa = size(E_tCa)
-%SizevrmsCaAndDark = size(E_t)
-%SizeDark = size(DarkVelocities)
-%SizeT = size(t)
-%SizeTempCa = size(T_Ca)
-%SizeTempDark = size(T_Dark)
 
 %Generate Info file
 infoname = insertBefore(filename,1,'Info-');
@@ -397,7 +382,9 @@ size(E_t)
 size(vx)
 size(vrms2x)
 size(Cax)
-
+size(Darkvx)
+size(Darkvx2)
+size(Darkv2Total)
 
 %Delete the data files so data does not get mixed if the code is run again
 fclose('all');
@@ -407,3 +394,19 @@ delete 'ener.txt';
 delete 'f_pos.txt';
 delete (filename);
 
+
+
+
+%Eli's second attempt
+%DarkVelname = insertBefore(filename,1,'DarkVel-');
+%DarkVelocities = vrms2([DarkIons.ID]);
+%RegionOfInterest = DarkVelocities;
+%DarkfileID = fopen(DarkVelname,'wt');
+%fprintf(DarkfileID,'%e ', RegionOfInterest);
+
+%SizevrmsCa = size(E_tCa)
+%SizevrmsCaAndDark = size(E_t)
+%SizeDark = size(DarkVelocities)
+%SizeT = size(t)
+%SizeTempCa = size(T_Ca)
+%SizeTempDark = size(T_Dark)
