@@ -46,6 +46,7 @@ Ca40Group = sim.Group(Ca40Ions);
 %Eli Edit: THis Next group is so we can act stuff on it separately, same atom type and everything
 DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
 DarkGroupActive = sim.Group(NumberDark + NumberCa);
+DarkGroup = sim.Group(DarkIons);
 
 %Set how frequently data should be written to the output file. For energy
 %calculations set to 1 
@@ -96,7 +97,7 @@ VTKick = langevinBath(500000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(3*interval));
+sim.Add(evolve(4*interval));
 
 
 
@@ -182,9 +183,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,5*interval-3*interval:5*interval+3*interval);
-Darkvy = vy(NumberCa+NumberDark-2:end,5*interval-3*interval:5*interval+3*interval);
-Darkvz = vz(NumberCa+NumberDark-2:end,5*interval-3*interval:5*interval+3*interval);
+Darkvx = vx(NumberCa+NumberDark-2:end,5*interval-4*interval:5*interval+4*interval);
+Darkvy = vy(NumberCa+NumberDark-2:end,5*interval-4*interval:5*interval+4*interval);
+Darkvz = vz(NumberCa+NumberDark-2:end,5*interval-4*interval:5*interval+4*interval);
 
 Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
