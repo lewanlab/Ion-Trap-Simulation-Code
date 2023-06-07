@@ -192,6 +192,14 @@ Darkvy2 = Darkvy.^2;
 Darkvz2 = Darkvz.^2;
 Darkv2Total = Darkvx2 + Darkvy2 + Darkvz2;
 
+RawDarkVelFile = insertBefore(filename,1,'DarkVel-');
+RawDarkVelfileID = fopen(DarkVelFile,'wt');
+[nrows,ncols] = size(Darkv2Total);
+for row = 1:nrows
+    fprintf(RawDarkVelfileID,formatSpec,Darkv2Total(row,:));
+    fprintf(RawDarkVelfileID,'\n');
+end
+
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
 vrmsfinalz = sqrt(vrms2z(:,end));
