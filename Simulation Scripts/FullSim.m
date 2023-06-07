@@ -96,7 +96,7 @@ VTKick = langevinBath(5000000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(interval));
+sim.Add(evolve(2*interval));
 
 
 
@@ -182,9 +182,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-interval:4*interval+interval);
-Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-interval:4*interval+interval);
-Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-interval:4*interval+interval);
+Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+2*interval);
+Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+2*interval);
+Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+2*interval);
 
 Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
