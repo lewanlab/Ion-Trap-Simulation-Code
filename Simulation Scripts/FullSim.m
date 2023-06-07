@@ -169,7 +169,6 @@ Darkvrms2 = Darkvrms2x + Darkvrms2y + Darkvrms2z;
 Darkvrms = sqrt(Darkvrms2);
 %max(Darkvrms)
 %[M,I] = max(Darkvrms)
-max(Darkvrms,[],2)
 DarkVelFile = insertBefore(filename,1,'DarkVel-');
 DarkVelfileID = fopen(DarkVelFile,'wt');
 %formatSpec = '%e';
@@ -191,6 +190,7 @@ Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
 Darkvz2 = Darkvz.^2;
 Darkv2Total = Darkvx2 + Darkvy2 + Darkvz2;
+max(Darkv2Total,[],2)
 
 RawDarkVelFile = insertBefore(filename,1,'RawDarkVel-');
 RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
