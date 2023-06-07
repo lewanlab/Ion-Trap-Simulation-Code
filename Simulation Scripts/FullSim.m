@@ -193,7 +193,7 @@ Darkvz2 = Darkvz.^2;
 Darkv2Total = Darkvx2 + Darkvy2 + Darkvz2;
 
 RawDarkVelFile = insertBefore(filename,1,'DarkVel-');
-RawDarkVelfileID = fopen(DarkVelFile,'wt');
+RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
 [nrows,ncols] = size(Darkv2Total);
 for row = 1:nrows
     fprintf(RawDarkVelfileID,formatSpec,Darkv2Total(row,:));
