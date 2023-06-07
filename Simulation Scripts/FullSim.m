@@ -93,7 +93,7 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(750000, 30e-7,DarkGroupActive);
+VTKick = langevinBath(950000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
@@ -193,13 +193,13 @@ Darkvz2 = Darkvz.^2;
 Darkv2Total = Darkvx2 + Darkvy2 + Darkvz2;
 max(Darkv2Total,[],2)
 
-RawDarkVelFile = insertBefore(filename,1,'RawDarkVel-');
-RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
-[nrows,ncols] = size(Darkv2Total);
-for row = 1:nrows
-    fprintf(RawDarkVelfileID,'%e ',Darkv2Total(row,:));
-    fprintf(RawDarkVelfileID,'\n');
-end
+%RawDarkVelFile = insertBefore(filename,1,'RawDarkVel-');
+%RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
+%[nrows,ncols] = size(Darkv2Total);
+%for row = 1:nrows
+%    fprintf(RawDarkVelfileID,'%e ',Darkv2Total(row,:));
+%    fprintf(RawDarkVelfileID,'\n');
+%end
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
