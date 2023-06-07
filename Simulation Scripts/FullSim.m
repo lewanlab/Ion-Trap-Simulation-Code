@@ -82,7 +82,7 @@ lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
 %sim.Add (NH_Ca);
 %sim.Add (NH_DarkIon);
 sim.Add(lasercool);
-sim.Add(evolve(interval*3));
+sim.Add(evolve(interval*2));
 
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
 sim.Add(evolve(interval));
@@ -93,11 +93,11 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(200000, 30e-7,DarkGroupActive);
+VTKick = langevinBath(750000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(4*interval));
+sim.Add(evolve(6*interval));
 
 
 
@@ -183,9 +183,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,5*interval-4*interval:5*interval+4*interval);
-Darkvy = vy(NumberCa+NumberDark-2:end,5*interval-4*interval:5*interval+4*interval);
-Darkvz = vz(NumberCa+NumberDark-2:end,5*interval-4*interval:5*interval+4*interval);
+Darkvx = vx(NumberCa+NumberDark-2:end,5*interval-2*interval:5*interval+6*interval);
+Darkvy = vy(NumberCa+NumberDark-2:end,5*interval-2*interval:5*interval+6*interval);
+Darkvz = vz(NumberCa+NumberDark-2:end,5*interval-2*interval:5*interval+6*interval);
 
 Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
