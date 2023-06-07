@@ -6,8 +6,8 @@ function  FullSim(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
-interval = 176250;
-minimisationSteps = 105750;
+interval = 105750;
+minimisationSteps = 176250;
 
 % Define trap parameters
 rf = 3.555e6 ; % Hz
@@ -96,7 +96,7 @@ VTKick = langevinBath(1500000000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(30));
+sim.Add(evolve(interval));
 
 
 
@@ -388,7 +388,7 @@ fprintf(fileID2,'Dark Ions \r\n');
 fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
 fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
 
-%Checking the sizes of things again
+%Eli: Checking the sizes of things again
 size(t)
 size(Darkvrms2)
 size(E_tCa)
