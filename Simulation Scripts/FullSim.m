@@ -225,28 +225,6 @@ vrmsfinal_midcyle_Darky = sqrt(vrms2y(NumberCa+1:end,end-10));
 %for all of Dark ones
 
 
-%[nrows,ncols] = size(C);
-%for row = 1:nrows
-    %fprintf(fileID,formatSpec,C{row,:});
-%Eli's intermediary Step to See how the information is stored using the info directly above
-%Eli's First DarkIon RMS Veolicty Edit
-%Darkvrms2 = @(ind) sum(Darkvrms2x(ind, :) + Darkvrms2y(ind, :) + Darkvrms2z(ind,:),1);
-%TextDarkvrms2 = Darkvrms2([DarkIons.ID])
-%DarkVelname = insertBefore(filename,1,'DarkVel-');
-%DarkVelocities = TextDarkvrms2;
-%DarkfileID = fopen(DarkVelname,'wt');
-%fprintf(DarkfileID,'Dark Ions \r\n');
-%fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
-
-%DarkVelocities = Darkvrms2x(:,end-10);
-%Veltest = insertBefore(filename,1,'VelTest-')
-%testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
-%VTfileID = fopen(Veltest,'wt');
-%fprintf(VTfileID,'Dark Ions \r\n');
-%fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
-%fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
-
-
 %store final RF cycle-averaged velocities
 sx_finalCa = sx(1:NumberCa,end);
 sz_finalCa = sz(1:NumberCa,end);
@@ -287,6 +265,13 @@ LastDarkx = x(NumberCa+1:end,end);
 LastDarky = y(NumberCa+1:end,end);
 LastDarkz = z(NumberCa+1:end,end);
 
+%Eli Edit 6/8/2023
+Darkx = x(NumberCa+1:end,:);
+Darky = y(NumberCa+1:end,:);
+Darkz = z(NumberCa+1:end,:);
+[nrows,ncols] = size(Darkx);
+
+
 %added 6/15/2022 OKC
 LastCavx = vx(1:NumberCa,end);
 LastCavy = vy(1:NumberCa,end);
@@ -295,8 +280,11 @@ LastDarkvx = vx(NumberCa+1:end,end);
 LastDarkvy = vy(NumberCa+1:end,end);
 LastDarkvz = vz(NumberCa+1:end,end);
 
+
+%Eli to Eli Note: This is for the JPG that mimics what we see in our camera, it averages over 1500 RF periods
+%This is not what I want so I am not going to print this, probably ever but idk
 if ImgSim == 1
-% Position file for image simulation
+% Position file for image simulation 
 posname = insertBefore(filename,1,'Positions-');
 PfileID = fopen(posname,'wt');
     steps = 1500 *(1/rf)/sim.TimeStep; %steps to cover 1500 rf periods
@@ -419,3 +407,24 @@ delete (filename);
 %SizeT = size(t)
 %SizeTempCa = size(T_Ca)
 %SizeTempDark = size(T_Dark)
+
+%[nrows,ncols] = size(C);
+%for row = 1:nrows
+    %fprintf(fileID,formatSpec,C{row,:});
+%Eli's intermediary Step to See how the information is stored using the info directly above
+%Eli's First DarkIon RMS Veolicty Edit
+%Darkvrms2 = @(ind) sum(Darkvrms2x(ind, :) + Darkvrms2y(ind, :) + Darkvrms2z(ind,:),1);
+%TextDarkvrms2 = Darkvrms2([DarkIons.ID])
+%DarkVelname = insertBefore(filename,1,'DarkVel-');
+%DarkVelocities = TextDarkvrms2;
+%DarkfileID = fopen(DarkVelname,'wt');
+%fprintf(DarkfileID,'Dark Ions \r\n');
+%fprintf(DarkfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
+
+%DarkVelocities = Darkvrms2x(:,end-10);
+%Veltest = insertBefore(filename,1,'VelTest-')
+%testVelocitiesDark = [vrmsfinal_midcyle_Darkx vrmsfinal_midcyle_Darky vrmsfinal_midcyle_Darkz];
+%VTfileID = fopen(Veltest,'wt');
+%fprintf(VTfileID,'Dark Ions \r\n');
+%fprintf(VTfileID,'  %6s       %6s       %6s        (m/s) \r\n','vrmsx','vrmsy','vrmsz');
+%fprintf(VTfileID,'%6.8f   %6.8f   %6.8f \r\n', DarkVelocities);
