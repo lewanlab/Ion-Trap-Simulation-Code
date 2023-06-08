@@ -93,7 +93,7 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(1900000, 30e-7,DarkGroupActive);
+VTKick = langevinBath(950000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
@@ -269,8 +269,35 @@ LastDarkz = z(NumberCa+1:end,end);
 Darkx = x(NumberCa+1:end,:);
 Darky = y(NumberCa+1:end,:);
 Darkz = z(NumberCa+1:end,:);
-[nrows,ncols] = size(Darkx);
+IonXPositionFile = insertBefore(filename,1,'IonXPosition-');
+IonXPositionFileID = fopen(IonXPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (4*interval) - (3*282):282:(4*interval) + (3*282)
+        fprintf(IonXPositionFileID,'%e ',x(row,i));
+    end
+    fprintf(IonXPositionFileID,'\n');    
+end
 
+IonYPositionFile = insertBefore(filename,1,'IonYPosition-');
+IonYPositionFileID = fopen(IonYPositionFile,'wt');
+[nrows,ncols] = size(y);
+for row = 1:nrows
+    for i = (4*interval) - (3*282):282:(4*interval) + (3*282)
+        fprintf(IonYPositionFileID,'%e ',y(row,i));
+    end
+    fprintf(IonYPositionFileID,'\n');    
+end
+
+IonZPositionFile = insertBefore(filename,1,'IonZPosition-');
+IonZPositionFileID = fopen(IonZPositionFile,'wt');
+[nrows,ncols] = size(z);
+for row = 1:nrows
+    for i = (4*interval) - (3*282):282:(4*interval) + (3*282)
+        fprintf(IonZPositionFileID,'%e ',z(row,i));
+    end
+    fprintf(IonZPositionFileID,'\n');    
+end
 
 %added 6/15/2022 OKC
 LastCavx = vx(1:NumberCa,end);
@@ -372,16 +399,10 @@ fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
 fprintf(fileID2,'%6.8f   %6.8f   %6.8f \r\n',RawVelocitiesDark');
 
 %Eli: Checking the sizes of things again
-size(t)
-size(Darkvrms2)
-size(E_tCa)
-size(E_t)
-size(vx)
-size(vrms2x)
+size(x)
+size(Darkx)
 size(Cax)
-size(Darkvx)
-size(Darkvx2)
-size(Darkv2Total)
+
 
 %Delete the data files so data does not get mixed if the code is run again
 fclose('all');
