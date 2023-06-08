@@ -11,7 +11,7 @@
 
 # Maximum expected wall time this job will require
 # Format is DD-HH:MM:SS, this one will end in 15 seconds
-#SBATCH -t 4:0:15
+#SBATCH -t 2-04:00:15
 
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_90
 
