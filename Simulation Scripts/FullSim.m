@@ -93,7 +93,7 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(1850000, 30e-7,DarkGroupActive);
+VTKick = langevinBath(1750000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
@@ -273,7 +273,7 @@ IonXPositionFile = insertBefore(filename,1,'IonXPosition-');
 IonXPositionFileID = fopen(IonXPositionFile,'wt');
 [nrows,ncols] = size(x);
 for row = 1:nrows
-    for i = (4*interval) - (3*282):282:(4*interval) + (3*282)
+    for i = (4*interval) - (3*282):282:(4*interval) + (25*282)
         fprintf(IonXPositionFileID,'%e ',x(row,i));
     end
     fprintf(IonXPositionFileID,'\n');    
@@ -283,7 +283,7 @@ IonYPositionFile = insertBefore(filename,1,'IonYPosition-');
 IonYPositionFileID = fopen(IonYPositionFile,'wt');
 [nrows,ncols] = size(y);
 for row = 1:nrows
-    for i = (4*interval) - (3*282):282:(4*interval) + (3*282)
+    for i = (4*interval) - (3*282):282:(4*interval) + (25*282)
         fprintf(IonYPositionFileID,'%e ',y(row,i));
     end
     fprintf(IonYPositionFileID,'\n');    
@@ -293,7 +293,7 @@ IonZPositionFile = insertBefore(filename,1,'IonZPosition-');
 IonZPositionFileID = fopen(IonZPositionFile,'wt');
 [nrows,ncols] = size(z);
 for row = 1:nrows
-    for i = (4*interval) - (3*282):282:(4*interval) + (3*282)
+    for i = (4*interval) - (3*282):282:(4*interval) + (25*282)
         fprintf(IonZPositionFileID,'%e ',z(row,i));
     end
     fprintf(IonZPositionFileID,'\n');    
