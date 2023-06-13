@@ -93,11 +93,11 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(950000, 30e-7,DarkGroupActive);
+VTKick = langevinBath(1750000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(32*interval));
+sim.Add(evolve(48*interval));
 
 
 
@@ -183,9 +183,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+32*interval);
-Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+32*interval);
-Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+32*interval);
+Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+48*interval);
+Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+48*interval);
+Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+48*interval);
 
 Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
@@ -298,6 +298,37 @@ for row = 1:nrows
     end
     fprintf(IonZPositionFileID,'\n');    
 end
+
+HalfCycleIonXPositionFile = insertBefore(filename,1,'HalfCycleIonXPosition-');
+HalfCycleIonXPositionFileID = fopen(HalfCycleIonXPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (interval + 141) - (5*282):282:(interval + 141) + (25*282)
+        fprintf(HalfCycleIonXPositionFile,'%e ',x(row,i));
+    end
+    fprintf(HalfCycleIonXPositionFile,'\n');    
+end
+
+HalfCycleIonYPositionFile = insertBefore(filename,1,'HalfCycleIonYPosition-');
+HalfCycleIonYPositionFileID = fopen(HalfCycleIonYPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (interval + 141) - (5*282):282:(interval + 141) + (25*282)
+        fprintf(HalfCycleIonXPositionFile,'%e ',y(row,i));
+    end
+    fprintf(HalfCycleIonYPositionFile,'\n');    
+end
+
+HalfCycleIonZPositionFile = insertBefore(filename,1,'HalfCycleIonZPosition-');
+HalfCycleIonZPositionFileID = fopen(HalfCycleIonZPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (interval + 141) - (5*282):282:(interval + 141) + (25*282)
+        fprintf(HalfCycleIonZPositionFile,'%e ',z(row,i));
+    end
+    fprintf(HalfCycleIonZPositionFile,'\n');    
+end
+
 
 %added 6/15/2022 OKC
 LastCavx = vx(1:NumberCa,end);
