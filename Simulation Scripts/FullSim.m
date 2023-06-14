@@ -97,7 +97,7 @@ VTKick = langevinBath(1750000, 30e-7,DarkGroupActive);
 sim.Add(VTKick);
 sim.Add(evolve(1));
 sim.Remove(VTKick);
-sim.Add(evolve(150*interval));
+sim.Add(evolve(1*interval));
 
 
 
@@ -297,6 +297,37 @@ for row = 1:nrows
         fprintf(IonZPositionFileID,'%e ',z(row,i));
     end
     fprintf(IonZPositionFileID,'\n');    
+end
+
+%Eli Edit 6/14/2023 Printing out positions immediately after the VT Kick
+ImmediateXPositionFile = insertBefore(filename,1,'ImmediateXPosition-');
+ImmediateXPositionFileID = fopen(ImmediateXPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (interval) - (5):(interval) + (15)
+        fprintf(ImmediateXPositionFile,'%e ',x(row,i));
+    end
+    fprintf(ImmediateXPositionFile,'\n');    
+end
+
+ImmediateYPositionFile = insertBefore(filename,1,'ImmediateYPosition-');
+ImmediateYPositionFileID = fopen(ImmediateYPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (interval) - (5):(interval) + (15)
+        fprintf(ImmediateYPositionFile,'%e ',y(row,i));
+    end
+    fprintf(ImmediateYPositionFile,'\n');    
+end
+
+ImmediateZPositionFile = insertBefore(filename,1,'ImmediateZPosition-');
+ImmediateZPositionFileID = fopen(ImmediateZPositionFile,'wt');
+[nrows,ncols] = size(x);
+for row = 1:nrows
+    for i = (interval) - (5):(interval) + (15)
+        fprintf(ImmediateZPositionFile,'%e ',z(row,i));
+    end
+    fprintf(ImmediateZPositionFile,'\n');    
 end
 
 %added 6/15/2022 OKC
