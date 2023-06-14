@@ -101,7 +101,7 @@ sim.Add(VTKick2);
 sim.Add(evolve(1));
 sim.Remove(VTKick1);
 sim.Remove(VTKick2);
-sim.Add(evolve(1*interval));
+sim.Add(evolve(100*interval));
 
 
 
@@ -187,9 +187,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+1*interval);
-Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+1*interval);
-Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+1*interval);
+Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+50*interval);
+Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+50*interval);
+Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+50*interval);
 
 Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
@@ -197,13 +197,13 @@ Darkvz2 = Darkvz.^2;
 Darkv2Total = Darkvx2 + Darkvy2 + Darkvz2;
 max(Darkv2Total,[],2)
 
-RawDarkVelFile = insertBefore(filename,1,'RawDarkVel-');
-RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
-[nrows,ncols] = size(Darkv2Total);
-for row = 1:nrows
-    fprintf(RawDarkVelfileID,'%e ',Darkv2Total(row,:));
-    fprintf(RawDarkVelfileID,'\n');
-end
+%RawDarkVelFile = insertBefore(filename,1,'RawDarkVel-');
+%RawDarkVelfileID = fopen(RawDarkVelFile,'wt');
+%[nrows,ncols] = size(Darkv2Total);
+%for row = 1:nrows
+%    fprintf(RawDarkVelfileID,'%e ',Darkv2Total(row,:));
+%    fprintf(RawDarkVelfileID,'\n');
+%end
 
 %Store final individual RMS velocities separately 
 vrmsfinalx = sqrt(vrms2x(:,end));
