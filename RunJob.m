@@ -4,7 +4,7 @@ SetPaths();
 
 % Define the file name for the simulation. Make sure not to use an
 % existing one. The output folder will have the same name
-filename = '100Ca20Dark2VTKick'; %Type desired name here
+filename = '100Ca20Dark2VTKickTest'; %Type desired name here
 
 % Define destination folder 
 directory = '/data/lewandow/elka1772/'; %Type your desired path here
