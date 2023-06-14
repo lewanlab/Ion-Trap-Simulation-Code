@@ -45,7 +45,8 @@ Ca40Group = sim.Group(Ca40Ions);
 
 %Eli Edit: THis Next group is so we can act stuff on it separately, same atom type and everything
 DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
-DarkGroupActive = sim.Group(NumberDark + NumberCa - 1:NumberDark + NumberCa);
+DarkGroupActive1 = sim.Group(NumberDark + NumberCa);
+DarkGroupActive2 = sim.Group(NumberDark + NumberCa - 1);
 DarkGroup = sim.Group(DarkIons);
 
 %Set how frequently data should be written to the output file. For energy
@@ -93,10 +94,13 @@ sim.Add(evolve(interval));
 % (I don't know what the time for this evolution should be)
 % Then finally execute it
 %Add Langevin Bath just to the "Active" Dark Ion Group
-VTKick = langevinBath(1750000, 30e-7,DarkGroupActive);
-sim.Add(VTKick);
+VTKick1 = langevinBath(1750000, 30e-7,DarkGroupActive1);
+VTKick2 = langevinBath(1750000, 30e-7,DarkGroupActive2);
+sim.Add(VTKick1);
+sim.Add(VTKick2);
 sim.Add(evolve(1));
-sim.Remove(VTKick);
+sim.Remove(VTKick1);
+sim.Remove(VTKick2);
 sim.Add(evolve(1*interval));
 
 
