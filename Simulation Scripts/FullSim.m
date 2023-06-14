@@ -304,30 +304,30 @@ ImmediateXPositionFile = insertBefore(filename,1,'ImmediateXPosition-');
 ImmediateXPositionFileID = fopen(ImmediateXPositionFile,'wt');
 [nrows,ncols] = size(x);
 for row = 1:nrows
-    for i = (interval) - (5):(interval) + (15)
-        fprintf(ImmediateXPositionFile,'%e ',x(row,i));
+    for i = (interval) - (5):1:(interval) + (15)
+        fprintf(ImmediateXPositionFileID,'%e ',x(row,i));
     end
-    fprintf(ImmediateXPositionFile,'\n');    
+    fprintf(ImmediateXPositionFileID,'\n');    
 end
 
 ImmediateYPositionFile = insertBefore(filename,1,'ImmediateYPosition-');
 ImmediateYPositionFileID = fopen(ImmediateYPositionFile,'wt');
-[nrows,ncols] = size(x);
+[nrows,ncols] = size(y);
 for row = 1:nrows
-    for i = (interval) - (5):(interval) + (15)
-        fprintf(ImmediateYPositionFile,'%e ',y(row,i));
+    for i = (interval) - (5):1:(interval) + (15)
+        fprintf(ImmediateYPositionFileID,'%e ',y(row,i));
     end
-    fprintf(ImmediateYPositionFile,'\n');    
+    fprintf(ImmediateYPositionFileID,'\n');    
 end
 
 ImmediateZPositionFile = insertBefore(filename,1,'ImmediateZPosition-');
 ImmediateZPositionFileID = fopen(ImmediateZPositionFile,'wt');
-[nrows,ncols] = size(x);
+[nrows,ncols] = size(z);
 for row = 1:nrows
-    for i = (interval) - (5):(interval) + (15)
-        fprintf(ImmediateZPositionFile,'%e ',z(row,i));
+    for i = (interval) - (5):1:(interval) + (15)
+        fprintf(ImmediateZPositionFileID,'%e ',z(row,i));
     end
-    fprintf(ImmediateZPositionFile,'\n');    
+    fprintf(ImmediateZPositionFileID,'\n');    
 end
 
 %added 6/15/2022 OKC
