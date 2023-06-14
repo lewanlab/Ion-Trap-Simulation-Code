@@ -304,7 +304,7 @@ ImmediateXPositionFile = insertBefore(filename,1,'ImmediateXPosition-');
 ImmediateXPositionFileID = fopen(ImmediateXPositionFile,'wt');
 [nrows,ncols] = size(x);
 for row = 1:nrows
-    for i = (interval) - (5):1:(interval) + (15)
+    for i = (interval) - (5):10:(interval) + (285)
         fprintf(ImmediateXPositionFileID,'%e ',x(row,i));
     end
     fprintf(ImmediateXPositionFileID,'\n');    
@@ -314,7 +314,7 @@ ImmediateYPositionFile = insertBefore(filename,1,'ImmediateYPosition-');
 ImmediateYPositionFileID = fopen(ImmediateYPositionFile,'wt');
 [nrows,ncols] = size(y);
 for row = 1:nrows
-    for i = (interval) - (5):1:(interval) + (15)
+    for i = (interval) - (5):10:(interval) + (285)
         fprintf(ImmediateYPositionFileID,'%e ',y(row,i));
     end
     fprintf(ImmediateYPositionFileID,'\n');    
@@ -324,7 +324,7 @@ ImmediateZPositionFile = insertBefore(filename,1,'ImmediateZPosition-');
 ImmediateZPositionFileID = fopen(ImmediateZPositionFile,'wt');
 [nrows,ncols] = size(z);
 for row = 1:nrows
-    for i = (interval) - (5):1:(interval) + (15)
+    for i = (interval) - (5):10:(interval) + (285)
         fprintf(ImmediateZPositionFileID,'%e ',z(row,i));
     end
     fprintf(ImmediateZPositionFileID,'\n');    
