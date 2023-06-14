@@ -45,7 +45,7 @@ Ca40Group = sim.Group(Ca40Ions);
 
 %Eli Edit: THis Next group is so we can act stuff on it separately, same atom type and everything
 DarkIons = createIonCloud(sim, radius, Dark, NumberDark);
-DarkGroupActive = sim.Group(NumberDark + NumberCa);
+DarkGroupActive = sim.Group(NumberDark + NumberCa - 1:NumberDark + NumberCa);
 DarkGroup = sim.Group(DarkIons);
 
 %Set how frequently data should be written to the output file. For energy
@@ -298,37 +298,6 @@ for row = 1:nrows
     end
     fprintf(IonZPositionFileID,'\n');    
 end
-
-HalfCycleIonXPositionFile = insertBefore(filename,1,'HalfCycleIonXPosition-');
-HalfCycleIonXPositionFileID = fopen(HalfCycleIonXPositionFile,'wt');
-[nrows,ncols] = size(x);
-for row = 1:nrows
-    for i = (interval + 141) - (5*282):282:(interval + 141) + (25*282)
-        fprintf(HalfCycleIonXPositionFile,'%e ',x(row,i));
-    end
-    fprintf(HalfCycleIonXPositionFile,'\n');    
-end
-
-HalfCycleIonYPositionFile = insertBefore(filename,1,'HalfCycleIonYPosition-');
-HalfCycleIonYPositionFileID = fopen(HalfCycleIonYPositionFile,'wt');
-[nrows,ncols] = size(x);
-for row = 1:nrows
-    for i = (interval + 141) - (5*282):282:(interval + 141) + (25*282)
-        fprintf(HalfCycleIonXPositionFile,'%e ',y(row,i));
-    end
-    fprintf(HalfCycleIonYPositionFile,'\n');    
-end
-
-HalfCycleIonZPositionFile = insertBefore(filename,1,'HalfCycleIonZPosition-');
-HalfCycleIonZPositionFileID = fopen(HalfCycleIonZPositionFile,'wt');
-[nrows,ncols] = size(x);
-for row = 1:nrows
-    for i = (interval + 141) - (5*282):282:(interval + 141) + (25*282)
-        fprintf(HalfCycleIonZPositionFile,'%e ',z(row,i));
-    end
-    fprintf(HalfCycleIonZPositionFile,'\n');    
-end
-
 
 %added 6/15/2022 OKC
 LastCavx = vx(1:NumberCa,end);
