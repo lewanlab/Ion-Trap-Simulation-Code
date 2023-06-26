@@ -101,7 +101,7 @@ sim.Add(VTKick2);
 sim.Add(evolve(1));
 sim.Remove(VTKick1);
 sim.Remove(VTKick2);
-sim.Add(evolve(100*interval));
+sim.Add(evolve(150*interval));
 
 
 
@@ -187,9 +187,9 @@ fprintf(DarkVelfileID,'\n');
 fprintf(DarkVelfileID,'%e ',t);
 
 %Raw Dark Velocities
-Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+50*interval);
-Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+50*interval);
-Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+50*interval);
+Darkvx = vx(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+20*interval);
+Darkvy = vy(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+20*interval);
+Darkvz = vz(NumberCa+NumberDark-2:end,4*interval-2*interval:4*interval+20*interval);
 
 Darkvx2 = Darkvx.^2;
 Darkvy2 = Darkvy.^2;
