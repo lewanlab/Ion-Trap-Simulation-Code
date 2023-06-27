@@ -101,7 +101,7 @@ sim.Add(VTKick2);
 sim.Add(evolve(1));
 sim.Remove(VTKick1);
 sim.Remove(VTKick2);
-sim.Add(evolve(150*interval));
+sim.Add(evolve(200*interval));
 
 
 
@@ -277,7 +277,7 @@ IonXPositionFile = insertBefore(filename,1,'IonXPosition-');
 IonXPositionFileID = fopen(IonXPositionFile,'wt');
 [nrows,ncols] = size(x);
 for row = 1:nrows
-    for i = (interval) - (5*282):282:(interval) + (25*282)
+    for i = (interval) - (5*282):282:(interval) + (50*282)
         fprintf(IonXPositionFileID,'%e ',x(row,i));
     end
     fprintf(IonXPositionFileID,'\n');    
@@ -287,7 +287,7 @@ IonYPositionFile = insertBefore(filename,1,'IonYPosition-');
 IonYPositionFileID = fopen(IonYPositionFile,'wt');
 [nrows,ncols] = size(y);
 for row = 1:nrows
-    for i = (interval) - (5*282):282:(interval) + (25*282)
+    for i = (interval) - (5*282):282:(interval) + (50*282)
         fprintf(IonYPositionFileID,'%e ',y(row,i));
     end
     fprintf(IonYPositionFileID,'\n');    
@@ -297,7 +297,7 @@ IonZPositionFile = insertBefore(filename,1,'IonZPosition-');
 IonZPositionFileID = fopen(IonZPositionFile,'wt');
 [nrows,ncols] = size(z);
 for row = 1:nrows
-    for i = (interval) - (5*282):282:(interval) + (25*282)
+    for i = (interval) - (5*282):282:(interval) + (50*282)
         fprintf(IonZPositionFileID,'%e ',z(row,i));
     end
     fprintf(IonZPositionFileID,'\n');    
