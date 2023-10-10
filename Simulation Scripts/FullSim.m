@@ -66,10 +66,10 @@ sim.Remove(allBath);
 lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
 %This block adds neutral heating to Ca+ and the dark ion with background
 %gas He
-%NH_Ca = NeutralHeating(Ca40,HeatRate('He',DarkMass,Initial_T));
-%NH_DarkIon = NeutralHeating(Dark,HeatRate('He',DarkMass,Initial_T));
-%sim.Add (NH_Ca);
-%sim.Add (NH_DarkIon);
+NH_Ca = NeutralHeating(Ca40,HeatRate('He',40,Initial_T));
+NH_DarkIon = NeutralHeating(Dark,HeatRate('He',DarkMass,Initial_T));
+sim.Add(NH_Ca);
+sim.Add(NH_DarkIon);
 sim.Add(lasercool);
 sim.Add(evolve(interval*2));
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
