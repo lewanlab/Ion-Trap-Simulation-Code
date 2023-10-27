@@ -8,8 +8,8 @@ numpix = 512;
 pixsize = 16e-6; 
 mag = 10.3;    
 binsize = pixsize/mag;
-dof = 7e-6; 
-blurparam = 0.75; %Must be determined experimentally, this is just a guess
+dof = 25e-6; 
+blurparam = 1.5; %Must be determined experimentally, this is Olivia's best guess
 numplanes = 20*dof/binsize/10;
 
 % Read Data
@@ -44,7 +44,7 @@ normalized_pos = floor(positions/binsize);
 
 % Determine which ions are within the camera's field of view
 inbounds = zeros(3,length(x));
-numplanes = 30; floor(numplanes);
+numplanes = 35; floor(numplanes);
 for i = 1:length(x)
     if normalized_pos(1,i) < numpix-1 && normalized_pos(1,i) > 0 && normalized_pos(2,i) < numpix-1 && normalized_pos(2,i) > 0 && normalized_pos(3,i) < numpix-1 && normalized_pos(3,i) > 0
         inbounds(1,i) = normalized_pos(1,i);
@@ -72,7 +72,7 @@ hist2d = zeros(numpix,numpix);
     end
 
 % Normalize 2D histogram
-hist2d = hist2d./(max(hist2d(:))+1e-6);
+hist2d = hist2d./(max(hist2d(:))-0.3);
 hist2d = hist2d';
 
 % Generate fake color map
@@ -80,6 +80,7 @@ map = ones(256,3);
 map(:,1) = [zeros(128,1);[0:1/127:1]'];
 map(:,2) = [zeros(128,1);[0:1/127:1]'];
 map(:,3) = [[0:1/127:1]';ones(128,1)];
+%map= load('IonColorMap1.mat', 'mymap'); %%alternative color map option
 
 
 %Plot final Image

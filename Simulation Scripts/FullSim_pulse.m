@@ -1,6 +1,7 @@
 %% Full sim
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
-% specific temperature and then are laser cooled. 
+% specific temperature and then are laser cooled. This script was built to add two 100us pulses
+% and download positions during one such pulse to aid in simulating CC spectroscopy experiments
 
 function  FullSim(filename,NumberCa,NumberDark,DarkMass,Vo,Ve,gas,pressure,ImgSim)
 eV_per_J=6.2415093433e18;
@@ -69,9 +70,10 @@ sim.Remove(allBath);
 lasercool = StoLaserCool(Ca40Group,397e-9, 130e6,Ca40.Mass);
 
 %This block adds neutral heating to Ca+ and the dark ion with background
-%gas He
+%gas N2 at a typical 2e-9Torr pressure
 NH_Ca = NeutralHeating(Ca40,HeatRate('N',40,0.01));
 NH_DarkIon = NeutralHeating(Dark,HeatRate('N',DarkMass,0.01));
+%this block then adds an additional rate with input 'gas' at a rate 'pressure' larger than 2e-9Torr
 NH_Ca_p = NeutralHeating(Ca40,pressure*HeatRate(gas,40,0.01));
 NH_DarkIon_p = NeutralHeating(Dark,pressure*HeatRate(gas,DarkMass,0.01));
 sim.Add(NH_Ca);
@@ -79,25 +81,27 @@ sim.Add(NH_DarkIon);
 sim.Add(NH_Ca_p);
 sim.Add(NH_DarkIon_p);
 sim.Add(lasercool);
-%sim.Add(evolve(interval*2));
+%this block determines the length of the pulse
 sim.Add(evolve(pulseduration));
-%sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
 
-%in between pulses
+%removes pulsed gas and evolves for 2x set interval
 sim.Remove(NH_Ca_p);
 sim.Remove(NH_DarkIon_p);
 sim.Add(evolve(interval*2));
 
-%second pulse and output of positions for imaging
+%second pulse and output of positions for imaging while pulse is occuring
 sim.Add(NH_Ca_p);
 sim.Add(NH_DarkIon_p);
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
 sim.Add(evolve(pulseduration));
+
+%final evolution without pulse to monitor temperature and energy decay
 sim.Remove(NH_Ca_p);
 sim.Remove(NH_DarkIon_p);
 sim.Add(evolve(interval));
 
-%Execute 
+
+%Execute the functions
 sim.Execute();
 
 %% Load results
@@ -176,7 +180,7 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 
 %Calculate the total energy in eV
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
-E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
+E_tDark = vrms2([DarkIons.ID])*DarkMass*Const.amu/(2*(NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
 
 %Generate Info file
@@ -227,7 +231,7 @@ end
 %Print total energy, secular temperature and vrms velocities to Ener file 
 Efile = insertBefore(filename,1,'Ener-');
 EfileID = fopen(Efile,'wt');
-fprintf(EfileID,'%e ', E_t);
+fprintf(EfileID,'%e ', E_tDark);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', E_tCa);
 fprintf(EfileID,'\n'); 

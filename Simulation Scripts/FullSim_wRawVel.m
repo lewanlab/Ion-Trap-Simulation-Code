@@ -1,6 +1,8 @@
 %% Full sim
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
-% specific temperature and then are laser cooled. 
+% specific temperature and then are laser cooled. This script pulls samples raw velocities throughout 
+%an RF cycle to obtain more information about raw velocities to help model ion distributions for 
+%decelerator reactions
 
 function  FullSim_wRawVel(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
@@ -156,7 +158,6 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 
 %Calculate the total energy in eV
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
-E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
 E_tDark = vrms2([DarkIons.ID])*DarkMass*Const.amu/(2*(NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
 
