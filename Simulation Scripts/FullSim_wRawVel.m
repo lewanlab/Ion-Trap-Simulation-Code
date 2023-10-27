@@ -2,17 +2,17 @@
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
 % specific temperature and then are laser cooled. 
 
-function  FullSim_wRawVel(filename,NumberCa,NumberDark,DarkMass,ImgSim)
+function  FullSim(filename,NumberCa,NumberDark,DarkMass,Vo, Ve, ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
-interval = 120000;
+interval = 60000;
 minimisationSteps = 100000;
 
 % Define trap parameters
 rf = 3.555e6 ; % Hz
-Vo = 300; % V
-Ve = 2.5; % V
+%Vo = 400; % V
+%Ve = 3.0; % V
 geomC = 0.22;
 r0  = 3.91e-3;
 z0  = 3.5e-3;
@@ -45,7 +45,7 @@ timstp_per_datapoint = 1;
 sim.Add(linearPT(Vo, Ve, z0, r0, geomC, rf));
 
 % Minimise the system with a Langevin bath
-Initial_T = 0.1;
+Initial_T = 0.01;
 allBath = langevinBath(Initial_T, 30e-7);
 sim.Add(allBath);
 sim.Add(evolve(minimisationSteps));
@@ -62,16 +62,17 @@ sim.Add(dump('ener.txt', {'id','vx','vy', 'vz'}, timstp_per_datapoint));
 sim.Add(evolve(interval));
 
 %Remove the bath and add laser cooling
+%Add neutral gas collisional heating. Adapted 10/2023 by OKC to have "background" collisions and 
+%"pulse" collisions. 
 sim.Remove(allBath);
-lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
+lasercool = StoLaserCool(Ca40Group,397e-9, 130e6,Ca40.Mass);
 
 %This block adds neutral heating to Ca+ and the dark ion with background
 %gas He
-NH_Ca = NeutralHeating(Ca40,100*HeatRate('N',40,0.01));
-NH_DarkIon = NeutralHeating(Dark,100*HeatRate('N',DarkMass,0.01));
+NH_Ca = NeutralHeating(Ca40,HeatRate('N',40,0.01));
+NH_DarkIon = NeutralHeating(Dark,HeatRate('N',DarkMass,0.01));
 sim.Add(NH_Ca);
 sim.Add(NH_DarkIon);
-
 sim.Add(lasercool);
 sim.Add(evolve(interval*2));
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
@@ -156,7 +157,6 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 
 %Calculate the total energy in eV
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
-E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
 E_tDark = vrms2([DarkIons.ID])*DarkMass*Const.amu/(2*(NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
 
@@ -184,13 +184,13 @@ LastDarkx = x(NumberCa+1:end,end);
 LastDarky = y(NumberCa+1:end,end);
 LastDarkz = z(NumberCa+1:end,end);
 
-%added 6/15/2022 OKC; velocities from midcycle
-LastCavx = vx(1:NumberCa,end-9:end);
-LastCavy = vy(1:NumberCa,end-9:end);
-LastCavz = vz(1:NumberCa,end-9:end);
-LastDarkvx = vx(NumberCa+1:end,end-9:end);
-LastDarkvy = vy(NumberCa+1:end,end-9:end);
-LastDarkvz = vz(NumberCa+1:end,end-9:end);
+%added 6/15/2022 OKC
+LastCavx = vx(1:NumberCa,end);
+LastCavy = vy(1:NumberCa,end);
+LastCavz = vz(1:NumberCa,end);
+LastDarkvx = vx(NumberCa+1:end,end);
+LastDarkvy = vy(NumberCa+1:end,end);
+LastDarkvz = vz(NumberCa+1:end,end);
 
 if ImgSim == 1
 % Position file for image simulation
@@ -242,15 +242,17 @@ fprintf(EfileID,'%e ', LastDarky);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', LastDarkz);
 fprintf(EfileID,'\n');
-fprintf(EfileID,'%e ', LastCavx);
+fprintf(EfileID,'%e ', LastCavx');
 fprintf(EfileID,'\n');
-fprintf(EfileID,'%e ', LastCavz);
+fprintf(EfileID,'%e ', LastCavz');
 fprintf(EfileID,'\n');
-fprintf(EfileID,'%e ', LastDarkvx);
+fprintf(EfileID,'%e ', vrmsDarkx');
 fprintf(EfileID,'\n');
-fprintf(EfileID,'%e ', LastDarkvz);
+fprintf(EfileID,'%e ', LastDarkvz');
 fprintf(EfileID,'\n');
-fprintf(EfileID,'%e ', LastDarkvy);
+fprintf(EfileID,'%e ', LastCavy');
+fprintf(EfileID,'\n');
+fprintf(EfileID,'%e ', LastDarkvx');
 
 %Final velocities to file
 Velname = insertBefore(filename,1,'FinVel-');
@@ -267,8 +269,8 @@ fprintf(fileID,'%6.8f   %6.8f   %6.8f \r\n',VelocitiesDark');
 
 %Save raw (non-rms) final velocities to file; next 11 lines added by OKC 6/15/2022
 RawVelname = insertBefore(filename,1,'RawFinVel-');
-RawVelocitiesCa = [LastCavx(:,end-9:end) LastCavy(:,end-9:end) LastCavz(:,end-9:end)];
-RawVelocitiesDark = [LastDarkvx(:,end-9:end) LastDarkvy(:,end-9:end) LastDarkvz(:,end-9:end)];
+RawVelocitiesCa = [LastCavx(:,end) LastCavy(:,end) LastCavz(:,end)];
+RawVelocitiesDark = [LastDarkvx(:,end) LastDarkvy(:,end) LastDarkvz(:,end)];
 fileID2 = fopen(RawVelname,'wt');
 fprintf(fileID2,'Ca+ Ions \r\n');
 fprintf(fileID2,'  %6s       %6s       %6s        (m/s) \r\n','vx','vy','vz');
@@ -285,4 +287,3 @@ delete 'log.lammps';
 delete 'ener.txt';
 delete 'f_pos.txt';
 delete (filename);
-
