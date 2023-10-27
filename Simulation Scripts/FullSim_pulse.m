@@ -2,11 +2,12 @@
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
 % specific temperature and then are laser cooled. 
 
-function  FullSim(filename,NumberCa,NumberDark,DarkMass,Vo, Ve, ImgSim)
+function  FullSim(filename,NumberCa,NumberDark,DarkMass,Vo,Ve,gas,pressure,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
 interval = 60000;
+pulseduration = 7000;
 minimisationSteps = 100000;
 
 % Define trap parameters
@@ -71,11 +72,29 @@ lasercool = StoLaserCool(Ca40Group,397e-9, 130e6,Ca40.Mass);
 %gas He
 NH_Ca = NeutralHeating(Ca40,HeatRate('N',40,0.01));
 NH_DarkIon = NeutralHeating(Dark,HeatRate('N',DarkMass,0.01));
+NH_Ca_p = NeutralHeating(Ca40,pressure*HeatRate(gas,40,0.01));
+NH_DarkIon_p = NeutralHeating(Dark,pressure*HeatRate(gas,DarkMass,0.01));
 sim.Add(NH_Ca);
 sim.Add(NH_DarkIon);
+sim.Add(NH_Ca_p);
+sim.Add(NH_DarkIon_p);
 sim.Add(lasercool);
+%sim.Add(evolve(interval*2));
+sim.Add(evolve(pulseduration));
+%sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
+
+%in between pulses
+sim.Remove(NH_Ca_p);
+sim.Remove(NH_DarkIon_p);
 sim.Add(evolve(interval*2));
+
+%second pulse and output of positions for imaging
+sim.Add(NH_Ca_p);
+sim.Add(NH_DarkIon_p);
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
+sim.Add(evolve(pulseduration));
+sim.Remove(NH_Ca_p);
+sim.Remove(NH_DarkIon_p);
 sim.Add(evolve(interval));
 
 %Execute 
@@ -157,7 +176,7 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 
 %Calculate the total energy in eV
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
-E_tDark = vrms2([DarkIons.ID])*DarkMass*Const.amu/(2*(NumberDark))*eV_per_J;
+E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
 
 %Generate Info file
@@ -208,7 +227,7 @@ end
 %Print total energy, secular temperature and vrms velocities to Ener file 
 Efile = insertBefore(filename,1,'Ener-');
 EfileID = fopen(Efile,'wt');
-fprintf(EfileID,'%e ', E_tDark);
+fprintf(EfileID,'%e ', E_t);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', E_tCa);
 fprintf(EfileID,'\n'); 

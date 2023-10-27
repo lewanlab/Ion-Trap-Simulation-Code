@@ -6,13 +6,13 @@ function  FullSim_wRawVel(filename,NumberCa,NumberDark,DarkMass,ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
-interval = 60000;
+interval = 120000;
 minimisationSteps = 100000;
 
 % Define trap parameters
-rf = 3.552e6 ; % Hz
+rf = 3.555e6 ; % Hz
 Vo = 300; % V
-Ve = 4; %3.5; % V
+Ve = 2.5; % V
 geomC = 0.22;
 r0  = 3.91e-3;
 z0  = 3.5e-3;
@@ -45,7 +45,7 @@ timstp_per_datapoint = 1;
 sim.Add(linearPT(Vo, Ve, z0, r0, geomC, rf));
 
 % Minimise the system with a Langevin bath
-Initial_T = 0.01;
+Initial_T = 0.1;
 allBath = langevinBath(Initial_T, 30e-7);
 sim.Add(allBath);
 sim.Add(evolve(minimisationSteps));
@@ -64,12 +64,14 @@ sim.Add(evolve(interval));
 %Remove the bath and add laser cooling
 sim.Remove(allBath);
 lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
+
 %This block adds neutral heating to Ca+ and the dark ion with background
 %gas He
-%NH_Ca = NeutralHeating(Ca40,HeatRate('He',DarkMass,Initial_T));
-%NH_DarkIon = NeutralHeating(Dark,HeatRate('He',DarkMass,Initial_T));
-%sim.Add (NH_Ca);
-%sim.Add (NH_DarkIon);
+NH_Ca = NeutralHeating(Ca40,100*HeatRate('N',40,0.01));
+NH_DarkIon = NeutralHeating(Dark,100*HeatRate('N',DarkMass,0.01));
+sim.Add(NH_Ca);
+sim.Add(NH_DarkIon);
+
 sim.Add(lasercool);
 sim.Add(evolve(interval*2));
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
