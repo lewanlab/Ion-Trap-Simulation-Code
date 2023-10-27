@@ -2,7 +2,7 @@
 % This script runs a simulation of Ca+ ions and a second ion species that are first thermalized to a 
 % specific temperature and then are laser cooled. 
 
-function  FullSim(filename,NumberCa,NumberDark,DarkMass,ImgSim)
+function  FullSim(filename,NumberCa,NumberDark,DarkMass,Vo, Ve, ImgSim)
 eV_per_J=6.2415093433e18;
 
 % Define timesteps
@@ -10,9 +10,9 @@ interval = 60000;
 minimisationSteps = 100000;
 
 % Define trap parameters
-rf = 3.552e6 ; % Hz
-Vo = 400; % V
-Ve = 3.5; % V
+rf = 3.555e6 ; % Hz
+%Vo = 400; % V
+%Ve = 3.0; % V
 geomC = 0.22;
 r0  = 3.91e-3;
 z0  = 3.5e-3;
@@ -62,14 +62,17 @@ sim.Add(dump('ener.txt', {'id','vx','vy', 'vz'}, timstp_per_datapoint));
 sim.Add(evolve(interval));
 
 %Remove the bath and add laser cooling
+%Add neutral gas collisional heating. Adapted 10/2023 by OKC to have "background" collisions and 
+%"pulse" collisions. 
 sim.Remove(allBath);
-lasercool = StoLaserCool(Ca40Group,397e-9,130e6,Ca40.Mass);
+lasercool = StoLaserCool(Ca40Group,397e-9, 130e6,Ca40.Mass);
+
 %This block adds neutral heating to Ca+ and the dark ion with background
 %gas He
-%NH_Ca = NeutralHeating(Ca40,HeatRate('He',DarkMass,Initial_T));
-%NH_DarkIon = NeutralHeating(Dark,HeatRate('He',DarkMass,Initial_T));
-%sim.Add (NH_Ca);
-%sim.Add (NH_DarkIon);
+NH_Ca = NeutralHeating(Ca40,HeatRate('N',40,0.01));
+NH_DarkIon = NeutralHeating(Dark,HeatRate('N',DarkMass,0.01));
+sim.Add(NH_Ca);
+sim.Add(NH_DarkIon);
 sim.Add(lasercool);
 sim.Add(evolve(interval*2));
 sim.Add(dump('f_pos.txt', {'id', 'x', 'y', 'z'}, timstp_per_datapoint));
@@ -154,7 +157,7 @@ vrms2 = @(ind) sum(vrms2x(ind, :) + vrms2y(ind, :) + vrms2z(ind,:),1);
 
 %Calculate the total energy in eV
 E_tCa = vrms2([Ca40Ions.ID])*Ca40.Mass*Const.amu/(2*NumberCa)*eV_per_J;
-E_t = vrms2(cat(1,Ca40Ions.ID,DarkIons.ID))*Ca40.Mass*Const.amu/(2*(NumberCa+NumberDark))*eV_per_J;
+E_tDark = vrms2([DarkIons.ID])*DarkMass*Const.amu/(2*(NumberDark))*eV_per_J;
 %E_s = 3*Const.kB /2 .*T_Ca*eV_per_J;
 
 %Generate Info file
@@ -205,7 +208,7 @@ end
 %Print total energy, secular temperature and vrms velocities to Ener file 
 Efile = insertBefore(filename,1,'Ener-');
 EfileID = fopen(Efile,'wt');
-fprintf(EfileID,'%e ', E_t);
+fprintf(EfileID,'%e ', E_tDark);
 fprintf(EfileID,'\n');
 fprintf(EfileID,'%e ', E_tCa);
 fprintf(EfileID,'\n'); 

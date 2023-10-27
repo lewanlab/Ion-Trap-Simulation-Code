@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH -J CrystalSIM
+#SBATCH -J IonCrySIM
 
 #SBATCH -p jila
 
-#SBATCH -n 12
+#SBATCH -n 8
 
 #SBATCH -N 1
 
